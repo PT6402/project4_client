@@ -42,9 +42,16 @@ export default function SlideBookSection() {
       <div className={`${styles.container} main-container`}>
         <div className={styles.content_container}>
           {showContent && (
-            <>
-              <div className={`${styles.content_wrapper}`}>hello</div>
-            </>
+            <div className={styles.content_wrapper}>
+              <p className={styles.content_title}>Drop #01</p>
+              <p className={styles.content_title}>De gira</p>
+              <p className={styles.content_subtitle}>
+                T-shirts, hoodies & more
+              </p>
+              <Button className={styles.button} to="/collections/products">
+                Shop now
+              </Button>
+            </div>
           )}
           {isBigScreen && (
             <Slider

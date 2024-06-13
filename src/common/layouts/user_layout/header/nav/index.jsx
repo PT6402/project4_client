@@ -66,10 +66,7 @@ export default function Nav({ toggleSideNav, openCartModal }) {
           </li>
         </ul>
 
-        <Link
-          to="/account/login"
-          className={`${styles.link} ${styles.login_link}`}
-        >
+        <Link to="/login" className={`${styles.link} ${styles.login_link}`}>
           Login
         </Link>
       </div>

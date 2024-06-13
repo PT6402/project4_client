@@ -16,7 +16,6 @@ export default function DrawerModal({
   motionKey,
 }) {
   useKeyDown(() => {
-    console.log("test");
     close();
   }, ["Escape"]);
   const overlayElement = document.getElementById("overlay");
