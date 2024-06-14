@@ -1,16 +1,34 @@
-import { useState } from "react";
-import { Link, useLocation } from "react-router-dom";
+import { useEffect, useState } from "react";
+import { Link, useLocation, useParams } from "react-router-dom";
 
 import styles from "./index.module.scss";
 import { Formik } from "formik";
 import * as Yup from "yup";
+import useAuth from "@/hooks/useAuth";
+import { useSelector } from "react-redux";
 const LoginPage = () => {
+  const { email } = useParams();
   const { state: routerState } = useLocation();
-  const [checkTypeLogin, setCheckTypeLogin] = useState(true);
+  const { inforUser } = useSelector((state) => state.userStore);
+  const [checkLogin, setCheckTypeLogin] = useState(false);
+  const { checkTypeLogin, login } = useAuth();
 
   const handleSubmit = (value) => {
-    // e.preventDefault();
-    console.log(value);
+    if (!checkLogin) {
+      checkTypeLogin(value.email).then((res) => {
+        if (res?.typeLogin == "EMAIL") {
+          setCheckTypeLogin(true);
+        }
+      });
+    }
+
+    if (checkLogin) {
+      login({
+        email: value.email,
+        password: value.password,
+        type_login: "EMAIL",
+      });
+    }
   };
 
   const SigninSchema = Yup.object().shape({
@@ -19,6 +37,12 @@ const LoginPage = () => {
       .required(),
     password: Yup.string(),
   });
+
+  useEffect(() => {
+    if (email || inforUser?.typeLogin == "EMAIL") {
+      setCheckTypeLogin(true);
+    }
+  }, []);
   return (
     <>
       <section className={styles.nav_section}></section>
@@ -26,7 +50,7 @@ const LoginPage = () => {
         <div className={styles.container}>
           <div className={`${styles.wrapper} main-container`}>
             <Formik
-              initialValues={{ email: "", password: "" }}
+              initialValues={{ email: inforUser?.email || "", password: "" }}
               onSubmit={handleSubmit}
               validationSchema={SigninSchema}
               validateOnChange={false}
@@ -49,7 +73,6 @@ const LoginPage = () => {
                   <label className={styles.label}>
                     <span>Email:</span>
                     <input
-                      //   defaultValue={defaultValue?.email || ""}
                       className={`${styles.input} focus:outline-none focus:ring-transparent 
                           text-xs `}
                       style={{
@@ -69,7 +92,7 @@ const LoginPage = () => {
                       </div>
                     )}
                   </label>
-                  {checkTypeLogin && (
+                  {checkLogin && (
                     <label className={styles.label}>
                       <span>Password:</span>
 

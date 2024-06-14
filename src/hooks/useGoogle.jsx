@@ -20,7 +20,7 @@ const useGoogle = () => {
       );
       if (res.status == 200) {
         setUserInfo({
-          infoUser: res.data,
+          inforUser: res.data,
           access_token: tokenResponse.access_token,
         });
         setIsLoading(false);

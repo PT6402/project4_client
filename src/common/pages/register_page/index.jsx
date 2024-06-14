@@ -1,16 +1,34 @@
+/* eslint-disable react-hooks/exhaustive-deps */
 import { Link, useLocation } from "react-router-dom";
 import styles from "./index.module.scss";
 import useGoogle from "@/hooks/useGoogle";
 import BtnLoginGG from "./btn_login_gg";
 import { Formik } from "formik";
 import * as Yup from "yup";
+import { useEffect } from "react";
+import useAuth from "@/hooks/useAuth";
 export default function RegisterPage() {
   const { state: routerState } = useLocation();
-
-  const { loginGoogle, setIsLoading } = useGoogle();
-  const handleSubmit = (value, { setSubmitting }) => {
-    console.log(value);
-    setSubmitting(false);
+  const { register } = useAuth();
+  const { loginGoogle, setIsLoading, isLoading, error, userInfo } = useGoogle();
+  const handleSubmit = ({ typeLogin }, value) => {
+    if (typeLogin == "GOOGLE") {
+      const data = {
+        typeLogin,
+        fullname: userInfo.inforUser.name,
+        email: userInfo.inforUser.email,
+        password: userInfo.access_token,
+      };
+      register(data);
+    } else {
+      const data = {
+        typeLogin: "EMAIL",
+        fullname: value.fullname,
+        email: value.email,
+        password: value.password,
+      };
+      register(data);
+    }
   };
   const SignupSchema = Yup.object().shape({
     fullname: Yup.string()
@@ -29,7 +47,15 @@ export default function RegisterPage() {
       .oneOf([Yup.ref("password"), null], 'Must match "password" field value')
       .required("Required"),
   });
-
+  useEffect(() => {
+    if (
+      !(error == undefined && isLoading == undefined) &&
+      !error &&
+      !isLoading
+    ) {
+      handleSubmit({ typeLogin: "GOOGLE" });
+    }
+  }, [isLoading]);
   return (
     <>
       <section className={styles.nav_section}></section>
@@ -53,7 +79,7 @@ export default function RegisterPage() {
                 password: "",
                 confirmPass: "",
               }}
-              onSubmit={handleSubmit}
+              onSubmit={(e) => handleSubmit({ typeLogin: "EMAIL" }, e)}
               validationSchema={SignupSchema}
             >
               {({
@@ -63,7 +89,6 @@ export default function RegisterPage() {
                 handleChange,
                 handleBlur,
                 handleSubmit,
-                isSubmitting,
               }) => (
                 <form
                   onSubmit={handleSubmit}
@@ -160,13 +185,15 @@ export default function RegisterPage() {
                       </div>
                     )}
                   </label>
-                  <button
-                    className={styles.button}
-                    type="submit"
-                    disabled={isSubmitting}
-                  >
-                    Register
-                  </button>
+                  <div className="flex justify-center items-center">
+                    <button
+                      className={styles.button}
+                      type="submit"
+                      disabled={isLoading}
+                    >
+                      Register
+                    </button>
+                  </div>
                 </form>
               )}
             </Formik>

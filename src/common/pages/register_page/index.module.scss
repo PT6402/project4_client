@@ -47,13 +47,13 @@
     }
 
     .button {
+      width: 100%;
       font-family: $font-f-primary;
       margin-top: 3rem;
       padding: 1rem 2rem;
       font-size: 1.6rem;
       border: solid 0.2rem #000;
       border-radius: 1rem;
-      width: 100%;
       background: #000;
       color: white;
       text-transform: uppercase;
@@ -75,6 +75,9 @@
       }
       &:hover {
         cursor: pointer;
+      }
+      &:disabled {
+        opacity: 0.5;
       }
     }
 
