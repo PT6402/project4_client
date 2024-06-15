@@ -5,11 +5,14 @@ import useGoogle from "@/hooks/useGoogle";
 import BtnLoginGG from "./btn_login_gg";
 import { Formik } from "formik";
 import * as Yup from "yup";
-import { useEffect } from "react";
+import { useEffect, useRef } from "react";
 import useAuth from "@/hooks/useAuth";
+import { useSelector } from "react-redux";
 export default function RegisterPage() {
+  const fullnameInput = useRef();
   const { state: routerState } = useLocation();
   const { register } = useAuth();
+  const { inforUser } = useSelector((state) => state.userStore);
   const { loginGoogle, setIsLoading, isLoading, error, userInfo } = useGoogle();
   const handleSubmit = ({ typeLogin }, value) => {
     if (typeLogin == "GOOGLE") {
@@ -19,7 +22,14 @@ export default function RegisterPage() {
         email: userInfo.inforUser.email,
         password: userInfo.access_token,
       };
-      register(data);
+      register(data).then((res) => {
+        if (res.errorExist) {
+          value.fullname = "";
+          value.email = "";
+          value.password = "";
+          value.confirmPass = "";
+        }
+      });
     } else {
       const data = {
         typeLogin: "EMAIL",
@@ -27,7 +37,15 @@ export default function RegisterPage() {
         email: value.email,
         password: value.password,
       };
-      register(data);
+      register(data).then((res) => {
+        if (res.errorExist) {
+          fullnameInput.current.focus();
+          value.fullname = "";
+          value.email = "";
+          value.password = "";
+          value.confirmPass = "";
+        }
+      });
     }
   };
   const SignupSchema = Yup.object().shape({
@@ -75,7 +93,7 @@ export default function RegisterPage() {
             <Formik
               initialValues={{
                 fullname: "",
-                email: "",
+                email: inforUser?.email || "",
                 password: "",
                 confirmPass: "",
               }}
@@ -105,9 +123,10 @@ export default function RegisterPage() {
                       className={`${styles.input} focus:outline-none focus:ring-transparent`}
                       type="text"
                       name="fullname"
-                      value={values.name}
+                      value={values.fullname}
                       onChange={handleChange}
                       onBlur={handleBlur}
+                      ref={fullnameInput}
                     />
                     {errors.fullname && touched.fullname && (
                       <div className="text-left -mt-10 mb-4 ml-2">

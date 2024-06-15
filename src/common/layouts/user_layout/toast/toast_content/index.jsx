@@ -45,7 +45,7 @@ const ToastContent = ({ content, addToCart, error, close, className }) => {
         <div className={styles.content_wrapper}>
           <div>
             <p className={styles.title}>There was an error.</p>
-            <p className={styles.error_details}>{content.message}</p>
+            <p className={styles.error_details}>{content}</p>
           </div>
         </div>
         <i className={styles.icon}>

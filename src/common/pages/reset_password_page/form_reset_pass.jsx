@@ -1,11 +1,12 @@
+/* eslint-disable react/prop-types */
+import useAuth from "@/hooks/useAuth";
 import styles from "./index.module.scss";
 import { Formik } from "formik";
 import * as Yup from "yup";
-export default function FormResetPass() {
+export default function FormResetPass({ code }) {
+  const { resetPassword } = useAuth();
   const handleSubmit = (e) => {
-    e.preventDefault();
-
-    console.log({});
+    resetPassword({ new_password: e.password, code });
   };
 
   const ResetSchema = Yup.object().shape({

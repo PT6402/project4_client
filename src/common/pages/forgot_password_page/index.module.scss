@@ -78,6 +78,11 @@
       &:hover {
         cursor: pointer;
       }
+      &:disabled {
+        &:active {
+          transform: scale(1);
+        }
+      }
     }
 
     .no_account {

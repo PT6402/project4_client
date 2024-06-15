@@ -1,10 +1,16 @@
 /* eslint-disable react-hooks/exhaustive-deps */
-import { useDispatch } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import http from "../http";
 import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
-import { setEmail, setInfor, setTypeLogin } from "@/context/userSlice";
+import {
+  setAccessToken,
+  setEmail,
+  setInfor,
+  setTypeLogin,
+} from "@/context/userSlice";
 import useGoogle from "./useGoogle";
+import useToast from "./useToast";
 
 const useAuth = () => {
   const [isLoading, setIsLoading] = useState();
@@ -17,6 +23,8 @@ const useAuth = () => {
     isLoading: loadingGG,
     userInfo,
   } = useGoogle();
+  const { sendToast } = useToast();
+  const { inforUser } = useSelector((state) => state.userStore);
   const register = async ({ typeLogin, fullname, email, password }) => {
     setIsLoading(true);
     setError(null);
@@ -51,14 +59,16 @@ const useAuth = () => {
       setError(null);
     } catch (error) {
       if (error.response.status == 409) {
-        dispatch(setEmail(email));
+        dispatch(setEmail(null));
         if (typeLogin == "GOOGLE") {
           dispatch(setTypeLogin(typeLogin));
         }
-        navigate(`/login`);
+        sendToast({ error: true, message: "user is already" });
       }
 
+      //   navigate(`/login`);
       setError(error);
+      return { errorExist: true };
     } finally {
       setIsLoading(false);
     }
@@ -85,15 +95,21 @@ const useAuth = () => {
         } else {
           loginGoogle();
         }
-        setIsLoading(false);
-        setError(null);
       } else {
-        setIsLoading(false);
+        setError(true);
+        return { errorNotFound: true };
       }
     } catch (error) {
+      setError(true);
+      if (error?.response?.data) {
+        dispatch(setEmail(null));
+        dispatch(setTypeLogin(null));
+        sendToast({ error: true, message: error?.response?.data });
+        console.log(error?.response?.data);
+        return { errorNotFound: true };
+      }
+    } finally {
       setIsLoading(false);
-      setError(error.response.data);
-      console.log(error.response.data);
     }
   };
   const login = async ({ email, password, type_login }) => {
@@ -118,20 +134,113 @@ const useAuth = () => {
           })
         );
         navigate("/");
-        setError(null);
+      } else {
+        setError(true);
       }
     } catch (error) {
-      console.log(error);
-      setError(error);
+      setError(true);
+      sendToast({ error: true, message: error?.response?.data });
+      if (error?.response?.data == "password wrond") {
+        return { errorPassword: true };
+      }
+      if (error?.response?.data == "user not found") {
+        dispatch(setEmail(null));
+        dispatch(setTypeLogin(null));
+        console.log(error?.response?.data);
+        return { errorNotFound: true };
+      }
+    } finally {
+      setIsLoading(false);
+    }
+  };
+
+  const forgotPassword = async (email) => {
+    setIsLoading(true);
+    setError(null);
+    try {
+      const res = await http.get(`api/v1/auth/forgot-password/${email}`);
+      if (res.status == 200) {
+        dispatch(setEmail(email));
+        dispatch(setAccessToken(res.data));
+        navigate("/reset-password");
+      }
+    } catch (error) {
+      setError(true);
+
+      sendToast({ error: true, message: error?.response?.data });
+      if (error?.response?.data == "user not found") {
+        return { errorNotFound: true };
+      }
+
+      if (error?.response?.data == "type invalid") {
+        navigate("/login");
+      }
+    } finally {
+      setIsLoading(false);
+    }
+  };
+
+  const checkCodeReset = async ({ code }) => {
+    setIsLoading(true);
+    setError(null);
+    try {
+      if (inforUser?.accessToken != null && inforUser?.email != null) {
+        const res = await http.post(`api/v1/auth/check-code-reset`, {
+          code,
+          access_token: inforUser?.accessToken,
+          email: inforUser?.email,
+        });
+        if (res.status == 200) {
+          return true;
+        }
+      } else {
+        setError(true);
+        return false;
+      }
+    } catch (error) {
+      setError(true);
+      if (error?.response?.data == "token invalid") {
+        sendToast({ error: true, message: "code reset wrond" });
+      }
+      return false;
+    } finally {
+      setIsLoading(false);
+    }
+  };
+  const resetPassword = async ({ new_password, code }) => {
+    setIsLoading(true);
+    setError(null);
+    try {
+      if (inforUser?.accessToken != null && inforUser?.email != null) {
+        const res = await http.post(`api/v1/auth/reset-password`, {
+          new_password,
+          code,
+          access_token: inforUser?.accessToken,
+          email: inforUser?.email,
+        });
+        if (res.status == 200) {
+          dispatch(setTypeLogin("EMAIL"));
+          navigate("/login");
+        }
+        // console.log({ new_password, code, access_token, email });
+      } else {
+        setError(true);
+      }
+    } catch (error) {
+      setError(true);
+      console.log(error?.response?.data);
     } finally {
       setIsLoading(false);
     }
   };
 
   return {
-    checkTypeLogin,
-    register,
     login,
+    register,
+    checkCodeReset,
+    resetPassword,
+    forgotPassword,
+    checkTypeLogin,
     isLoading,
     error,
   };

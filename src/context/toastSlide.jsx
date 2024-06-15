@@ -27,4 +27,4 @@ const toastSlide = createSlice({
 });
 
 export default toastSlide.reducer;
-export const { setSuccess, setError } = toastSlide.actions;
+export const { setSuccess, setError, setClose } = toastSlide.actions;

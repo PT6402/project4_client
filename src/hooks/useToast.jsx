@@ -1,4 +1,4 @@
-import { setError, setSuccess } from "@/context/toastSlide";
+import { setClose, setError, setSuccess } from "@/context/toastSlide";
 import { useDispatch } from "react-redux";
 
 const useToast = () => {
@@ -13,7 +13,9 @@ const useToast = () => {
     }
   };
 
-  const close = () => {};
+  const close = () => {
+    dispatch(setClose());
+  };
   return { sendToast, close };
 };
 export default useToast;

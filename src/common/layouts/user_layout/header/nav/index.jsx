@@ -75,7 +75,7 @@ export default function Nav({ toggleSideNav, openCartModal }) {
           {/* <img className={styles.logo} src={LogoNav} alt="Logo Nav" /> */}
         </Link>
         <ul className={styles.links}>
-          <li>
+          {/* <li>
             <NavLink className={styles.link} to="/collections/t-shirts">
               T-shirts
             </NavLink>
@@ -92,7 +92,7 @@ export default function Nav({ toggleSideNav, openCartModal }) {
             <NavLink className={styles.link} to="/collections/accessories">
               Accessories
             </NavLink>
-          </li>
+          </li> */}
         </ul>
         <ul className={styles.icons_menu}>
           <li className={`${styles.search_icon} disabled-link`}>

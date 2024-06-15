@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-import { Link, useLocation, useParams } from "react-router-dom";
+import { Link, useLocation } from "react-router-dom";
 
 import styles from "./index.module.scss";
 import { Formik } from "formik";
@@ -7,7 +7,6 @@ import * as Yup from "yup";
 import useAuth from "@/hooks/useAuth";
 import { useSelector } from "react-redux";
 const LoginPage = () => {
-  const { email } = useParams();
   const { state: routerState } = useLocation();
   const { inforUser } = useSelector((state) => state.userStore);
   const [checkLogin, setCheckTypeLogin] = useState(false);
@@ -19,6 +18,9 @@ const LoginPage = () => {
         if (res?.typeLogin == "EMAIL") {
           setCheckTypeLogin(true);
         }
+        if (res?.errorNotFound) {
+          value.email = "";
+        }
       });
     }
 
@@ -27,6 +29,14 @@ const LoginPage = () => {
         email: value.email,
         password: value.password,
         type_login: "EMAIL",
+      }).then((res) => {
+        if (res?.errorNotFound) {
+          value.email = "";
+        }
+
+        if (res?.errorPassword) {
+          value.password = "";
+        }
       });
     }
   };
@@ -35,14 +45,19 @@ const LoginPage = () => {
     email: Yup.string()
       .matches(/^[A-Z0-9._%+-]+@[A-Z0-9.-]+.[A-Z]{2,4}$/i, "Invalid email")
       .required(),
-    password: Yup.string(),
+    password: checkLogin
+      ? Yup.string().required("require password")
+      : Yup.string(),
   });
 
   useEffect(() => {
-    if (email || inforUser?.typeLogin == "EMAIL") {
+    if (inforUser?.typeLogin == "EMAIL") {
       setCheckTypeLogin(true);
+    } else {
+      setCheckTypeLogin(false);
     }
-  }, []);
+  }, [inforUser]);
+
   return (
     <>
       <section className={styles.nav_section}></section>
@@ -92,41 +107,46 @@ const LoginPage = () => {
                       </div>
                     )}
                   </label>
-                  {checkLogin && (
-                    <label className={styles.label}>
-                      <span>Password:</span>
+                  {(() => {
+                    return (
+                      <label
+                        className={`${styles.label} ${
+                          checkLogin ? "visible" : "collapse hidden"
+                        } `}
+                      >
+                        <span>Password:</span>
 
-                      <p className="text-right text-lg text-gray-600  -mt-7 mb-2 mr-3 relative -bottom-2">
-                        <Link
-                          to="/forgot-password"
-                          className="font-medium text-gray-600 hover:text-gray-500 underline"
-                        >
-                          forgot password
-                        </Link>
-                      </p>
-                      <input
-                        style={{
-                          borderColor:
-                            errors.password && touched.password ? "red" : "",
-                        }}
-                        className={`${styles.input} focus:outline-none focus:ring-transparent 
+                        <p className="text-right text-lg text-gray-600  -mt-7 mb-2 mr-3 relative -bottom-2">
+                          <Link
+                            to="/forgot-password"
+                            className="font-medium text-gray-600 hover:text-gray-500 underline"
+                          >
+                            forgot password
+                          </Link>
+                        </p>
+                        <input
+                          style={{
+                            borderColor:
+                              errors.password && touched.password ? "red" : "",
+                          }}
+                          className={`${styles.input} focus:outline-none focus:ring-transparent 
                             text-xs `}
-                        name="password"
-                        type="password"
-                        onChange={handleChange}
-                        onBlur={handleBlur}
-                        value={values.password}
-                        required={false}
-                      />
-                      {errors.password && touched.password && (
-                        <div className="text-left -mt-10 mb-4 ml-2">
-                          <p className="font-medium text-red-600  text-base ">
-                            {errors.password}
-                          </p>
-                        </div>
-                      )}
-                    </label>
-                  )}
+                          name="password"
+                          type="password"
+                          onChange={handleChange}
+                          onBlur={handleBlur}
+                          value={values.password}
+                        />
+                        {errors.password && touched.password && (
+                          <div className="text-left -mt-10 mb-4 ml-2">
+                            <p className="font-medium text-red-600  text-base ">
+                              {errors.password}
+                            </p>
+                          </div>
+                        )}
+                      </label>
+                    );
+                  })()}
                   <button
                     className={styles.button}
                     type="submit"

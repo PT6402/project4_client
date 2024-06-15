@@ -2,12 +2,17 @@ import styles from "./index.module.scss";
 import { Link, useLocation } from "react-router-dom";
 import { Formik } from "formik";
 import * as Yup from "yup";
+import useAuth from "@/hooks/useAuth";
+import { useSelector } from "react-redux";
 export default function ForgotPasswordPage() {
   const { state: routerState } = useLocation();
-
+  const { forgotPassword, isLoading } = useAuth();
+  const { inforUser } = useSelector((state) => state.userStore);
   const handleSubmit = (value) => {
-    console.log({
-      value,
+    forgotPassword(value?.email).then((res) => {
+      if (res?.errorNotFound) {
+        value.email = "";
+      }
     });
   };
   const ForgotSchema = Yup.object().shape({
@@ -20,7 +25,7 @@ export default function ForgotPasswordPage() {
         <div className={styles.container}>
           <div className={`${styles.wrapper} main-container`}>
             <Formik
-              initialValues={{ email: "" }}
+              initialValues={{ email: inforUser?.email || "" }}
               onSubmit={handleSubmit}
               validationSchema={ForgotSchema}
               validateOnChange={false}
@@ -62,8 +67,21 @@ export default function ForgotPasswordPage() {
                     )}
                   </label>
 
-                  <button className={styles.button} type="submit">
-                    Send
+                  <button
+                    className={styles.button}
+                    type="submit"
+                    disabled={isLoading}
+                  >
+                    {isLoading ? (
+                      <div className="flex space-x-2 justify-center items-center bg-black">
+                        <span className="sr-only">Loading...</span>
+                        <div className="h-5 w-5 bg-white rounded-full animate-bounce [animation-delay:-0.3s]"></div>
+                        <div className="h-5 w-5 bg-white rounded-full animate-bounce [animation-delay:-0.15s]"></div>
+                        <div className="h-5 w-5 bg-white rounded-full animate-bounce"></div>
+                      </div>
+                    ) : (
+                      "Send"
+                    )}
                   </button>
                 </form>
               )}

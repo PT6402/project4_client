@@ -1,7 +1,15 @@
-import { Link } from "react-router-dom";
+/* eslint-disable react/prop-types */
+import { Link, useLocation, useNavigate } from "react-router-dom";
 import styles from "./index.module.scss";
 import { FaArrowLeft } from "react-icons/fa";
-export default function InputCode() {
+import useAuth from "@/hooks/useAuth";
+import { useEffect } from "react";
+import { useSelector } from "react-redux";
+export default function InputCode({ handleChange }) {
+  const navigate = useNavigate();
+  const { pathname } = useLocation();
+  const { inforUser } = useSelector((state) => state.userStore);
+  const { checkCodeReset, error } = useAuth();
   function focusNextInput(el, prevId, nextId) {
     if (el.value.length === 0) {
       if (prevId) {
@@ -31,11 +39,29 @@ export default function InputCode() {
       }
     }
     if (flag) {
-      console.log("code", code);
+      checkCodeReset({ code }).then((res) => {
+        handleChange({ status: res, code });
+      });
     }
   };
   const styleInput = `block w-16 h-16 py-3 text-sm font-extrabold text-center text-gray-900 bg-white border border-gray-300 rounded-lg focus:ring-gray-500 focus:border-gray-500  ${styles.input} sm:w-24 sm:h-24 sm:text-xl`;
+  useEffect(() => {
+    if (!(inforUser?.email && inforUser?.accessToken)) {
+      navigate("/forgot-password");
+    }
+  }, [pathname]);
 
+  useEffect(() => {
+    if (error) {
+      const listInput = document.querySelectorAll("[data-focus-input-init]");
+      for (let i = 0; i < listInput.length; i++) {
+        listInput[i].value = "";
+        if (i == 0) {
+          listInput[i].focus();
+        }
+      }
+    }
+  }, [error]);
   return (
     <div className=" mx-auto flex justify-start flex-col items-center">
       <Link to={"/forgot-password"} className={`${styles.arrow_button} `}>
