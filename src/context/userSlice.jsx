@@ -4,11 +4,36 @@ const userSlice = createSlice({
   name: "userSlice",
   initialState: {
     inforUser: {
-      fullname: null,
-      role: null,
-      email: null,
-      typeLogin: null,
-      accessToken: null,
+      fullname: "user",
+      role: "USER",
+      email: "user@gmail.com",
+      typeLogin: "EMAIL",
+      accessToken: "",
+      isLoggedIn: true,
+    },
+    orderHistorys: [],
+    myBooks: [],
+    cart: {
+      items: [
+        // {
+        //   bookId: null,
+        //   title: "",
+        //   image: "",
+        //   author: [{ authorId: null, authorName: "" }],
+        // },
+      ],
+    },
+
+    wishlist: {
+      items: [
+        // {
+        //   bookId: null,
+        //   title: "",
+        //   image: "",
+        //   rating: null,
+        //   ratingQuantity: null,
+        // },
+      ],
     },
   },
   reducers: {
@@ -26,6 +51,37 @@ const userSlice = createSlice({
     },
     setTypeLogin: (state, action) => {
       state.inforUser.typeLogin = action.payload;
+    },
+
+    // cart
+    addCartItem: (state, action) => {
+      const copyItems = [...state.items];
+      copyItems.push(action.payload);
+      state.items = copyItems;
+    },
+    deleteCartItem: (state, action) => {
+      const copyItems = [...state.items];
+      const newItems = copyItems.filter(
+        ({ bookId }) => action.payload != bookId
+      );
+      state.items = newItems;
+    },
+    removeAll: (state) => {
+      state.items = [];
+    },
+
+    // wishlist
+    addWishlistItem: (state, action) => {
+      const copyItems = [...state.items];
+      copyItems.push(action.payload);
+      state.items = copyItems;
+    },
+    deleteWishlistItem: (state, action) => {
+      const copyItems = [...state.items];
+      const newItems = copyItems.filter(
+        ({ bookId }) => action.payload != bookId
+      );
+      state.items = newItems;
     },
   },
 });

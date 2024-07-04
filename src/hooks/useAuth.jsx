@@ -10,7 +10,6 @@ import {
   setTypeLogin,
 } from "@/context/userSlice";
 import useGoogle from "./useGoogle";
-import useToast from "./useToast";
 
 const useAuth = () => {
   const [isLoading, setIsLoading] = useState();
@@ -23,7 +22,7 @@ const useAuth = () => {
     isLoading: loadingGG,
     userInfo,
   } = useGoogle();
-  const { sendToast } = useToast();
+
   const { inforUser } = useSelector((state) => state.userStore);
   const register = async ({ typeLogin, fullname, email, password }) => {
     setIsLoading(true);
@@ -63,7 +62,7 @@ const useAuth = () => {
         if (typeLogin == "GOOGLE") {
           dispatch(setTypeLogin(typeLogin));
         }
-        sendToast({ error: true, message: "user is already" });
+        // sendToast({ error: true, message: "user is already" });
       }
 
       //   navigate(`/login`);
@@ -104,7 +103,7 @@ const useAuth = () => {
       if (error?.response?.data) {
         dispatch(setEmail(null));
         dispatch(setTypeLogin(null));
-        sendToast({ error: true, message: error?.response?.data });
+        // sendToast({ error: true, message: error?.response?.data });
         console.log(error?.response?.data);
         return { errorNotFound: true };
       }
@@ -139,7 +138,7 @@ const useAuth = () => {
       }
     } catch (error) {
       setError(true);
-      sendToast({ error: true, message: error?.response?.data });
+      // sendToast({ error: true, message: error?.response?.data });
       if (error?.response?.data == "password wrond") {
         return { errorPassword: true };
       }
@@ -167,7 +166,7 @@ const useAuth = () => {
     } catch (error) {
       setError(true);
 
-      sendToast({ error: true, message: error?.response?.data });
+      // sendToast({ error: true, message: error?.response?.data });
       if (error?.response?.data == "user not found") {
         return { errorNotFound: true };
       }
@@ -200,7 +199,7 @@ const useAuth = () => {
     } catch (error) {
       setError(true);
       if (error?.response?.data == "token invalid") {
-        sendToast({ error: true, message: "code reset wrond" });
+        // sendToast({ error: true, message: "code reset wrond" });
       }
       return false;
     } finally {
@@ -233,7 +232,7 @@ const useAuth = () => {
       setIsLoading(false);
     }
   };
-
+  const handleLogout = () => {};
   return {
     login,
     register,
@@ -241,6 +240,7 @@ const useAuth = () => {
     resetPassword,
     forgotPassword,
     checkTypeLogin,
+    handleLogout,
     isLoading,
     error,
   };

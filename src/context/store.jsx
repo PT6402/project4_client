@@ -1,9 +1,21 @@
 import { configureStore } from "@reduxjs/toolkit";
 import userSlice from "./userSlice";
-import toastSlide from "./toastSlide";
+
+import bookSlice from "./bookSlice";
+import uiSlice from "./uiSlice";
+import formSlice from "./formSlice";
 
 const store = configureStore({
-  reducer: { userStore: userSlice, toastStore: toastSlide },
+  reducer: {
+    userStore: userSlice,
+    bookStore: bookSlice,
+    uiConfig: uiSlice,
+    formStore: formSlice,
+  },
+  middleware: (getDefaultMiddleware) =>
+    getDefaultMiddleware({
+      serializableCheck: false,
+    }),
 });
 
 export default store;
