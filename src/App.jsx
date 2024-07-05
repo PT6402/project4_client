@@ -5,12 +5,14 @@ import { AdminLayout, UserLayout } from "./layouts";
 import {
   AccountPage,
   CartPage,
+  ForgotPasswordPage,
   HomePage,
   LoginPage,
   NotFoundPage,
   ProductOverviewPage,
   ProductPage,
   RegisterPage,
+  ResetPasswordPage,
   SearchPage,
   ThankYouPage,
   WishlistPage,
@@ -32,14 +34,18 @@ function App() {
     <Routes>
       <Route path="/" element={<UserLayout />}>
         <Route index element={<HomePage />} />
+        {/* auth route */}
+        <Route path="login" element={<LoginPage />} />
+        <Route path="register" element={<RegisterPage />} />
+        <Route path="forgot-password" element={<ForgotPasswordPage />} />
+        <Route path="reset-password" element={<ResetPasswordPage />} />
+
         <Route path="products" element={<ProductPage />} />
         <Route path="wishlist" element={<WishlistPage />} />
         <Route path="cart" element={<CartPage />} />
         <Route path="product-overview" element={<ProductOverviewPage />} />
         <Route path="account" element={<AccountPage />} />
         <Route path="thank-you" element={<ThankYouPage />} />
-        <Route path="login" element={<LoginPage />} />
-        <Route path="register" element={<RegisterPage />} />
         <Route path="search" element={<SearchPage />} />
       </Route>
       <Route path="/admin" element={<AdminLayout />}>

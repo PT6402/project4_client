@@ -11,7 +11,7 @@ ReactDOM.createRoot(document.getElementById("root")).render(
   <GoogleOAuthProvider clientId="522149207280-0besags21pb05hdp0c8juu2vmg0hc1be.apps.googleusercontent.com">
     <Provider store={store}>
       <Router>
-        <Toaster position="top-right" reverseOrder={false} />
+        <Toaster position="top-center" reverseOrder={false} />
         <ThemeProvider>
           <App />
         </ThemeProvider>

@@ -4,12 +4,12 @@ const userSlice = createSlice({
   name: "userSlice",
   initialState: {
     inforUser: {
-      fullname: "user",
-      role: "USER",
-      email: "user@gmail.com",
-      typeLogin: "EMAIL",
+      fullname: "",
+      role: "",
+      email: "",
+      typeLogin: "",
       accessToken: "",
-      isLoggedIn: true,
+      isLoggedIn: false,
     },
     orderHistorys: [],
     myBooks: [],

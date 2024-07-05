@@ -10,6 +10,7 @@ import {
   setTypeLogin,
 } from "@/context/userSlice";
 import useGoogle from "./useGoogle";
+import toast from "react-hot-toast";
 
 const useAuth = () => {
   const [isLoading, setIsLoading] = useState();
@@ -41,14 +42,15 @@ const useAuth = () => {
           dispatch(setTypeLogin(typeLogin));
           navigate(`/login`);
         } else {
+          const data = res.data.model;
           dispatch(
             setInfor({
-              fullname: res.data.fullname,
-              email: res.data.email,
-              role: res.data.role,
-              typeLogin: res.data.type_login,
-              accessToken: res.data.access_token,
-              isVerified: true,
+              fullname: data.fullname,
+              email: data.email,
+              role: data.role,
+              typeLogin: data.type_login,
+              accessToken: data.access_token,
+              isLoggedIn: true,
             })
           );
           navigate("/");
@@ -62,6 +64,7 @@ const useAuth = () => {
         if (typeLogin == "GOOGLE") {
           dispatch(setTypeLogin(typeLogin));
         }
+        toast.error("user is already");
         // sendToast({ error: true, message: "user is already" });
       }
 
@@ -88,7 +91,7 @@ const useAuth = () => {
     try {
       const res = await http.get(`/api/v1/auth/check-type-login/${email}`);
       if (res.status == 200) {
-        if (res.data == "EMAIL") {
+        if (res.data.model == "EMAIL") {
           dispatch(setEmail(email));
           return { typeLogin: "EMAIL" };
         } else {
@@ -103,6 +106,7 @@ const useAuth = () => {
       if (error?.response?.data) {
         dispatch(setEmail(null));
         dispatch(setTypeLogin(null));
+        toast.error(error?.response.data.message);
         // sendToast({ error: true, message: error?.response?.data });
         console.log(error?.response?.data);
         return { errorNotFound: true };
@@ -122,14 +126,15 @@ const useAuth = () => {
         type_device: "WEB",
       });
       if (res.status == 200) {
+        const data = res.data.model;
         dispatch(
           setInfor({
-            fullname: res.data.fullname,
-            email: res.data.email,
-            role: res.data.role,
-            typeLogin: res.data.type_login,
-            accessToken: res.data.access_token,
-            isVerified: true,
+            fullname: data.fullname,
+            email: data.email,
+            role: data.role,
+            typeLogin: data.type_login,
+            accessToken: data.access_token,
+            isLoggedIn: true,
           })
         );
         navigate("/");
@@ -139,10 +144,11 @@ const useAuth = () => {
     } catch (error) {
       setError(true);
       // sendToast({ error: true, message: error?.response?.data });
-      if (error?.response?.data == "password wrond") {
+      toast.error(error.response.data.message);
+      if (error?.response?.data?.message == "password wrond") {
         return { errorPassword: true };
       }
-      if (error?.response?.data == "user not found") {
+      if (error?.response?.data?.message == "user not found") {
         dispatch(setEmail(null));
         dispatch(setTypeLogin(null));
         console.log(error?.response?.data);
@@ -160,18 +166,18 @@ const useAuth = () => {
       const res = await http.get(`api/v1/auth/forgot-password/${email}`);
       if (res.status == 200) {
         dispatch(setEmail(email));
-        dispatch(setAccessToken(res.data));
+        dispatch(setAccessToken(res.data.model));
         navigate("/reset-password");
       }
     } catch (error) {
       setError(true);
-
+      toast.error(error.response.data.message);
       // sendToast({ error: true, message: error?.response?.data });
-      if (error?.response?.data == "user not found") {
+      if (error?.response?.data?.message == "user not found") {
         return { errorNotFound: true };
       }
 
-      if (error?.response?.data == "type invalid") {
+      if (error?.response?.data?.message == "type invalid") {
         navigate("/login");
       }
     } finally {
@@ -198,7 +204,8 @@ const useAuth = () => {
       }
     } catch (error) {
       setError(true);
-      if (error?.response?.data == "token invalid") {
+      if (error?.response?.data?.message == "token invalid") {
+        toast.error("code reset wrond");
         // sendToast({ error: true, message: "code reset wrond" });
       }
       return false;

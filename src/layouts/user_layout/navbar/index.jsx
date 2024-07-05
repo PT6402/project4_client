@@ -9,7 +9,6 @@ import { MdOutlineExplore } from "react-icons/md";
 import { BiLogIn, BiSearch } from "react-icons/bi";
 import { useUser } from "../../../hooks";
 import Logout from "./Logout";
-import { SearchBar } from "../../../components";
 
 const Navbar = () => {
   const {
@@ -28,14 +27,16 @@ const Navbar = () => {
           className="px-4 mx-auto max-w-7xl sm:px-6 lg:px-8"
         >
           <div className="flex items-center justify-between h-16">
-            <div className="flex items-center justify-between">
-              <div className="flex w-1/2 overflow-hidden sm:ml-4 md:w-1/12 lg:ml-0">
+            <div className="flex items-center justify-end w-full">
+              <div className="flex flex-1 overflow-hidden sm:ml-4 md:w-1/12 lg:ml-0">
                 <NavLink to="/">
-                  <span className="sr-only">The Book Shelf</span>
-                  <img
+                  <p className=" text-2xl text-white font-bold">
+                    The Book Shelf
+                  </p>
+                  {/* <img
                     src="https://ik.imagekit.io/pb97gg2as/E-Commerce-Assets/logo-no-background.png?updatedAt=1684597528087"
                     alt="THE BOOK SHELF"
-                  />
+                  /> */}
                 </NavLink>
               </div>
               <div className="flex items-center justify-end w-4/5">
@@ -74,9 +75,13 @@ const Navbar = () => {
                     className="w-px h-6 ml-4 bg-gray-700 lg:ml-6"
                     aria-hidden="true"
                   />
-                  <div className="flow-root ml-4 lg:ml-6">
+                  <div
+                    className={`flow-root ml-4 lg:ml-6 ${
+                      isUserValid ? "" : "opacity-40"
+                    }`}
+                  >
                     <NavLink
-                      to="wishlist"
+                      to={!isUserValid ? "#" : "wishlist"}
                       className="flex items-center p-2 -m-2 group"
                     >
                       <HeartIcon
@@ -84,7 +89,7 @@ const Navbar = () => {
                         aria-hidden="true"
                       />
                       <span className="ml-1 text-xs font-medium text-gray-100 sm:ml-2 sm:text-sm group-hover:text-gray-50">
-                        {wishlist.items.length}
+                        {isUserValid && wishlist.items.length}
                       </span>
                       <span className="sr-only">favorite items view</span>
                     </NavLink>
@@ -93,9 +98,13 @@ const Navbar = () => {
                     className="w-px h-6 ml-4 bg-gray-700 lg:ml-6"
                     aria-hidden="true"
                   />
-                  <div className="flow-root ml-4 lg:ml-6">
+                  <div
+                    className={`flow-root ml-4 lg:ml-6 ${
+                      isUserValid ? "" : "opacity-40"
+                    }`}
+                  >
                     <NavLink
-                      to="cart"
+                      to={!isUserValid ? "#" : "cart"}
                       className="flex items-center p-2 -m-2 group"
                     >
                       <ShoppingBagIcon
@@ -103,27 +112,31 @@ const Navbar = () => {
                         aria-hidden="true"
                       />
                       <span className="ml-1 text-xs font-medium text-gray-100 sm:ml-2 sm:text-sm group-hover:text-gray-50">
-                        {cart.items.length}
+                        {isUserValid && cart.items.length}
                       </span>
                       <span className="sr-only">items in cart, view bag</span>
                     </NavLink>
                   </div>
-                  <span
-                    className="w-px h-6 ml-4 bg-gray-700 lg:ml-6"
-                    aria-hidden="true"
-                  />
-                  <div className="ml-4 md:flow-root lg:ml-6">
-                    <NavLink
-                      to="account"
-                      className="flex items-center p-2 -m-2 group"
-                    >
-                      <UserCircleIcon
-                        className="flex-shrink-0 w-6 h-6 text-gray-100 group-hover:text-white"
+                  {isUserValid && (
+                    <>
+                      <span
+                        className="w-px h-6 ml-4 bg-gray-700 lg:ml-6"
                         aria-hidden="true"
                       />
-                      <span className="sr-only">user profile view</span>
-                    </NavLink>
-                  </div>
+                      <div className="ml-4 md:flow-root lg:ml-6">
+                        <NavLink
+                          to="account"
+                          className="flex items-center p-2 -m-2 group"
+                        >
+                          <UserCircleIcon
+                            className="flex-shrink-0 w-6 h-6 text-gray-100 group-hover:text-white"
+                            aria-hidden="true"
+                          />
+                          <span className="sr-only">user profile view</span>
+                        </NavLink>
+                      </div>
+                    </>
+                  )}
                   {isUserValid && (
                     <>
                       <span

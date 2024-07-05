@@ -1,11 +1,13 @@
 import { useEffect, useState } from "react";
 import { useParams } from "react-router-dom";
 import OrderHistory from "./OrderHistory";
+import { useSelector } from "react-redux";
 
 const AccountPage = () => {
-  const fullname = "test user";
-  const email = "test email user";
   const { tab } = useParams();
+  const {
+    inforUser: { fullname, email },
+  } = useSelector((state) => state.userStore);
   const [selectedTab, setSelectedTab] = useState(tab ?? "profile");
 
   useEffect(() => {

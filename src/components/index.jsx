@@ -1,5 +1,6 @@
 import AddToCartButton from "./AddToCardButton";
 import CategoryCard from "./CategoryCard";
+import InputForm from "./InputForm";
 import OrderCard from "./OrderCard";
 import SearchBar from "./SearchBar";
 import WishlistButton from "./WishlistButton";
@@ -34,4 +35,5 @@ export {
   IconArrowRight,
   ControlForm,
   HeaderStepForm,
+  InputForm,
 };
