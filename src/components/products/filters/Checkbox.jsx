@@ -1,31 +1,12 @@
-import { useDispatch, useSelector } from "react-redux";
-import { useFilter } from "../../../hooks";
-import { refreshCollection, setFilterCate } from "../../../context/bookSlice";
-import { useEffect } from "react";
+/* eslint-disable react/prop-types */
 
-const Checkbox = () => {
-  const dispatch = useDispatch();
+import { useSelector } from "react-redux";
+const Checkbox = ({ onChange }) => {
   const {
     categories,
-    filterBook: { categorys: selectedCategory, isFilter, rating },
+    filterBook: { categorys },
   } = useSelector((state) => state.bookStore);
-  const { filterBook } = useFilter();
 
-  const changeHandler = async (id) => {
-    dispatch(setFilterCate(id));
-    if (!isFilter) {
-      dispatch(refreshCollection());
-    }
-
-    console.log(id);
-  };
-  useEffect(() => {
-    (async () => {
-      if (isFilter) {
-        await filterBook({ rating, categorys: selectedCategory });
-      }
-    })();
-  }, [selectedCategory]);
   return (
     <fieldset className="pb-4">
       <legend className="text-sm text-gray-100">Category</legend>
@@ -35,11 +16,11 @@ const Checkbox = () => {
             <div className="flex items-center pl-3">
               <input
                 id={id}
-                onChange={() => changeHandler(id)}
+                onChange={() => onChange(id)}
                 name="categories"
                 value={name}
                 type="checkbox"
-                checked={selectedCategory.includes(id)}
+                checked={categorys.includes(id)}
                 className="w-4 h-4 bg-gray-700 border-gray-500 cursor-pointer text-cyan-600 focus:ring-cyan-600 ring-offset-gray-700 focus:ring-offset-gray-700 focus:ring-2"
               />
               <label

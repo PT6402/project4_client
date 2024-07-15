@@ -11,18 +11,23 @@ import {
 } from "@/context/userSlice";
 import useGoogle from "./useGoogle";
 import toast from "react-hot-toast";
+import useWishlist from "./useWishlist";
 
 const useAuth = () => {
   const [isLoading, setIsLoading] = useState();
   const [error, setError] = useState();
   const dispatch = useDispatch();
   const navigate = useNavigate();
+  // use Google
   const {
     loginGoogle,
     error: errorGG,
     isLoading: loadingGG,
     userInfo,
   } = useGoogle();
+
+  // useWishlist
+  const { getWishlist } = useWishlist();
 
   const { inforUser } = useSelector((state) => state.userStore);
   const register = async ({ typeLogin, fullname, email, password }) => {
@@ -139,6 +144,7 @@ const useAuth = () => {
             isLoggedIn: true,
           })
         );
+        await getWishlist({ userDetailId: data.userDetailId });
         navigate("/");
       } else {
         setError(true);

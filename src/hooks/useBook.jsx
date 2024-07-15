@@ -28,6 +28,7 @@ const useBook = () => {
         dispatch(setCurrentPage(goToPage));
         dispatch(setTotalPage(res.data?.model?.totalPage));
         dispatch(setListBook(res.data?.model?.paglist));
+        return res.data?.model?.paglist;
       }
     } catch (error) {
       console.log(error.response.data);

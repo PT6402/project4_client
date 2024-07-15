@@ -1,42 +1,34 @@
 import { useEffect } from "react";
 
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import { ProductCard } from "../../components";
 import { Transition } from "@headlessui/react";
+import { useSelector } from "react-redux";
+import { useWishlist } from "../../hooks";
 
 const WishlistPage = () => {
-  const wishListedItems = [
-    {
-      nameBook: "test",
-      images: "https://picsum.photos/seed/VDb7zyov2/640/480",
-      author: "abc",
-      rating: 12,
-      pages: 100,
-      description: "description",
-      price: 100,
-      reviews: [
-        {
-          username: "user1",
-          comment: "good good good good",
-          rating: 12,
-          date: "12-12-2012",
-        },
-        {
-          username: "user1",
-          comment: "good good good good",
-          rating: 12,
-          date: "12-12-2012",
-        },
-      ],
-    },
-  ];
+  const navigate = useNavigate();
+  const { getWishlist } = useWishlist();
+
+  const {
+    wishlist,
+    inforUser: { userDetailId },
+  } = useSelector((state) => state.userStore);
+
   useEffect(() => {
     document.title = "Wishlist | The Book Shelf";
+    if (!userDetailId) {
+      navigate("/login");
+    } else {
+      (async () => {
+        await getWishlist({ userDetailId });
+      })();
+    }
   }, []);
   return (
     <section>
       <h1
-        className={`${wishListedItems.length > 0 ? "mb-5" : ""} 
+        className={`${wishlist.length > 0 ? "mb-5" : ""} 
         mt-40 sm:mt-20 font-bold tracking-tight text-center text-gray-100 md:text-xl lg:text-4xl `}
       >
         Wishlist
@@ -50,7 +42,7 @@ const WishlistPage = () => {
           </div>
         </section>
       )} */}
-      <Transition
+      {/* <Transition
         appear={true}
         enter="transition-all ease-in-out duration-500 delay-[100ms]"
         enterFrom="opacity-0 translate-y-6"
@@ -59,18 +51,18 @@ const WishlistPage = () => {
         leave="transition-all ease-in-out duration-300"
         leaveFrom="opacity-100"
         leaveTo="opacity-0"
-      >
-        <div className="mx-auto max-w-2xl px-4 py-16 sm:px-6 sm:py-24 lg:max-w-7xl lg:px-8">
-          <h2 className="sr-only">Products</h2>
+      > */}
+      <div className="mx-auto max-w-2xl px-4 py-16 sm:px-6 sm:py-24 lg:max-w-7xl lg:px-8">
+        <h2 className="sr-only">Products</h2>
 
-          <div className="grid grid-cols-1 gap-x-6 gap-y-10 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 xl:gap-x-8">
-            {wishListedItems.map((product) => (
-              <ProductCard key={product.id} product={product} />
-            ))}
-          </div>
+        <div className="grid grid-cols-1 gap-x-6 gap-y-10 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 xl:gap-x-8">
+          {wishlist.map((product) => (
+            <ProductCard key={product.wishId} product={product} />
+          ))}
         </div>
-      </Transition>
-      {wishListedItems && wishListedItems.length === 0 && (
+      </div>
+      {/* </Transition> */}
+      {wishlist && wishlist.length === 0 && (
         <div className="grid h-60 place-items-center">
           <div>
             <p className="my-4 text-2xl font-semibold tracking-wide text-gray-100">

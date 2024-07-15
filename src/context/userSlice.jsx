@@ -9,7 +9,7 @@ const userSlice = createSlice({
       email: "",
       typeLogin: "",
       accessToken: "",
-      userDetailId: "",
+      userDetailId: null,
       isLoggedIn: false,
     },
     orderHistorys: [],
@@ -25,17 +25,7 @@ const userSlice = createSlice({
       ],
     },
 
-    wishlist: {
-      items: [
-        // {
-        //   bookId: null,
-        //   title: "",
-        //   image: "",
-        //   rating: null,
-        //   ratingQuantity: null,
-        // },
-      ],
-    },
+    wishlist: [],
   },
   reducers: {
     setAccessToken: (state, action) => {

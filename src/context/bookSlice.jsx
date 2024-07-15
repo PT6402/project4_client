@@ -13,7 +13,7 @@ const bookSlice = createSlice({
     filterBook: {
       isFilter: false,
       categorys: [],
-      rating: 0,
+      rating: null,
     },
   },
 
@@ -43,6 +43,9 @@ const bookSlice = createSlice({
       state.filterBook.isFilter = true;
       state.filterBook.categorys = newListCateSelected;
     },
+    setFilterCategorys: (state, action) => {
+      state.filterBook.categorys = action.payload;
+    },
     setFilterRating: (state, action) => {
       state.filterBook.isFilter = true;
       state.filterBook.rating = action.payload;
@@ -51,7 +54,7 @@ const bookSlice = createSlice({
       state.filterBook = {
         isFilter: false,
         categorys: [],
-        rating: 0,
+        rating: null,
       };
     },
     refreshCollection: (state) => {
@@ -74,4 +77,5 @@ export const {
   setTotalPage,
   setCurrentPage,
   refreshCollection,
+  setFilterCategorys,
 } = bookSlice.actions;

@@ -10,89 +10,92 @@ import {
 import { XMarkIcon } from "@heroicons/react/24/outline";
 import { FunnelIcon } from "@heroicons/react/20/solid";
 
-import { Checkbox, Range } from "../../components";
+import { Checkbox, Loader, Range } from "../../components";
 import { useFilter } from "../../hooks";
 import { useDispatch, useSelector } from "react-redux";
-import { clearFilter } from "../../context/bookSlice";
+import {
+  clearFilter,
+  setFilterCate,
+  setFilterCategorys,
+  setFilterRating,
+} from "../../context/bookSlice";
 import useBook from "../../hooks/useBook";
+import ShowItemFilter from "./ShowItemFilter";
+import ButtonClearAll from "./ButtonClearAll";
 
-const ProductLayout = ({ children }) => {
+const ProductLayout = ({ children, handleSetDataBook, idCate }) => {
   const dispatch = useDispatch();
   const [mobileFiltersOpen, setMobileFiltersOpen] = useState(false);
-
+  const [showLoader, setShowLoader] = useState(false);
+  //
   const {
-    filterBook: { rating },
+    filterBook: { isFilter, categorys, rating },
   } = useSelector((state) => state.bookStore);
-  const { getBooks } = useBook();
+  const { getBooks, isLoading } = useBook();
+  const { filterBook, loading } = useFilter();
+
+  //
+  const handleToggleStar = (value) => {
+    if (value == 1 && rating == 1) {
+      dispatch(setFilterRating(0));
+    }
+  };
+  const handleClearCate = () => {
+    dispatch(setFilterCategorys([]));
+    if (rating == null) {
+      dispatch(clearFilter());
+    }
+  };
+  const handleClearRating = () => {
+    dispatch(setFilterRating(null));
+    if (categorys.length == 0) {
+      dispatch(clearFilter());
+    }
+  };
+  //
+  const handleCheckboxOnChange = (id) => {
+    if (categorys.includes(id) && categorys.length == 1 && rating == null) {
+      dispatch(clearFilter());
+    } else {
+      dispatch(setFilterCate(id));
+    }
+  };
+  const handleChange = (value) => {
+    dispatch(setFilterRating(value));
+  };
+  const handleCallApiFilter = async () => {
+    const data = await filterBook({ categorys, rating });
+    handleSetDataBook(data);
+  };
+  const handleCallApiBook = async () => {
+    const data = await getBooks({ goToPage: 1 });
+    handleSetDataBook(data);
+  };
+  //
+  useEffect(() => {
+    if (loading || isLoading) {
+      setShowLoader(true);
+    } else {
+      setShowLoader(false);
+    }
+  }, [loading, isLoading]);
+
+  useEffect(() => {
+    if (categorys.length == 0 && rating == null) {
+      handleCallApiBook();
+    } else {
+      handleCallApiFilter();
+    }
+  }, [categorys, rating]);
+  useEffect(() => {
+    if (idCate != null) {
+      dispatch(setFilterCate(Number(idCate)));
+    } else {
+      dispatch(clearFilter());
+    }
+  }, []);
   return (
     <div className="mx-auto md:max-w-2xl lg:max-w-7xl">
-      {/* Mobile filter dialog */}
-      {/* <Transition show={mobileFiltersOpen} as={Fragment}>
-        <Dialog
-          as="div"
-          className="relative z-40 lg:hidden"
-          onClose={setMobileFiltersOpen}
-        >
-          <TransitionChild
-            as={Fragment}
-            enter="transition-opacity ease-linear duration-300"
-            enterFrom="opacity-0"
-            enterTo="opacity-100"
-            leave="transition-opacity ease-linear duration-300"
-            leaveFrom="opacity-100"
-            leaveTo="opacity-0"
-          >
-            <div className="fixed inset-0 bg-black bg-opacity-25" />
-          </TransitionChild>
-
-          <div className="fixed inset-0 z-40 flex">
-            <TransitionChild
-              as={Fragment}
-              enter="transition ease-in-out duration-300 transform"
-              enterFrom="translate-x-full"
-              enterTo="translate-x-0"
-              leave="transition ease-in-out duration-300 transform"
-              leaveFrom="translate-x-0"
-              leaveTo="translate-x-full"
-            >
-              <DialogPanel className="relative flex flex-col w-full h-full max-w-xs py-4 pb-12 ml-auto overflow-y-auto bg-gray-900 shadow-xl bg-inherit">
-                <div className="flex justify-end px-4">
-                  <button
-                    type="button"
-                    className="flex items-center justify-center w-10 h-10 p-2 -mr-2 text-gray-400 bg-gray-900 rounded-md"
-                    onClick={() => setMobileFiltersOpen(false)}
-                  >
-                    <span className="sr-only">Close menu</span>
-                    <XMarkIcon className="w-6 h-6" aria-hidden="true" />
-                  </button>
-                </div>
-
-                <div className="flex items-center justify-between px-4 mt-8">
-                  <h2 className="text-lg font-medium text-gray-100">Filters</h2>
-                  <span className="w-px h-6 bg-gray-700" aria-hidden="true" />
-                  <button
-                    // onClick={handleFilterReset}
-                    className="flex items-center p-2 text-sm text-gray-400 rounded-lg bg-gray-50 bg-opacity-10"
-                    type="button"
-                  >
-                    {" "}
-                    <XMarkIcon className="w-4 h-4 mr-2" /> Clear All
-                  </button>
-                </div>
-
-                <form className="mt-4 border-t border-gray-200">
-                  <h3 className="sr-only">Categories</h3>
-                  <div className="px-4 mt-12 space-y-2">
-                    <Range />
-                    <Checkbox />
-                  </div>
-                </form>
-              </DialogPanel>
-            </TransitionChild>
-          </div>
-        </Dialog>
-      </Transition> */}
-
       <main className="relative px-4 mx-auto md:ml-36 mt-18 max-w-7xl sm:px-6 lg:px-8">
         <div className="sticky z-20 flex items-baseline justify-between pt-40 pb-8 bg-gray-900 sm:top-16 lg:top-0 md:pt-24 mb-30">
           <div className="flex items-center">
@@ -121,30 +124,33 @@ const ProductLayout = ({ children }) => {
           >
             <div className="h-full px-3 py-4 overflow-y-auto">
               <form className="hidden md:block">
-                <div className="flex items-center justify-between my-4 text-gray-100 ">
-                  <button
-                    onClick={() => {
-                      dispatch(clearFilter());
-                      getBooks({ goToPage: 1 });
-                    }}
-                    className="flex items-center p-2 text-sm text-gray-400 rounded-lg hover:bg-gray-50 hover:bg-opacity-10"
-                    type="button"
-                  >
-                    {" "}
-                    <XMarkIcon className="w-4 h-4 mr-2" /> Clear All
-                  </button>
-                </div>
                 <h3 className="sr-only">Categories</h3>
                 <div className="mt-6 space-y-4">
-                  <Range />
-                  <Checkbox />
+                  <Range
+                    handleToggleStar={handleToggleStar}
+                    handleChange={handleChange}
+                  />
+                  <Checkbox onChange={handleCheckboxOnChange} />
                 </div>
+                {isFilter && (
+                  <div className="p-2 border-gray-300 border-2 rounded-lg">
+                    <ButtonClearAll onClick={() => dispatch(clearFilter())} />
+                    <ShowItemFilter
+                      handleClearCate={handleClearCate}
+                      handleClearRating={handleClearRating}
+                    />
+                  </div>
+                )}
               </form>
             </div>
           </aside>
 
           {/* Product grid */}
-          <div className="p-4 sm:mt-12 lg:mt-0">{children}</div>
+          {showLoader ? (
+            <Loader />
+          ) : (
+            <div className="p-4 sm:mt-12 lg:mt-0">{children}</div>
+          )}
         </section>
       </main>
     </div>

@@ -1,49 +1,68 @@
 /* eslint-disable react/prop-types */
-import { useEffect } from "react";
-import { useLocation, useNavigate } from "react-router";
-import http from "../http";
-import { HttpStatusCode } from "axios";
+import { useEffect, useState } from "react";
 import { useSelector } from "react-redux";
-// import { getAuth } from "../services/localstorage-service";
-// import { toast } from "react-hot-toast";
-// import { useContext } from "react";
-// import { BooksContext } from "../contexts/BooksProvider";
+import { useWishlist } from "../hooks";
+import { useNavigate } from "react-router-dom";
 
 const WishlistButton = ({ productId }) => {
-  // const { handleWishlistToggle } = useContext(BooksContext);
   const navigate = useNavigate();
-  const location = useLocation();
-  const wishlistToggleHandler = (e, product) => {
-    // e.stopPropagation();
-    // if (checkForAuth()) return;
-    // handleWishlistToggle(product);
-  };
+  const {
+    wishlist,
+    inforUser: { userDetailId },
+  } = useSelector((state) => state.userStore);
+  const { addWishlist, deleteWishlist, getWishlist } = useWishlist();
+  const [active, setActive] = useState(() => {
+    if (wishlist.find(({ bookid }) => bookid == productId)) {
+      return true;
+    } else {
+      return false;
+    }
+  });
 
-  // const checkForAuth = () => {
-  //   if (getAuth() === null) {
-  //     toast.error("Log in to continue.");
-  //     navigate("/login", { state: { from: location } });
-  //     return true;
-  //   }
-  // };
-  const product = {
-    wishlisted: false,
-  };
-  const handleCreateWishlist = async () => {
-    const formData = new FormData();
-    formData.append("bookid", productId);
-    formData.append("userdetailid", productId);
-    const res = await http.post("/api/v1/wishlist/create", formData);
-    if (res.status == HttpStatusCode.Ok) {
-      res.data;
+  const wishlistToggleHandler = () => {
+    if (userDetailId) {
+      if (active) {
+        handleDeleteWishlist();
+      } else {
+        handleAddWishlist();
+      }
+    } else {
+      navigate("/login");
     }
   };
-  useEffect(() => {}, []);
+  const handleAddWishlist = async () => {
+    setActive(true);
+    await addWishlist({ userDetailId, bookId: productId });
+    await getWishlist({ userDetailId });
+  };
+  const handleDeleteWishlist = async () => {
+    const wishlistItem = wishlist.find(({ bookid }) => bookid == productId);
+    if (wishlistItem) {
+      setActive(false);
+      await deleteWishlist({ wishlistId: wishlistItem.wishId });
+      await getWishlist({ userDetailId });
+    }
+  };
+  const handleCheckActive = () => {
+    if (wishlist.find(({ bookid }) => bookid == productId)) {
+      setActive(true);
+    } else {
+      setActive(false);
+    }
+  };
+  useEffect(() => {
+    if (userDetailId) {
+      handleCheckActive();
+    }
+  }, []);
+
   return (
     <button
       type="button"
-      onClick={(e) => wishlistToggleHandler(e, product)}
-      className="absolute -right-2 w-12 h-12 text-pink-600 rounded-full top-2.5"
+      onClick={() => {
+        wishlistToggleHandler();
+      }}
+      className="absolute -right-2 w-12 h-12 text-pink-600 rounded-full top-2.5 z-10"
     >
       <svg
         xmlns="http://www.w3.org/2000/svg"
@@ -52,7 +71,7 @@ const WishlistButton = ({ productId }) => {
         strokeWidth={2}
         stroke="currentColor"
         className={`w-3/4 p-2 ${
-          product.wishlisted ? "fill-current" : "hover:fill-current"
+          active ? "fill-current" : "hover:fill-current"
         } bg-pink-200 rounded-full bg-opacity-60 h-3/4`}
       >
         <path

@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { useDispatch, useSelector } from "react-redux";
+import { useDispatch } from "react-redux";
 import http from "../http";
 import { HttpStatusCode } from "axios";
 import { setWishlist } from "../context/userSlice";
@@ -8,17 +8,18 @@ const useWishlist = () => {
   const dispatch = useDispatch();
   const [isLoading, setIsLoading] = useState();
   const [error, setError] = useState();
-  const {
-    inforUser: { userDetailId },
-  } = useSelector((state) => state.userStore);
 
-  const getWishlist = async () => {
+  const getWishlist = async ({ userDetailId }) => {
     setIsLoading(true);
     setError(null);
     try {
-      const res = await http.get(`/api/v1/wishlist/show/${userDetailId}`);
-      if (res.status == HttpStatusCode.Ok) {
-        dispatch(setWishlist(res.data?.model));
+      if (userDetailId) {
+        const res = await http.get(`/api/v1/wishlist/show/${userDetailId}`);
+        if (res.status == HttpStatusCode.Ok) {
+          dispatch(setWishlist(res.data?.model));
+        }
+      } else {
+        return;
       }
     } catch (error) {
       console.log(error);
@@ -26,13 +27,15 @@ const useWishlist = () => {
       setIsLoading(false);
     }
   };
-  const addWishlist = async () => {
+  const addWishlist = async ({ bookId, userDetailId }) => {
     setIsLoading(true);
     setError(null);
     try {
-      const res = await http.get(`/api/v1/wishlist/show/${userDetailId}`);
+      const res = await http.post(
+        `/api/v1/wishlist/create?bookid=${bookId}&userdetailid=${userDetailId}`
+      );
       if (res.status == HttpStatusCode.Ok) {
-        dispatch(setWishlist(res.data?.model));
+        console.log("add success");
       }
     } catch (error) {
       console.log(error);
@@ -40,7 +43,20 @@ const useWishlist = () => {
       setIsLoading(false);
     }
   };
-  const deleteWishlist = () => {};
+  const deleteWishlist = async ({ wishlistId }) => {
+    setIsLoading(true);
+    setError(null);
+    try {
+      const res = await http.delete(`/api/v1/wishlist/${wishlistId}`);
+      if (res.status == HttpStatusCode.Ok) {
+        console.log("delete success");
+      }
+    } catch (error) {
+      console.log(error);
+    } finally {
+      setIsLoading(false);
+    }
+  };
   return { addWishlist, deleteWishlist, getWishlist, isLoading, error };
 };
 
