@@ -48,6 +48,7 @@ const useAuth = () => {
               fullname: data.fullname,
               email: data.email,
               role: data.role,
+              userDetailId: data.userDetailId,
               typeLogin: data.type_login,
               accessToken: data.access_token,
               isLoggedIn: true,
@@ -134,6 +135,7 @@ const useAuth = () => {
             role: data.role,
             typeLogin: data.type_login,
             accessToken: data.access_token,
+            userDetailId: data.userDetailId,
             isLoggedIn: true,
           })
         );

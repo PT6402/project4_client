@@ -3,13 +3,20 @@
 import { useNavigate } from "react-router-dom";
 import WishlistButton from "../WishlistButton";
 import AddToCartButton from "../AddToCardButton";
+import IconStarFull from "../icons/IconStarFull";
 // import { BooksContext } from "../../contexts/BooksProvider";
 
 const ProductCard = ({ product, fromWishlist }) => {
   const navigate = useNavigate();
   // const { removeWishlistHandler } = useContext(BooksContext);
 
-  const { images, price, rating, nameBook, bookId } = product;
+  const {
+    imageCove: images,
+    rating,
+    ratingQuantity,
+    name: nameBook,
+    bookid: bookId,
+  } = product;
 
   const removeFromWishList = (e, product) => {
     // e.stopPropagation();
@@ -17,7 +24,7 @@ const ProductCard = ({ product, fromWishlist }) => {
   };
 
   const productOverview = (id) => {
-    navigate(`/product-overview`);
+    navigate(`/product-overview/${id}`);
   };
 
   return (
@@ -28,10 +35,14 @@ const ProductCard = ({ product, fromWishlist }) => {
       <div className="relative">
         <img
           className="w-40 h-48 mt-3  lg:w-56 lg:h-80 rounded-lg overflow-hidden"
-          src={images}
+          src={`data:image/png;base64,${images}`}
           alt={nameBook}
         />
-
+        <div className=" flex absolute items-center justify-center text-xs left-1 top-4 font-semibold px-1.5 py-0.5 rounded-md bg-cyan-900  text-gray-100">
+          <p className="font-bold text-lg text-center">{rating}</p>
+          <IconStarFull />
+          <p className="-ml-2 relative top-0.5">({ratingQuantity})</p>
+        </div>
         {!fromWishlist && <WishlistButton product={product} />}
         {fromWishlist && (
           <button
@@ -56,24 +67,15 @@ const ProductCard = ({ product, fromWishlist }) => {
           </button>
         )}
       </div>
-      <div className="flex flex-col flex-wrap content-between justify-center px-5 pb-5 align-middle">
+      <div className="flex flex-col flex-wrap content-between justify-center px-5 pb-5 align-middle ">
         <h5
           title={nameBook}
           className="w-32 h-12 text-base font-semibold tracking-tight text-gray-100 lg:w-48 lg:text-lg lg:h-14 line-clamp-2"
         >
           {nameBook}
         </h5>
-        <div className="flex flex-col space-y-2">
-          <div className="text-lg lg:text-2xl relative before:mr-1 before:content-['₹'] font-bold text-gray-100">
-            {price}
-            {/* <p className="text-xs sm:text-sm  before:mr-1 before:content-['₹'] line-through text-gray-200">
-              {price}
-            </p> */}
 
-            <span className=" absolute text-xs right-0 bottom-1.5 font-semibold px-2.5 py-0.5 rounded bg-cyan-900 bg-opacity-80 text-gray-100">
-              {rating}
-            </span>
-          </div>
+        <div className="flex flex-col space-y-2 ">
           <AddToCartButton product={product} />
         </div>
       </div>

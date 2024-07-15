@@ -9,6 +9,7 @@ const userSlice = createSlice({
       email: "",
       typeLogin: "",
       accessToken: "",
+      userDetailId: "",
       isLoggedIn: false,
     },
     orderHistorys: [],
@@ -83,9 +84,12 @@ const userSlice = createSlice({
       );
       state.items = newItems;
     },
+    setWishlist: (state, action) => {
+      state.wishlist = action.payload;
+    },
   },
 });
 
 export default userSlice.reducer;
-export const { setAccessToken, setEmail, setInfor, setTypeLogin } =
+export const { setAccessToken, setEmail, setInfor, setTypeLogin, setWishlist } =
   userSlice.actions;

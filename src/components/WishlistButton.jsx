@@ -1,11 +1,15 @@
 /* eslint-disable react/prop-types */
+import { useEffect } from "react";
 import { useLocation, useNavigate } from "react-router";
+import http from "../http";
+import { HttpStatusCode } from "axios";
+import { useSelector } from "react-redux";
 // import { getAuth } from "../services/localstorage-service";
 // import { toast } from "react-hot-toast";
 // import { useContext } from "react";
 // import { BooksContext } from "../contexts/BooksProvider";
 
-const WishlistButton = () => {
+const WishlistButton = ({ productId }) => {
   // const { handleWishlistToggle } = useContext(BooksContext);
   const navigate = useNavigate();
   const location = useLocation();
@@ -25,6 +29,16 @@ const WishlistButton = () => {
   const product = {
     wishlisted: false,
   };
+  const handleCreateWishlist = async () => {
+    const formData = new FormData();
+    formData.append("bookid", productId);
+    formData.append("userdetailid", productId);
+    const res = await http.post("/api/v1/wishlist/create", formData);
+    if (res.status == HttpStatusCode.Ok) {
+      res.data;
+    }
+  };
+  useEffect(() => {}, []);
   return (
     <button
       type="button"

@@ -1,6 +1,5 @@
 import { Outlet } from "react-router-dom";
 
-import Footer from "./Footer";
 import DashboardNavbar from "./DashboardNavbar";
 import Sidenav from "./SideNav";
 import admin_routes from "../../routes/admin_routes";

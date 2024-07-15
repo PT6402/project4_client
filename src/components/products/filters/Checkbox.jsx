@@ -1,32 +1,31 @@
-// import { useContext } from "react";
-// import { BooksContext } from "../../../contexts/BooksProvider";
-// import { FILTERS_ACTION } from "../../../constants/dispatchTypes";
-import useBook from "../../../hooks/useBook";
+import { useDispatch, useSelector } from "react-redux";
+import { useFilter } from "../../../hooks";
+import { refreshCollection, setFilterCate } from "../../../context/bookSlice";
+import { useEffect } from "react";
 
 const Checkbox = () => {
+  const dispatch = useDispatch();
   const {
-    bookStore: { categories },
-  } = useBook();
-  const selectedCategory = [];
-  // const {
-  //   booksState: { categories },
-  //   filtersState: { selectedCategory },
-  //   filtersDispatch,
-  // } = useContext(BooksContext);
+    categories,
+    filterBook: { categorys: selectedCategory, isFilter, rating },
+  } = useSelector((state) => state.bookStore);
+  const { filterBook } = useFilter();
 
-  const changeHandler = (e) => {
-    // let categories = selectedCategory;
-    // if (selectedCategory.includes(e.target.value)) {
-    //   // Remove if already selected
-    //   categories = selectedCategory.filter((ele) => ele !== e.target.value);
-    // } else {
-    //   categories = [...selectedCategory, e.target.value];
-    // }
-    // filtersDispatch({
-    //   type: FILTERS_ACTION.UPDATE_CATEGORY,
-    //   payload: categories,
-    // });
+  const changeHandler = async (id) => {
+    dispatch(setFilterCate(id));
+    if (!isFilter) {
+      dispatch(refreshCollection());
+    }
+
+    console.log(id);
   };
+  useEffect(() => {
+    (async () => {
+      if (isFilter) {
+        await filterBook({ rating, categorys: selectedCategory });
+      }
+    })();
+  }, [selectedCategory]);
   return (
     <fieldset className="pb-4">
       <legend className="text-sm text-gray-100">Category</legend>
@@ -36,11 +35,11 @@ const Checkbox = () => {
             <div className="flex items-center pl-3">
               <input
                 id={id}
-                onChange={changeHandler}
+                onChange={() => changeHandler(id)}
                 name="categories"
                 value={name}
                 type="checkbox"
-                checked={selectedCategory.includes(name)}
+                checked={selectedCategory.includes(id)}
                 className="w-4 h-4 bg-gray-700 border-gray-500 cursor-pointer text-cyan-600 focus:ring-cyan-600 ring-offset-gray-700 focus:ring-offset-gray-700 focus:ring-2"
               />
               <label

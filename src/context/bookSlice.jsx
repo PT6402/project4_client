@@ -1,49 +1,77 @@
 import { createSlice } from "@reduxjs/toolkit";
 
 const bookSlice = createSlice({
-  name: "userSlice",
+  name: "bookSlice",
   initialState: {
-    listBooks: [],
+    listBook: [],
+    collection: {
+      totalPage: 0,
+      currentPage: 1,
+      limit: 10,
+    },
     categories: [],
-    selectedBook: {
-      bookId: "",
-      nameBook: "",
-      price: "",
-      pageQuatity: null,
-      rating: null,
-      ratingQuantity: null,
-      description: "",
-      edition: "",
-      authors: [{ authorId: null, authorName: "" }],
-      images: "",
-      categories: [{ id: "", name: "", thumbnail: "", description: "" }],
-      page: null,
-      isBestSeller: null,
-      reviews: [
-        {
-          userId: null,
-          content: "",
-          rating: null,
-          userName: null,
-          dateReview: null,
-        },
-      ],
+    filterBook: {
+      isFilter: false,
+      categorys: [],
+      rating: 0,
     },
   },
 
   reducers: {
-    setInforBook: (state, action) => {
-      state.selectedBook = action.payload;
+    setCurrentPage: (state, action) => {
+      state.collection.currentPage = action.payload;
     },
-
+    setTotalPage: (state, action) => {
+      state.collection.totalPage = action.payload;
+    },
     setListBook: (state, action) => {
-      state.listBooks = action.payload;
+      state.listBook = action.payload;
     },
     setCategories: (state, action) => {
       state.categories = action.payload;
+    },
+    setFilterCate: (state, action) => {
+      const listCateSelected = [...state.filterBook.categorys];
+      let newListCateSelected = [];
+      if (listCateSelected.includes(action.payload)) {
+        newListCateSelected = listCateSelected.filter(
+          (i) => i != action.payload
+        );
+      } else {
+        newListCateSelected = [...listCateSelected, action.payload];
+      }
+      state.filterBook.isFilter = true;
+      state.filterBook.categorys = newListCateSelected;
+    },
+    setFilterRating: (state, action) => {
+      state.filterBook.isFilter = true;
+      state.filterBook.rating = action.payload;
+    },
+    clearFilter: (state) => {
+      state.filterBook = {
+        isFilter: false,
+        categorys: [],
+        rating: 0,
+      };
+    },
+    refreshCollection: (state) => {
+      state.collection = {
+        totalPage: 0,
+        currentPage: 1,
+        limit: 10,
+      };
     },
   },
 });
 
 export default bookSlice.reducer;
-export const { setInforBook, setListBook, setCategories } = bookSlice.actions;
+export const {
+  setFilterCate,
+  clearFilter,
+  setCategories,
+  setFilterRating,
+  setListBook,
+  setTotalPage,
+  setCurrentPage,
+  refreshCollection,
+} = bookSlice.actions;

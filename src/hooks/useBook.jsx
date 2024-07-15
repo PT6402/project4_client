@@ -2,37 +2,57 @@ import { useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import http from "../http";
 import { HttpStatusCode } from "axios";
-import { setCategories, setListBook } from "../context/bookSlice";
+import {
+  setCurrentPage,
+  setListBook,
+  setTotalPage,
+} from "../context/bookSlice";
 
 const useBook = () => {
   const dispatch = useDispatch();
+
   const [isLoading, setIsLoading] = useState();
   const [error, setError] = useState();
-  const bookStore = useSelector((state) => state.bookStore);
+  const {
+    collection: { currentPage, limit },
+  } = useSelector((state) => state.bookStore);
 
-  const getFirstBooks = async () => {
+  const getBooks = async ({ goToPage = currentPage }) => {
     setIsLoading(true);
     setError(null);
     try {
-      const res_categories = await http.get("/api/v1/categories");
-      if (res_categories.status == HttpStatusCode.Ok) {
-        dispatch(setCategories(res_categories.data));
+      const res = await http.get(
+        `/api/v1/book/showpage?page=${goToPage}&limit=${limit}`
+      );
+      if (res.status == HttpStatusCode.Ok) {
+        dispatch(setCurrentPage(goToPage));
+        dispatch(setTotalPage(res.data?.model?.totalPage));
+        dispatch(setListBook(res.data?.model?.paglist));
       }
-      const res_books = await http.get("/api/v1/books?_page=1&_limit=5");
-      if (res_books.status == HttpStatusCode.Ok) {
-        dispatch(setListBook(res_books.data.data));
-      }
-      return;
     } catch (error) {
       console.log(error.response.data);
       setError(error.response.data);
-      return;
+    } finally {
+      setIsLoading(false);
+    }
+  };
+  const getBookDetail = async ({ id }) => {
+    setIsLoading(true);
+    setError(null);
+    try {
+      const res = await http.get(`/api/v1/book/showone/${id}`);
+      if (res.status == HttpStatusCode.Ok) {
+        return res.data.model;
+      }
+    } catch (error) {
+      console.log(error.response.data);
+      setError(error.response.data);
     } finally {
       setIsLoading(false);
     }
   };
 
-  return { isLoading, error, getFirstBooks, bookStore };
+  return { isLoading, error, getBooks, getBookDetail };
 };
 
 export default useBook;

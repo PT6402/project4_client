@@ -3,11 +3,12 @@ import { NavLink } from "react-router-dom";
 
 import { CategoryCard } from "../../components";
 import useBook from "../../hooks/useBook";
+import { useSelector } from "react-redux";
 
 const links = [{ name: "Explore", to: "products" }];
 
 const HomePage = () => {
-  const { bookStore } = useBook();
+  const { categories } = useSelector((state) => state.bookStore);
   useEffect(() => {
     document.title = "Home | The Book Shelf";
   }, []);
@@ -71,10 +72,17 @@ const HomePage = () => {
             </div>
 
             <dl className="grid grid-cols-2 gap-6 mt-8 sm:mt-20 lg:grid-cols-4">
-              {bookStore.categories.length > 0 &&
-                bookStore.categories.map((category) => (
+              {categories.length > 0 &&
+                categories.map((category) => (
                   <CategoryCard key={category.id} category={category} />
                 ))}
+              {categories.length === 0 && (
+                <div className="">
+                  <p className="text-md text-center text-gray-100 text-nowrap">
+                    Oops! Looks like our Book Shelf is empty. 😟
+                  </p>
+                </div>
+              )}
             </dl>
           </div>
         </div>

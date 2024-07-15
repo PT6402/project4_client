@@ -17,18 +17,30 @@ import {
   ThankYouPage,
   WishlistPage,
 } from "./pages";
-import useBook from "./hooks/useBook";
 import { useEffect, useState } from "react";
 import { Loader } from "./components";
 import { admin_routes } from "./routes";
 import AddCategory from "./pages/admin/categories_page/AddCategory";
+import { useCategory } from "./hooks";
 
 function App() {
   const [showLoader, setShowLoader] = useState(false);
-  const { getFirstBooks, isLoading } = useBook();
+  const { getCategorys, isLoading: loadCate } = useCategory();
+  const handleCallFirst = async () => {
+    await getCategorys();
+  };
   useEffect(() => {
-    getFirstBooks().then(() => setShowLoader());
-  }, [isLoading]);
+    document.title = "Products | The Book Shelf";
+    const loader = setTimeout(() => {
+      if (!loadCate) {
+        setShowLoader(false);
+      }
+    }, 2000);
+    return () => clearTimeout(loader);
+  }, [loadCate]);
+  useEffect(() => {
+    handleCallFirst();
+  }, []);
   if (showLoader) return <Loader />;
   return (
     <Routes>
@@ -41,9 +53,10 @@ function App() {
         <Route path="reset-password" element={<ResetPasswordPage />} />
 
         <Route path="products" element={<ProductPage />} />
+        <Route path="products/:id" element={<ProductPage />} />
         <Route path="wishlist" element={<WishlistPage />} />
         <Route path="cart" element={<CartPage />} />
-        <Route path="product-overview" element={<ProductOverviewPage />} />
+        <Route path="product-overview/:id" element={<ProductOverviewPage />} />
         <Route path="account" element={<AccountPage />} />
         <Route path="thank-you" element={<ThankYouPage />} />
         <Route path="search" element={<SearchPage />} />

@@ -10,54 +10,24 @@ import {
 import { XMarkIcon } from "@heroicons/react/24/outline";
 import { FunnelIcon } from "@heroicons/react/20/solid";
 
-import { Outlet, useParams } from "react-router-dom";
-import { Checkbox, Radio, Range } from "../../components";
+import { Checkbox, Range } from "../../components";
+import { useFilter } from "../../hooks";
+import { useDispatch, useSelector } from "react-redux";
+import { clearFilter } from "../../context/bookSlice";
+import useBook from "../../hooks/useBook";
 
 const ProductLayout = ({ children }) => {
+  const dispatch = useDispatch();
   const [mobileFiltersOpen, setMobileFiltersOpen] = useState(false);
-  //   const {
-  //     filtersState: { priceSlider, ratingSlider },
-  //     filtersDispatch,
-  //     handleFilterReset,
-  //   } = useContext(BooksContext);
 
-  //   const { category } = useParams();
-
-  //   useEffect(() => {
-  //     category &&
-  //       filtersDispatch({
-  //         type: FILTERS_ACTION.UPDATE_CATEGORY,
-  //         payload: [category],
-  //       });
-  //   }, [category, filtersDispatch]);
-  const ratingSlider = 0;
-  const priceSlider = 0;
-  const ratingsRange = {
-    value: ratingSlider,
-    // dispatch: filtersDispatch,
-    heading:
-      ratingSlider === 5
-        ? `Ratings (${ratingSlider})`
-        : `Ratings (${ratingSlider} and above)`,
-    max: 5,
-    min: 1,
-    step: 0.5,
-    // dispatchType: FILTERS_ACTION.UPDATE_RATING_SLIDER,
-  };
-
-  const priceRange = {
-    value: priceSlider,
-    // dispatch: filtersDispatch,
-    heading: `Price (100 to ${priceSlider})`,
-    max: 1500,
-    step: 50,
-    min: 100,
-    // dispatchType: FILTERS_ACTION.UPDATE_PRICE_SLIDER,
-  };
+  const {
+    filterBook: { rating },
+  } = useSelector((state) => state.bookStore);
+  const { getBooks } = useBook();
   return (
     <div className="mx-auto md:max-w-2xl lg:max-w-7xl">
       {/* Mobile filter dialog */}
-      <Transition show={mobileFiltersOpen} as={Fragment}>
+      {/* <Transition show={mobileFiltersOpen} as={Fragment}>
         <Dialog
           as="div"
           className="relative z-40 lg:hidden"
@@ -90,7 +60,7 @@ const ProductLayout = ({ children }) => {
                   <button
                     type="button"
                     className="flex items-center justify-center w-10 h-10 p-2 -mr-2 text-gray-400 bg-gray-900 rounded-md"
-                    // onClick={() => setMobileFiltersOpen(false)}
+                    onClick={() => setMobileFiltersOpen(false)}
                   >
                     <span className="sr-only">Close menu</span>
                     <XMarkIcon className="w-6 h-6" aria-hidden="true" />
@@ -110,13 +80,10 @@ const ProductLayout = ({ children }) => {
                   </button>
                 </div>
 
-                {/* Filters */}
                 <form className="mt-4 border-t border-gray-200">
                   <h3 className="sr-only">Categories</h3>
                   <div className="px-4 mt-12 space-y-2">
-                    <Range {...priceRange} />
-                    <Radio />
-                    <Range {...ratingsRange} />
+                    <Range />
                     <Checkbox />
                   </div>
                 </form>
@@ -124,20 +91,16 @@ const ProductLayout = ({ children }) => {
             </TransitionChild>
           </div>
         </Dialog>
-      </Transition>
+      </Transition> */}
 
       <main className="relative px-4 mx-auto md:ml-36 mt-18 max-w-7xl sm:px-6 lg:px-8">
         <div className="sticky z-20 flex items-baseline justify-between pt-40 pb-8 bg-gray-900 sm:top-16 lg:top-0 md:pt-24 mb-30">
-          {/* <h1 className="font-bold tracking-tight text-gray-100 md:text-xl lg:text-4xl">
-            Books
-          </h1> */}
-
           <div className="flex items-center">
             <Menu as="div" className="relative inline-block text-left"></Menu>
             <button
               type="button"
               className="p-2 ml-4 -m-2 text-gray-400 hover:text-gray-500 sm:ml-6 md:hidden"
-              //   onClick={() => setMobileFiltersOpen(true)}
+              onClick={() => setMobileFiltersOpen(true)}
             >
               <span className="sr-only">Filters</span>
               <FunnelIcon className="w-5 h-5" aria-hidden="true" />
@@ -159,15 +122,11 @@ const ProductLayout = ({ children }) => {
             <div className="h-full px-3 py-4 overflow-y-auto">
               <form className="hidden md:block">
                 <div className="flex items-center justify-between my-4 text-gray-100 ">
-                  <span className="font-bold tracking-wide md:text-md lg:text-2xl">
-                    Filters
-                  </span>
-                  <span
-                    className="hidden w-px h-6 bg-gray-700 lg:block"
-                    aria-hidden="true"
-                  />
                   <button
-                    // onClick={handleFilterReset}
+                    onClick={() => {
+                      dispatch(clearFilter());
+                      getBooks({ goToPage: 1 });
+                    }}
                     className="flex items-center p-2 text-sm text-gray-400 rounded-lg hover:bg-gray-50 hover:bg-opacity-10"
                     type="button"
                   >
@@ -177,9 +136,7 @@ const ProductLayout = ({ children }) => {
                 </div>
                 <h3 className="sr-only">Categories</h3>
                 <div className="mt-6 space-y-4">
-                  <Range {...priceRange} />
-                  <Radio />
-                  <Range {...ratingsRange} />
+                  <Range />
                   <Checkbox />
                 </div>
               </form>
