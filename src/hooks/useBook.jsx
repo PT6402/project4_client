@@ -53,7 +53,47 @@ const useBook = () => {
     }
   };
 
-  return { isLoading, error, getBooks, getBookDetail };
+  const search = async ({ searchBy, querySearch }) => {
+    setIsLoading(true);
+    setError(null);
+    try {
+      if (searchBy == "book") {
+        const res = await http.get(`/api/v1/book/search?name=${querySearch}`);
+        if (res.status == HttpStatusCode.Ok) {
+          return res.data.model;
+        }
+      } else {
+        const res = await http.get(
+          `/api/v1/authors/search?name=${querySearch}`
+        );
+        if (res.status == HttpStatusCode.Ok) {
+          return res.data.model;
+        }
+      }
+    } catch (error) {
+      console.log(error.response.data);
+      setError(error.response.data);
+    } finally {
+      setIsLoading(false);
+    }
+  };
+  const getAuthors = async () => {
+    setIsLoading(true);
+    setError(null);
+    try {
+      const res = await http.get(`http://localhost:9090/api/v1/authors`);
+      if (res.status == HttpStatusCode.Ok) {
+        return res.data.model;
+      }
+    } catch (error) {
+      console.log(error.response.data);
+      setError(error.response.data);
+    } finally {
+      setIsLoading(false);
+    }
+  };
+
+  return { isLoading, error, getBooks, getBookDetail, search, getAuthors };
 };
 
 export default useBook;

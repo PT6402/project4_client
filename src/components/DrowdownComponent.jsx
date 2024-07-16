@@ -1,3 +1,4 @@
+/* eslint-disable react/prop-types */
 import {
   Listbox,
   ListboxButton,
@@ -7,22 +8,25 @@ import {
 } from "@headlessui/react";
 import { CheckIcon, ChevronDownIcon } from "@heroicons/react/20/solid";
 
-import { useState } from "react";
+import { useEffect, useState } from "react";
 
-const people = [
-  { id: 1, name: "Book" },
-  { id: 2, name: "Author" },
-];
-
-export default function ListBoxDropdown() {
-  const [selected, setSelected] = useState(people[1]);
-
+export default function ListBoxDropdown({ handleGetBySearch, searchBy }) {
+  const searchByDropdown = [
+    { id: 1, name: "Book", value: "book" },
+    { id: 2, name: "Author", value: "author" },
+  ];
+  const [selected, setSelected] = useState(() => {
+    return searchByDropdown.find(({ value }) => value == searchBy);
+  });
+  useEffect(() => {
+    handleGetBySearch(selected.value);
+  }, [selected]);
   return (
-    <div className="w-24  rounded-lg text-sm bg-white">
+    <div className="w-20  rounded-lg text-sm bg-white">
       <Listbox value={selected} onChange={setSelected}>
         <ListboxButton
           className={
-            "py-3 px-4 ps-6 pe-10 relative block w-full rounded-lg pr-8 pl-3 text-left text-sm/6 text-black "
+            "py-3 px-2  relative block w-full rounded-lg pr-8 pl-3 text-left text-sm/6 text-black "
           }
         >
           {selected.name}
@@ -40,7 +44,7 @@ export default function ListBoxDropdown() {
             anchor="bottom"
             className="rounded-xl border border-black/5 bg-white p-1 [--anchor-gap:var(--spacing-1)] focus:outline-none mt-4"
           >
-            {people.map((person) => (
+            {searchByDropdown.map((person) => (
               <ListboxOption
                 key={person.name}
                 value={person}

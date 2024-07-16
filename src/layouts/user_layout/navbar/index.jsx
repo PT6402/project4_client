@@ -21,12 +21,9 @@ const Navbar = () => {
 
   return (
     <header>
-      <div className="fixed top-0 left-0 right-0 z-30 py-2 overflow-hidden bg-gray-900">
-        <div
-          aria-label="Top"
-          className="px-4 mx-auto max-w-7xl sm:px-6 lg:px-8"
-        >
-          <div className="flex items-center justify-between h-16">
+      <div className="fixed top-0 left-0 right-0 z-30 py-2 overflow-hidden bg-gray-900 mx-auto">
+        <div aria-label="Top" className="px-4  max-w-7xl sm:px-6 lg:px-8 ">
+          <div className="flex items-center justify-between h-10 flex-1 ">
             <div className="flex items-center justify-end w-full">
               <div className="flex flex-1 overflow-hidden sm:ml-4 md:w-1/12 lg:ml-0">
                 <NavLink to="/">

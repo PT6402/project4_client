@@ -24,9 +24,10 @@ import ShowItemFilter from "./ShowItemFilter";
 import ButtonClearAll from "./ButtonClearAll";
 
 const ProductLayout = ({ children, handleSetDataBook, idCate }) => {
+  const [idCategory, setIdCategory] = useState(idCate);
   const dispatch = useDispatch();
   const [mobileFiltersOpen, setMobileFiltersOpen] = useState(false);
-  const [showLoader, setShowLoader] = useState(false);
+  const [showLoader, setShowLoader] = useState(true);
   //
   const {
     filterBook: { isFilter, categorys, rating },
@@ -71,7 +72,28 @@ const ProductLayout = ({ children, handleSetDataBook, idCate }) => {
     const data = await getBooks({ goToPage: 1 });
     handleSetDataBook(data);
   };
+
+  const handleCallApi = async () => {
+    if (categorys.length == 0 && rating == null) {
+      if (idCategory == null) {
+        await handleCallApiBook();
+      } else {
+        setIdCategory(null);
+      }
+    } else {
+      await handleCallApiFilter();
+    }
+  };
   //
+  useEffect(() => {
+    if (idCategory != null) {
+      dispatch(setFilterCate(Number(idCate)));
+    }
+
+    return () => {
+      dispatch(clearFilter());
+    };
+  }, []);
   useEffect(() => {
     if (loading || isLoading) {
       setShowLoader(true);
@@ -81,19 +103,8 @@ const ProductLayout = ({ children, handleSetDataBook, idCate }) => {
   }, [loading, isLoading]);
 
   useEffect(() => {
-    if (categorys.length == 0 && rating == null) {
-      handleCallApiBook();
-    } else {
-      handleCallApiFilter();
-    }
+    handleCallApi();
   }, [categorys, rating]);
-  useEffect(() => {
-    if (idCate != null) {
-      dispatch(setFilterCate(Number(idCate)));
-    } else {
-      dispatch(clearFilter());
-    }
-  }, []);
   return (
     <div className="mx-auto md:max-w-2xl lg:max-w-7xl">
       <main className="relative px-4 mx-auto md:ml-36 mt-18 max-w-7xl sm:px-6 lg:px-8">
