@@ -1,19 +1,17 @@
 import { useEffect, useState } from "react";
 import { AddToCartButton, Loader, WishlistButton } from "../../components";
-import { singleBook } from "./data_single_book";
-import axios from "axios";
-import http from "../../http";
 import { useParams } from "react-router-dom";
-import { bookDetail } from "../../hooks/data/bookDetail";
 import useBook from "../../hooks/useBook";
 import IconStarFull from "../../components/icons/IconStarFull";
+import PricePackage from "./PricePackage";
 
 const ProductOverviewPage = () => {
+  const [option, setOption] = useState("buy");
   const [showLoader, setShowLoader] = useState(true);
-  const { getBookDetail } = useBook();
+  const { getBookDetail, isLoading } = useBook();
   const { id: bookId } = useParams();
   const [dataDetail, setDataDetail] = useState({});
-
+  const handleGetOption = (value) => {};
   useEffect(() => {
     (async () => {
       const data = await getBookDetail({ id: bookId });
@@ -23,10 +21,14 @@ const ProductOverviewPage = () => {
 
   useEffect(() => {
     document.title = "Product Overview | The Book Shelf";
-    setTimeout(() => {
-      setShowLoader(false);
-    }, 2000);
   }, []);
+  useEffect(() => {
+    if (isLoading) {
+      setShowLoader(true);
+    } else {
+      setShowLoader(false);
+    }
+  }, [isLoading]);
   if (showLoader) return <Loader />;
 
   return (
@@ -44,28 +46,29 @@ const ProductOverviewPage = () => {
             ratingQuantity,
             authorlist,
             reviewlist,
+            priceBuy,
           } = dataDetail;
           return (
             <div className="container px-5 pt-32 pb-4 mx-auto sm:py-24">
               <div className="flex flex-wrap items-center mx-auto lg:max-w-5xl">
                 <img
                   alt={name}
-                  className="object-cover object-center w-full rounded h-1/2 lg:w-1/4"
+                  className="object-cover object-center w-full rounded h-1/2 lg:w-1/4 self-start"
                   src={`data:image/png;base64,${fileimage}`}
                 />
 
-                <div className="w-full mt-6 lg:w-2/3 lg:pl-10 lg:py-6 lg:mt-0">
-                  <h2 className="relative text-sm tracking-widest text-gray-500 title-font">
-                    {authorlist.map((author) => {
+                <div className="w-full  lg:w-2/3 lg:pl-10  lg:mt-0 self-start">
+                  <h1 className=" text-3xl font-medium text-gray-100 title-font">
+                    {name}
+                  </h1>
+                  <h2 className="relative text-sm tracking-widest text-gray-500 title-font mb-1">
+                    {authorlist?.map((author) => {
                       return <p key={author.id}>{author.name}</p>;
                     })}
                     <div className="absolute right-0 sm:bottom-4 sm:relative bottom-24">
                       <WishlistButton productId={bookId} />
                     </div>
                   </h2>
-                  <h1 className="mb-1 text-3xl font-medium text-gray-100 title-font">
-                    {name}
-                  </h1>
                   <div className="flex mb-4">
                     <span className="flex items-center">
                       <div className=" flex  items-center justify-center text-xs left-1 top-4 font-semibold px-1.5 py-0.5 rounded-md bg-cyan-900  text-gray-100 mr-2">
@@ -86,53 +89,18 @@ const ProductOverviewPage = () => {
                   <p className="leading-relaxed">{publisherDescription}</p>
 
                   <div className="flex items-baseline my-4">
-                    {/* <span className="text-2xl before:mr-1 before:content-['$'] font-medium text-gray-100 title-font">
-                      {price}
-                    </span> */}
-                    <div>
-                      <h3 className="mb-4 font-semibold text-white">Package</h3>
-                      <ul className="items-center w-full text-sm font-medium text-gray-900 bg-white border border-gray-200 rounded-lg dark:bg-gray-700 dark:border-gray-600 dark:text-white">
-                        {packlist.length > 0 &&
-                          packlist.map((packageItem, i) => (
-                            <li key={i} className="w-full">
-                              <div className="flex items-center ps-3">
-                                <input
-                                  id={`horizontal-list-radio-license ${i}`}
-                                  type="radio"
-                                  value=""
-                                  name="list-radio"
-                                  className="w-4 h-4 text-blue-600 bg-gray-100 border-gray-300 focus:ring-blue-500 dark:focus:ring-blue-600 dark:ring-offset-gray-700 dark:focus:ring-offset-gray-700 focus:ring-2 dark:bg-gray-600 dark:border-gray-500"
-                                />
-                                <label
-                                  htmlFor={`horizontal-list-radio-license ${i}`}
-                                  className="w-full py-3 ms-2 text-sm font-medium text-gray-900 dark:text-gray-300"
-                                >
-                                  <div>
-                                    <span className="p-2">
-                                      {packageItem.packageName}
-                                    </span>
-                                    -
-                                    <span className="p-2">
-                                      {packageItem.dayQuantity} day
-                                    </span>
-                                    -
-                                    <span className="p-2">
-                                      ${packageItem.rentPrice}
-                                    </span>
-                                  </div>
-                                </label>
-                              </div>
-                            </li>
-                          ))}
-                      </ul>
-                    </div>
+                    <PricePackage
+                      packlist={packlist}
+                      price={priceBuy}
+                      handleGetOption={handleGetOption}
+                    />
                     <div className="flex ml-auto">
                       <AddToCartButton product={dataDetail} />
                     </div>
                   </div>
                 </div>
               </div>
-              {reviewlist.length > 0 && (
+              {reviewlist?.length > 0 && (
                 <div className="flex flex-col mx-auto border-t border-gray-700 lg:max-w-5xl">
                   <h2 className="my-2 text-sm tracking-widest text-gray-500 title-font">
                     Recent Reviews

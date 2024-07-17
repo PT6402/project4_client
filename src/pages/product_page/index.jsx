@@ -4,6 +4,7 @@ import { ProductCard } from "../../components";
 import ProductLayout from "./ProductLayout";
 import PaginationPage from "./PaginationPage";
 import { useParams } from "react-router-dom";
+import MenuNav from "../../layouts/user_layout/navbar/MenuNav";
 
 const ProductPage = () => {
   const { id: idCate } = useParams();

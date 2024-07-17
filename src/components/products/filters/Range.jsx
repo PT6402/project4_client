@@ -10,7 +10,8 @@ const Range = ({ handleChange, handleToggleStar }) => {
   } = useSelector((state) => state.bookStore);
 
   return (
-    <fieldset className="pb-4 border-b border-gray-500">
+    <fieldset className="">
+      <p className="text-white mb-2">Rate</p>
       <Rating
         emptySymbol={<IconStarEmpty />}
         fullSymbol={<IconStarFull />}

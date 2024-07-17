@@ -9,6 +9,7 @@ import { MdOutlineExplore } from "react-icons/md";
 import { BiLogIn, BiSearch } from "react-icons/bi";
 import { useUser } from "../../../hooks";
 import Logout from "./Logout";
+import MenuNav from "./MenuNav";
 
 const Navbar = () => {
   const {
@@ -21,8 +22,11 @@ const Navbar = () => {
 
   return (
     <header>
-      <div className="fixed top-0 left-0 right-0 z-30 py-2 overflow-hidden bg-gray-900 mx-auto">
-        <div aria-label="Top" className="px-4  max-w-7xl sm:px-6 lg:px-8 ">
+      <div className="fixed top-0 left-0 right-0 z-30 py-2  bg-gray-900 p-10 ">
+        <div
+          aria-label="Top"
+          className="px-4  w-full sm:px-6 lg:px-8 relative "
+        >
           <div className="flex items-center justify-between h-10 flex-1 ">
             <div className="flex items-center justify-end w-full">
               <div className="flex flex-1 overflow-hidden sm:ml-4 md:w-1/12 lg:ml-0">
@@ -36,13 +40,13 @@ const Navbar = () => {
                   /> */}
                 </NavLink>
               </div>
-              <div className="flex items-center justify-end w-4/5">
+              <div className="flex items-center justify-end w-4/5 ">
                 {/* Search bar for above mobile screen */}
                 {/* <div className={`hidden relative w-1/4 mx-10 lg:block`}>
                   <SearchBar />
                 </div> */}
-                <div className="flex justify-end w-3/4">
-                  <div className="flow-root ml-4 lg:ml-6">
+                <div className="flex justify-end w-3/4 ">
+                  {/* <div className="flow-root ml-4 lg:ml-6">
                     <NavLink
                       to="products"
                       className="flex items-center p-2 -m-2 text-gray-100 rounded-md hover:bg-gray-700 group"
@@ -52,6 +56,18 @@ const Navbar = () => {
                       <span className="sr-only">products explore</span>
                     </NavLink>
                   </div>
+                  <span
+                    className="w-px h-6 ml-4 bg-gray-700 lg:ml-6"
+                    aria-hidden="true"
+                  /> */}
+                  <NavLink
+                    className="ml-4 md:flow-root lg:ml-6 "
+                    to={"/products"}
+                  >
+                    <div className="flex items-center p-2 -m-2 group ">
+                      <MenuNav />
+                    </div>
+                  </NavLink>
                   <span
                     className="w-px h-6 ml-4 bg-gray-700 lg:ml-6"
                     aria-hidden="true"
@@ -72,6 +88,7 @@ const Navbar = () => {
                     className="w-px h-6 ml-4 bg-gray-700 lg:ml-6"
                     aria-hidden="true"
                   />
+
                   <div
                     className={`flow-root ml-4 lg:ml-6 ${
                       isUserValid ? "" : "opacity-40"

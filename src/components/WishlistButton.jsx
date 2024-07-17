@@ -62,7 +62,7 @@ const WishlistButton = ({ productId }) => {
       onClick={() => {
         wishlistToggleHandler();
       }}
-      className="absolute -right-2 w-12 h-12 text-pink-600 rounded-full top-2.5 z-10"
+      className="absolute -right-2 w-10 h-10 text-pink-600 rounded-full -mt-0 z-10"
     >
       <svg
         xmlns="http://www.w3.org/2000/svg"
@@ -70,9 +70,9 @@ const WishlistButton = ({ productId }) => {
         viewBox="0 0 24 24"
         strokeWidth={2}
         stroke="currentColor"
-        className={`w-3/4 p-2 ${
+        className={`w-3/4 p-1 ${
           active ? "fill-current" : "hover:fill-current"
-        } bg-pink-200 rounded-full bg-opacity-60 h-3/4`}
+        }  rounded-full h-3/4`}
       >
         <path
           strokeLinecap="round"
