@@ -37,6 +37,20 @@ const admin_routes = [
         index: false,
         element: <AdminAuthorPage />,
       },
+      // {
+      //   icon: <HomeIcon {...icon} />,
+      //   name: "add-category",
+      //   path: "category/create",
+      //   index: false,
+      //   element: <AddCategory />,
+      // },
+      // {
+      //   icon: <HomeIcon {...icon} />,
+      //   name: "edit-category",
+      //   path: "category/edit/:id",
+      //   index: false,
+      //   element: <EditCategory />,
+      // },
     ],
   },
 ];

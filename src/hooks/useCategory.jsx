@@ -1,6 +1,10 @@
 import { useState } from "react";
 import http from "../http";
 import { HttpStatusCode } from "axios";
+
+import toast from "react-hot-toast";
+import { useEffect } from "react";
+
 import { useDispatch } from "react-redux";
 import { setCategories } from "../context/bookSlice";
 
@@ -8,6 +12,7 @@ const useCategory = () => {
   const dispatch = useDispatch();
   const [isLoading, setIsLoading] = useState();
   const [error, setError] = useState();
+  const dispatch = useDispatch();
 
   const getCategories = async () => {
     setIsLoading(true);
@@ -26,6 +31,26 @@ const useCategory = () => {
     }
   };
 
+  const getCategoryById = async (id) => {
+    setIsLoading(true);
+    setError(null);
+    try {
+      const res = await http.get(`/api/v1/cate/${id}`);
+      if (res.status === HttpStatusCode.Ok) {
+        return res.data.model;
+      } else {
+        setError('Failed to fetch category');
+        return null;
+      }
+    } catch (error) {
+      console.log(error);
+      setError('Failed to fetch category');
+      return null;
+    } finally {
+      setIsLoading(false);
+    }
+  };
+
   const createCategory = async (formData) => {
     setIsLoading(true);
     setError(null);
@@ -36,6 +61,7 @@ const useCategory = () => {
         },
       });
       if (res.status === HttpStatusCode.Ok) {
+        await getCategories();
         return res.data.model;
       }
     } catch (error) {
@@ -46,7 +72,28 @@ const useCategory = () => {
     }
   };
 
-  return { isLoading, error, getCategories, createCategory };
+  const updateCategory = async (id, formData) => {
+    setIsLoading(true);
+    setError(null);
+    try {
+      const res = await http.put(`/api/v1/cate/update/${id}`, formData, {
+        headers: {
+          "Content-Type": "multipart/form-data",
+        },
+      });
+      if (res.status === HttpStatusCode.Ok) {
+        // Handle success, e.g., show success message or update state
+        return res.data.status
+      }
+    } catch (error) {
+      console.log('Error response:', error.response);
+      setError(error.response?.data?.message || "Failed to update category");
+    } finally {
+      setIsLoading(false);
+    }
+  };
+
+  return { isLoading, error, getCategories, createCategory, updateCategory, getCategoryById };
 };
 
 export default useCategory;
