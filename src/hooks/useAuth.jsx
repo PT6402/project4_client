@@ -12,6 +12,7 @@ import {
 import useGoogle from "./useGoogle";
 import toast from "react-hot-toast";
 import useWishlist from "./useWishlist";
+import useCart from "./useCart";
 
 const useAuth = () => {
   const [isLoading, setIsLoading] = useState();
@@ -28,6 +29,7 @@ const useAuth = () => {
 
   // useWishlist
   const { getWishlist } = useWishlist();
+  const { getCart } = useCart();
 
   const { inforUser } = useSelector((state) => state.userStore);
   const register = async ({ typeLogin, fullname, email, password }) => {
@@ -145,6 +147,7 @@ const useAuth = () => {
           })
         );
         await getWishlist({ userDetailId: data.userDetailId });
+        await getCart(data.userDetailId);
         navigate("/");
       } else {
         setError(true);
