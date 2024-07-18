@@ -1,30 +1,55 @@
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
-import { CartCard, CartCheckoutDetails } from "../../components";
+import { CartCard, CartCheckoutDetails, Loader } from "../../components";
 import { listCart } from "./data_list_cart";
+import useCart from "../../hooks/useCart";
+import { useSelector } from "react-redux";
 
 const CartPage = () => {
-  const cart = listCart;
+  // const cart = listCart;
+  const {
+    cart: { items },
+  } = useSelector((state) => state.userStore);
+  // const [dataCart, setDataCart] = useState([]);
+  const { deleteToCart, updateCart, isLoading } = useCart();
+  const [showLoader, setShowLoader] = useState(true);
+  // const handleCallApiCart = async () => {
+  //   const data = await getCart();
+  //   setDataCart(data);
+  // };
+
   useEffect(() => {
     document.title = "Cart | The Book Shelf";
   }, []);
-
+  useEffect(() => {
+    if (isLoading) {
+      setShowLoader(true);
+    } else {
+      setShowLoader(false);
+    }
+  }, [isLoading]);
+  if (showLoader) return <Loader />;
   return (
     <div className="mt-40 sm:mt-20 ">
       <h1 className="my-4 font-bold tracking-tight text-center text-gray-100 md:text-xl lg:text-4xl">
         Cart Items
       </h1>
-      {cart && cart.length > 0 && (
+      {items && items.length > 0 && (
         <div className="justify-center max-w-5xl px-6 mx-auto md:flex md:space-x-6 xl:px-0">
           <div className="rounded-lg md:w-2/3">
-            {cart.map((product) => (
-              <CartCard key={product.bookId} product={product} />
+            {items.map((product) => (
+              <CartCard
+                key={product.bookId}
+                product={product}
+                deleteToCart={deleteToCart}
+                updateCart={updateCart}
+              />
             ))}
           </div>
-          <CartCheckoutDetails cart={cart} />
+          <CartCheckoutDetails cart={items} />
         </div>
       )}
-      {cart && cart.length === 0 && (
+      {items && items.length === 0 && (
         <div className="grid h-60 place-items-center">
           <div className="space-y-4">
             <p className="my-4 text-2xl font-semibold tracking-wide text-gray-100">

@@ -4,7 +4,7 @@ function IconStarFull() {
       xmlns="http://www.w3.org/2000/svg"
       fill="none"
       viewBox="0 0 24 24"
-      className="w-5 h-5 relative -top-0.5"
+      className="w-5 h-5 mx-2"
     >
       <path
         fill="#f3e439"

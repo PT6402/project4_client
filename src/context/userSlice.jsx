@@ -15,14 +15,7 @@ const userSlice = createSlice({
     orderHistorys: [],
     myBooks: [],
     cart: {
-      items: [
-        // {
-        //   bookId: null,
-        //   title: "",
-        //   image: "",
-        //   author: [{ authorId: null, authorName: "" }],
-        // },
-      ],
+      items: [],
     },
 
     wishlist: [],
@@ -57,8 +50,11 @@ const userSlice = createSlice({
       );
       state.items = newItems;
     },
-    removeAll: (state) => {
+    removeAllCart: (state) => {
       state.items = [];
+    },
+    setCartItem: (state, action) => {
+      state.cart.items = action.payload;
     },
 
     // wishlist
@@ -81,5 +77,14 @@ const userSlice = createSlice({
 });
 
 export default userSlice.reducer;
-export const { setAccessToken, setEmail, setInfor, setTypeLogin, setWishlist } =
-  userSlice.actions;
+export const {
+  setAccessToken,
+  setEmail,
+  setInfor,
+  setTypeLogin,
+  setWishlist,
+  setCartItem,
+  addCartItem,
+  removeAll,
+  deleteCartItem,
+} = userSlice.actions;

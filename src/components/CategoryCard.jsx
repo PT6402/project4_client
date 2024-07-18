@@ -12,7 +12,7 @@ const CategoryCard = ({ category }) => {
     >
       <div className="relative">
         <img
-          src={`data:image/HEIF;base64,${thumbnail}`}
+          src={`data:image/png;base64,${thumbnail}`}
           className="w-40 h-40 max-w-xs p-2 sm:h-60 sm:w-60"
           alt={description}
         />

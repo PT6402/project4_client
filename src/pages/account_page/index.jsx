@@ -2,6 +2,7 @@ import { useEffect, useState } from "react";
 import { useParams } from "react-router-dom";
 import OrderHistory from "./OrderHistory";
 import { useSelector } from "react-redux";
+import MyBook from "./MyBook";
 
 const AccountPage = () => {
   const { tab } = useParams();
@@ -16,7 +17,7 @@ const AccountPage = () => {
 
   return (
     <div className="mx-4 mt-[5.5rem]">
-      <ul className="flex flex-wrap max-w-4xl mx-auto text-sm font-medium text-center text-gray-400 border-b border-gray-700">
+      <ul className="flex flex-wrap max-w-4xl mx-auto text-sm font-medium text-center text-gray-400">
         <li className="mr-2">
           <button
             onClick={() => setSelectedTab("profile")}
@@ -24,7 +25,7 @@ const AccountPage = () => {
             aria-current="page"
             className={`${
               selectedTab === "profile" ? "bg-gray-800" : "hover:bg-gray-800"
-            } inline-block p-4 text-gray-100 rounded-t-lg`}
+            } inline-block p-4 text-gray-100 rounded-lg mb-1`}
           >
             Profile
           </button>
@@ -35,9 +36,20 @@ const AccountPage = () => {
             type="button"
             className={`${
               selectedTab === "orders" ? "bg-gray-800" : "hover:bg-gray-800"
-            } inline-block p-4 text-gray-100 rounded-t-lg`}
+            } inline-block p-4 text-gray-100 rounded-lg mb-1`}
           >
             Orders
+          </button>
+        </li>
+        <li className="mr-2">
+          <button
+            onClick={() => setSelectedTab("mybook")}
+            type="button"
+            className={`${
+              selectedTab === "mybook" ? "bg-gray-800" : "hover:bg-gray-800"
+            } inline-block p-4 text-gray-100 rounded-lg mb-1`}
+          >
+            My book
           </button>
         </li>
       </ul>
@@ -53,6 +65,11 @@ const AccountPage = () => {
         {selectedTab === "orders" && (
           <>
             <OrderHistory />
+          </>
+        )}
+        {selectedTab === "mybook" && (
+          <>
+            <MyBook />
           </>
         )}
       </div>

@@ -11,6 +11,7 @@ import ThankYouPage from "./thank_you_page";
 import WishlistPage from "./wishlist_page";
 import ForgotPasswordPage from "./auth/forgot_page";
 import ResetPasswordPage from "./auth/reset_page";
+import AuthorPage from "./author_page";
 export {
   HomePage,
   LoginPage,
@@ -25,4 +26,5 @@ export {
   SearchPage,
   ForgotPasswordPage,
   ResetPasswordPage,
+  AuthorPage,
 };
