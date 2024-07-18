@@ -8,7 +8,6 @@ const ProductCard = ({ product }) => {
   const {
     imageCove: images,
     rating,
-    ratingQuantity,
     name: nameBook,
     bookid: bookId,
     bookname,

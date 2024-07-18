@@ -1,17 +1,48 @@
 import { useEffect, useState } from "react";
 import { AddToCartButton, Loader, WishlistButton } from "../../components";
-import { useParams } from "react-router-dom";
+import { useNavigate, useParams } from "react-router-dom";
 import useBook from "../../hooks/useBook";
 import IconStarFull from "../../components/icons/IconStarFull";
-import PricePackage from "./PricePackage";
+import PricePackage from "../../components/PricePackage";
+import useCart from "../../hooks/useCart";
+import { useSelector } from "react-redux";
 
 const ProductOverviewPage = () => {
-  const [option, setOption] = useState("buy");
-  const [showLoader, setShowLoader] = useState(true);
-  const { getBookDetail, isLoading } = useBook();
+  const navigate = useNavigate();
   const { id: bookId } = useParams();
+  const [option, setOption] = useState({});
+  const [showLoader, setShowLoader] = useState(true);
   const [dataDetail, setDataDetail] = useState({});
-  const handleGetOption = (value) => {};
+  const { getBookDetail, isLoading } = useBook();
+  const { addToCart, updateCart, isLoading: loadCart } = useCart();
+  const {
+    inforUser: { isLoggedIn },
+    cart: { items },
+  } = useSelector((state) => state.userStore);
+  const handleGetOption = ({ type, packageId }) => {
+    setOption({ type, packageId });
+  };
+  const handleAddToCart = async (id) => {
+    if (!isLoggedIn) {
+      navigate("/login");
+    } else {
+      const itemCart = items.find(({ bookId: id }) => id == bookId);
+      if (itemCart) {
+        await updateCart({
+          cartItemId: itemCart.cartItemId,
+          packId: option.type == "buy" ? 0 : option.packageId,
+        });
+        navigate("/cart");
+      } else {
+        const data = {
+          bookId: Number(id),
+          iBuy: option.type == "buy",
+          packageId: option.packageId,
+        };
+        await addToCart(data);
+      }
+    }
+  };
   useEffect(() => {
     (async () => {
       const data = await getBookDetail({ id: bookId });
@@ -23,17 +54,17 @@ const ProductOverviewPage = () => {
     document.title = "Product Overview | The Book Shelf";
   }, []);
   useEffect(() => {
-    if (isLoading) {
+    if (isLoading || loadCart) {
       setShowLoader(true);
     } else {
       setShowLoader(false);
     }
-  }, [isLoading]);
+  }, [isLoading, loadCart]);
   if (showLoader) return <Loader />;
 
   return (
     <section className="overflow-hidden text-gray-100">
-      {dataDetail &&
+      {dataDetail?.id &&
         (() => {
           const {
             fileimage,
@@ -95,7 +126,11 @@ const ProductOverviewPage = () => {
                       handleGetOption={handleGetOption}
                     />
                     <div className="flex ml-auto">
-                      <AddToCartButton product={dataDetail} />
+                      <AddToCartButton
+                        bookId={id}
+                        cartUser={items}
+                        onClick={() => handleAddToCart(id)}
+                      />
                     </div>
                   </div>
                 </div>

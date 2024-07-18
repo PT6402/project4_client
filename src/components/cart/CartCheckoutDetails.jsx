@@ -15,7 +15,20 @@ const CartCheckoutDetails = ({ cart }) => {
   const navigate = useNavigate();
 
   const getAddress = () => [];
-
+  function calculateTotalPrice() {
+    let totalPrice = 0;
+    cart.forEach((item) => {
+      let price;
+      if (item.ibuy) {
+        price = item.priceBuy;
+      } else {
+        const pack = item.packlist.find((pack) => pack.id === item.packId);
+        price = pack ? pack.rentPrice : 0;
+      }
+      totalPrice += price;
+    });
+    return totalPrice;
+  }
   const checkoutHandler = () => {
     if (location.pathname === "/cart") {
       navigate("/checkout");
@@ -44,33 +57,36 @@ const CartCheckoutDetails = ({ cart }) => {
 
         {cart &&
           cart.length > 0 &&
-          cart.map(({ nameBook, price, bookId }) => (
-            <div
-              key={bookId}
-              title={nameBook}
-              className="flex justify-between mb-2"
-            >
-              <p className="w-40 text-gray-100 truncate">{nameBook}</p>{" "}
-              <p className="text-gray-100 before:mr-1 before:content-['₹']">
-                {price}
-              </p>
-            </div>
-          ))}
+          cart.map(({ bookName, packId, bookId, priceBuy, packlist, ibuy }) => {
+            let price;
 
-        <div className="flex justify-between mb-2">
-          <p className="text-gray-100">Subtotal</p>
-          <p className="text-gray-100 before:mr-1 before:content-['₹']">
-            {totalAmount}
-          </p>
-        </div>
-        <div className="flex justify-between mb-2">
-          <p className="text-gray-100">Discount</p>
-          <p className="text-gray-100 before:mr-1 before:content-['-₹']">
-            {totalAmount - discountedAmount}
-          </p>
-        </div>
+            if (ibuy) {
+              price = priceBuy;
+            } else {
+              const pack = packlist.find(({ id }) => id == packId);
+              price = { rentPrice: pack.rentPrice, day: pack.dayQuantity };
+            }
+            return (
+              <div
+                key={bookId}
+                title={bookName}
+                className="flex justify-between mb-2"
+              >
+                <p className="w-40 text-gray-100 truncate">{bookName}</p>{" "}
+                <p className="text-gray-100 before:mr-1 before:content-['$']">
+                  {ibuy ? (
+                    price
+                  ) : (
+                    <>
+                      {price.rentPrice}/{price.day} day
+                    </>
+                  )}
+                </p>
+              </div>
+            );
+          })}
 
-        {coupon.name !== "" && (
+        {/* {coupon.name !== "" && (
           <div className="flex justify-between">
             <p className="text-gray-100">Coupon Applied</p>
             <p className="text-gray-100 before:mr-1 before:content-['-₹']">
@@ -78,13 +94,13 @@ const CartCheckoutDetails = ({ cart }) => {
               {coupon.value}
             </p>
           </div>
-        )}
+        )} */}
         <hr className="my-4" />
         <div className="flex justify-between text-gray-100">
           <p className="text-lg font-bold">Total</p>
           <div>
             <p className="mb-1 text-lg before:mr-1 before:content-['₹'] font-bold">
-              {discountedAmount - coupon.value}
+              {calculateTotalPrice()}
             </p>
           </div>
         </div>
@@ -101,7 +117,7 @@ const CartCheckoutDetails = ({ cart }) => {
           {location.pathname === "/cart" ? "Check Out" : "Place Order"}
         </button>
 
-        {coupon.name !== "" && (
+        {/* {coupon.name !== "" && (
           <div className="flex justify-end ">
             <div className="px-2 py-1 my-2 hover:bg-gray-800 hover:rounded">
               <button
@@ -113,7 +129,7 @@ const CartCheckoutDetails = ({ cart }) => {
               </button>
             </div>
           </div>
-        )}
+        )} */}
       </div>
     </div>
   );

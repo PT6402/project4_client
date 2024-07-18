@@ -4,6 +4,7 @@ import "./App.css";
 import { AdminLayout, UserLayout } from "./layouts";
 import {
   AccountPage,
+  AuthorPage,
   CartPage,
   ForgotPasswordPage,
   HomePage,
@@ -61,6 +62,7 @@ function App() {
         <Route path="account" element={<AccountPage />} />
         <Route path="thank-you" element={<ThankYouPage />} />
         <Route path="search" element={<SearchPage />} />
+        <Route path="author" element={<AuthorPage />} />
       </Route>
       <Route path="/admin" element={<AdminLayout />}>
         {admin_routes.map(

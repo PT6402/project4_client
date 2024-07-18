@@ -2,6 +2,7 @@ import { useEffect, useState } from "react";
 import { useParams } from "react-router-dom";
 import OrderHistory from "./OrderHistory";
 import { useSelector } from "react-redux";
+import MyBook from "./MyBook";
 
 const AccountPage = () => {
   const { tab } = useParams();
@@ -40,6 +41,17 @@ const AccountPage = () => {
             Orders
           </button>
         </li>
+        <li className="mr-2">
+          <button
+            onClick={() => setSelectedTab("mybook")}
+            type="button"
+            className={`${
+              selectedTab === "mybook" ? "bg-gray-800" : "hover:bg-gray-800"
+            } inline-block p-4 text-gray-100 rounded-t-lg`}
+          >
+            My book
+          </button>
+        </li>
       </ul>
       <div className="max-w-4xl mx-auto my-4 text-gray-100 ">
         {/* For profile */}
@@ -53,6 +65,11 @@ const AccountPage = () => {
         {selectedTab === "orders" && (
           <>
             <OrderHistory />
+          </>
+        )}
+        {selectedTab === "mybook" && (
+          <>
+            <MyBook />
           </>
         )}
       </div>
