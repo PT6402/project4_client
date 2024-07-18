@@ -143,7 +143,7 @@ const ProductLayout = ({ children, handleSetDataBook, idCate }) => {
                   />
                   <Checkbox onChange={handleCheckboxOnChange} />
                 </div>
-                {/* {isFilter && (
+                {isFilter && (
                   <div className="p-2 border-gray-300 border-2 rounded-lg">
                     <ButtonClearAll onClick={() => dispatch(clearFilter())} />
                     <ShowItemFilter
@@ -151,7 +151,7 @@ const ProductLayout = ({ children, handleSetDataBook, idCate }) => {
                       handleClearRating={handleClearRating}
                     />
                   </div>
-                )} */}
+                )}
               </form>
             </div>
           </aside>
