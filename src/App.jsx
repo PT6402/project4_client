@@ -21,14 +21,15 @@ import { useEffect, useState } from "react";
 import { Loader } from "./components";
 import { admin_routes } from "./routes";
 import AddCategory from "./pages/admin/categories_page/AddCategory";
+import EditCategory from "./pages/admin/categories_page/EditCategory";
 import { useCategory } from "./hooks";
 import AddAuthor from "./pages/admin/authors_page/AddAuthor";
 
 function App() {
   const [showLoader, setShowLoader] = useState(false);
-  const { getCategorys, isLoading: loadCate } = useCategory();
+  const { getCategories, isLoading: loadCate } = useCategory();
   const handleCallFirst = async () => {
-    await getCategorys();
+    await getCategories();
   };
   useEffect(() => {
     document.title = "Products | The Book Shelf";
@@ -76,6 +77,7 @@ function App() {
         )}
         <Route path="/admin/author/create" element={<AddAuthor />} />
         <Route path="/admin/category/create" element={<AddCategory />} />
+        <Route path="/admin/category/edit/:id" element={<EditCategory />} />
       </Route>
       <Route path="/*" element={<NotFoundPage />} />
     </Routes>

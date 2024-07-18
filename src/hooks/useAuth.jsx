@@ -247,7 +247,7 @@ const useAuth = () => {
       setIsLoading(false);
     }
   };
-  const handleLogout = () => {};
+  const handleLogout = () => { };
   return {
     login,
     register,

@@ -27,15 +27,20 @@ export default function AdminCatetoriesPage() {
       <div className="mt-10 grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
         {categories.map((category) => (
           <div key={category.id} className="border rounded-md p-4 shadow-md">
-            {category.Imagedata && (
+            {category.imagedata && (
               <img
-                src={`data:image/jpeg;base64,${category.Imagedata}`}
+                src={`data:image/jpeg;base64,${category.imagedata}`}
                 alt={category.name}
                 className="w-full h-32 object-cover mb-4 rounded"
               />
             )}
             <h2 className="text-xl font-semibold">{category.name}</h2>
             <p className="text-gray-700">{category.description}</p>
+            <Link to={`edit/${category.id}`}>
+              <Button variant="gradient" className="mt-4">
+                Edit
+              </Button>
+            </Link>
           </div>
         ))}
       </div>
