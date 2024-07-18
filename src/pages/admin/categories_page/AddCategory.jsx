@@ -1,57 +1,64 @@
-/* eslint-disable react-hooks/exhaustive-deps */
-import { useDispatch, useSelector } from "react-redux";
-import CateFormNameFile from "./form/CateFormNameFile";
-import CateFormDes from "./form/CateFormDes";
-import { useEffect, useLayoutEffect, useState } from "react";
-import { firstConfig } from "../../../context/formSlice";
-import { ControlForm, HeaderStepForm } from "../../../components";
-import { Link } from "react-router-dom";
-import { Button } from "@material-tailwind/react";
-import CateReviewForm from "./form/CateReviewForm";
+import React, { useState } from 'react';
+import { useNavigate } from 'react-router-dom';
+import { Button } from '@material-tailwind/react';
+import useCategory from '../../../hooks/useCategory';
 
-export default function AddCategory() {
-  const dispatch = useDispatch();
-  const [uiRender, setUIRender] = useState();
-  const { currentStep } = useSelector((state) => state.formStore);
-  const handleRenderUI = () => {
-    switch (currentStep) {
-      case 1:
-        setUIRender(CateFormNameFile);
-        return;
-      case 2:
-        setUIRender(CateFormDes);
-        return;
-      case 3:
-        setUIRender(CateReviewForm);
-        return;
-      default:
-        throw Error("current step invalid");
-    }
+const AddCategory = () => {
+  const [name, setName] = useState('');
+  const [description, setDescription] = useState('');
+  const [fileImage, setFileImage] = useState(null);
+  const { createCategory, isLoading, error } = useCategory();
+  const navigate = useNavigate();
+
+  const handleSubmit = async (e) => {
+    e.preventDefault();
+    const formData = new FormData();
+    formData.append('name', name);
+    formData.append('description', description);
+    formData.append('fileImage', fileImage);
+
+    await createCategory(formData);
+    navigate('/admin/category');
   };
 
-  useEffect(() => {
-    if (currentStep) {
-      handleRenderUI();
-    }
-  }, [currentStep]);
-  useLayoutEffect(() => {
-    dispatch(firstConfig({ currentStep: 1, totalStep: 3 }));
-  }, []);
   return (
-    <>
-      {currentStep && (
-        <div className="w-full ">
-          <div className="my-5 flex  items-center gap-3">
-            <Link to={"/admin/category"}>
-              <Button variant="outlined">back</Button>
-            </Link>
-            <h1 className="font-bold text-xl">Add Category</h1>
-          </div>
-          <HeaderStepForm />
-          {uiRender ? uiRender : "no ui"}
-          <ControlForm />
+    <div className="w-full">
+      <form onSubmit={handleSubmit} className="space-y-6">
+        <div>
+          <label className="block text-sm font-medium text-gray-700">Name</label>
+          <input
+            type="text"
+            value={name}
+            onChange={(e) => setName(e.target.value)}
+            required
+            className="mt-1 block w-full border border-gray-300 rounded-md shadow-sm py-2 px-3 focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm"
+          />
         </div>
-      )}
-    </>
+        <div>
+          <label className="block text-sm font-medium text-gray-700">Description</label>
+          <textarea
+            value={description}
+            onChange={(e) => setDescription(e.target.value)}
+            required
+            className="mt-1 block w-full border border-gray-300 rounded-md shadow-sm py-2 px-3 focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm"
+          />
+        </div>
+        <div>
+          <label className="block text-sm font-medium text-gray-700">Image</label>
+          <input
+            type="file"
+            onChange={(e) => setFileImage(e.target.files[0])}
+            required
+            className="mt-1 block w-full border border-gray-300 rounded-md shadow-sm py-2 px-3 focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm"
+          />
+        </div>
+        <Button type="submit" variant="gradient" disabled={isLoading}>
+          {isLoading ? 'Creating...' : 'Create Category'}
+        </Button>
+        {error && <p className="text-red-500">{error}</p>}
+      </form>
+    </div>
   );
-}
+};
+
+export default AddCategory;

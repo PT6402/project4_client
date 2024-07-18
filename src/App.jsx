@@ -22,6 +22,7 @@ import { Loader } from "./components";
 import { admin_routes } from "./routes";
 import AddCategory from "./pages/admin/categories_page/AddCategory";
 import { useCategory } from "./hooks";
+import AddAuthor from "./pages/admin/authors_page/AddAuthor";
 
 function App() {
   const [showLoader, setShowLoader] = useState(false);
@@ -73,6 +74,7 @@ function App() {
               }
             })
         )}
+        <Route path="/admin/author/create" element={<AddAuthor />} />
         <Route path="/admin/category/create" element={<AddCategory />} />
       </Route>
       <Route path="/*" element={<NotFoundPage />} />
