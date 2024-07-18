@@ -4,6 +4,8 @@ import {
   AdminCatetoriesPage,
   AdminHomePage,
 } from "../pages/admin";
+import IconStarEmpty from "../components/icons/IconStarEmpty";
+import AddAuthor from "../pages/admin/authors_page/AddAuthor";
 
 const icon = {
   className: "w-5 h-5 text-inherit",
