@@ -1,4 +1,4 @@
-import { OrderCard } from "../../components";
+import { MyBookCard, OrderCard } from "../../components";
 
 export default function MyBook() {
   const products = [
@@ -20,7 +20,7 @@ export default function MyBook() {
   return (
     <div>
       {products.map((order) => (
-        <OrderCard key={order._id} order={order} />
+        <MyBookCard key={order._id} order={order} />
       ))}
     </div>
   );

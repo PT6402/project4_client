@@ -27,9 +27,9 @@ import AddAuthor from "./pages/admin/authors_page/AddAuthor";
 
 function App() {
   const [showLoader, setShowLoader] = useState(false);
-  const { getCategorys, isLoading: loadCate } = useCategory();
+  const { getCategories, isLoading: loadCate } = useCategory();
   const handleCallFirst = async () => {
-    await getCategorys();
+    await getCategories();
   };
   useEffect(() => {
     document.title = "Products | The Book Shelf";

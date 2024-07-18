@@ -2,6 +2,7 @@ import AddToCartButton from "./AddToCardButton";
 import CategoryCard from "./CategoryCard";
 import ListBoxDropdown from "./DrowdownComponent";
 import InputForm from "./InputForm";
+import MyBookCard from "./MyBookCart";
 import OrderCard from "./OrderCard";
 import PricePackage from "./PricePackage";
 import SearchBar from "./SearchBar";
@@ -42,4 +43,5 @@ export {
   ListBoxDropdown,
   AuthorBookCard,
   PricePackage,
+  MyBookCard,
 };
