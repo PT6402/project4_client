@@ -8,21 +8,6 @@ const useAuthor = () => {
   const [isLoading, setIsLoading] = useState(false);
   const [error, setError] = useState(null);
 
-  // const fetchAuthors = async () => {
-  //   setIsLoading(true);
-  //   setError(null);
-  //   try {
-  //     const res = await http.get('/api/v1/authors');
-  //     if (res.status === HttpStatusCode.Ok) {
-  //       setAuthors(res.data.model);
-  //     }
-  //   } catch (error) {
-  //     setError(error.response?.data || 'Error fetching authors');
-  //   } finally {
-  //     setIsLoading(false);
-  //   }
-  // };
-
   const getAuthors = async () => {
     setIsLoading(true);
     try {
