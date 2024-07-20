@@ -9,7 +9,6 @@ import { useDispatch } from "react-redux";
 import { setCategories } from "../context/bookSlice";
 
 const useCategory = () => {
-  const dispatch = useDispatch();
   const [isLoading, setIsLoading] = useState();
   const [error, setError] = useState();
 
