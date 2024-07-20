@@ -11,7 +11,7 @@ import { setCategories } from "../context/bookSlice";
 const useCategory = () => {
   const [isLoading, setIsLoading] = useState();
   const [error, setError] = useState();
-
+  const dispatch = useDispatch();
   const getCategories = async () => {
     setIsLoading(true);
     setError(null);
