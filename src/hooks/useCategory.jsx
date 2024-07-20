@@ -12,7 +12,6 @@ const useCategory = () => {
   const dispatch = useDispatch();
   const [isLoading, setIsLoading] = useState();
   const [error, setError] = useState();
-  const dispatch = useDispatch();
 
   const getCategories = async () => {
     setIsLoading(true);
@@ -39,12 +38,12 @@ const useCategory = () => {
       if (res.status === HttpStatusCode.Ok) {
         return res.data.model;
       } else {
-        setError('Failed to fetch category');
+        setError("Failed to fetch category");
         return null;
       }
     } catch (error) {
       console.log(error);
-      setError('Failed to fetch category');
+      setError("Failed to fetch category");
       return null;
     } finally {
       setIsLoading(false);
@@ -83,17 +82,24 @@ const useCategory = () => {
       });
       if (res.status === HttpStatusCode.Ok) {
         // Handle success, e.g., show success message or update state
-        return res.data.status
+        return res.data.status;
       }
     } catch (error) {
-      console.log('Error response:', error.response);
+      console.log("Error response:", error.response);
       setError(error.response?.data?.message || "Failed to update category");
     } finally {
       setIsLoading(false);
     }
   };
 
-  return { isLoading, error, getCategories, createCategory, updateCategory, getCategoryById };
+  return {
+    isLoading,
+    error,
+    getCategories,
+    createCategory,
+    updateCategory,
+    getCategoryById,
+  };
 };
 
 export default useCategory;
