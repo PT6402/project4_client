@@ -1,27 +1,27 @@
-import { MyBookCard, OrderCard } from "../../components";
+import { useEffect, useState } from "react";
+import { Loader, MyBookCard } from "../../components";
+import useBook from "../../hooks/useBook";
 
 export default function MyBook() {
-  const products = [
-    {
-      bookId: 1,
-      nameBook: "book 1",
-      authors: [],
-      price: 1000,
-      image: "https://picsum.photos/seed/VDb7zyov2/640/480",
-    },
-    {
-      bookId: 1,
-      nameBook: "book 1",
-      authors: [],
-      price: 1000,
-      image: "https://picsum.photos/seed/VDb7zyov2/640/480",
-    },
-  ];
+  const [data, setData] = useState([]);
+  const [showLoader, setShowLoader] = useState(true);
+  const { getMyBook, isLoading } = useBook();
+  useEffect(() => {
+    if (isLoading) {
+      setShowLoader(true);
+    } else {
+      setShowLoader(false);
+    }
+  }, [isLoading]);
+  useEffect(() => {
+    getMyBook().then((res) => setData(res));
+  }, []);
+  if (showLoader) return <Loader />;
   return (
     <div>
-      {products.map((order) => (
-        <MyBookCard key={order._id} order={order} />
-      ))}
+      {data.length > 0 &&
+        data.map((book) => <MyBookCard key={book.bookid} book={book} />)}
+      {data.length == 0 && <>no my book</>}
     </div>
   );
 }

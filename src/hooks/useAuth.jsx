@@ -13,6 +13,7 @@ import useGoogle from "./useGoogle";
 import toast from "react-hot-toast";
 import useWishlist from "./useWishlist";
 import useCart from "./useCart";
+import { setLogout } from "../context/userSlice";
 
 const useAuth = () => {
   const [isLoading, setIsLoading] = useState();
@@ -146,6 +147,7 @@ const useAuth = () => {
             isLoggedIn: true,
           })
         );
+        localStorage.setItem("refreshToken", data.refresh_token);
         await getWishlist({ userDetailId: data.userDetailId });
         await getCart(data.userDetailId);
         navigate("/");
@@ -250,7 +252,53 @@ const useAuth = () => {
       setIsLoading(false);
     }
   };
-  const handleLogout = () => { };
+  const handleLogout = async () => {
+    setIsLoading(true);
+    setError(null);
+    try {
+      dispatch(setLogout());
+      localStorage.removeItem("refreshToken");
+      navigate("/");
+      await http.get("api/auth/logout");
+    } catch (error) {
+      console.log(error);
+      setError(error);
+    } finally {
+      setIsLoading(false);
+    }
+  };
+  const handleReloadPage = async () => {
+    setIsLoading(true);
+    setError(null);
+    try {
+      const refresToken = localStorage.getItem("refreshToken");
+      const res = await http.get("api/v1/auth/reload", {
+        headers: {
+          Authorization: `Bearer ${refresToken}`,
+        },
+      });
+      const data = res.data.model;
+      dispatch(
+        setInfor({
+          fullname: data.fullname,
+          email: data.email,
+          role: data.role,
+          typeLogin: data.type_login,
+          accessToken: data.access_token,
+          userDetailId: data.userDetailId,
+          isLoggedIn: true,
+        })
+      );
+      await getWishlist({ userDetailId: data.userDetailId });
+      await getCart(data.userDetailId);
+      return data.userDetailId;
+    } catch (error) {
+      console.log(error);
+      setError(error);
+    } finally {
+      setIsLoading(false);
+    }
+  };
   return {
     login,
     register,
@@ -259,6 +307,7 @@ const useAuth = () => {
     forgotPassword,
     checkTypeLogin,
     handleLogout,
+    handleReloadPage,
     isLoading,
     error,
   };

@@ -2,9 +2,6 @@ import { useState } from "react";
 import http from "../http";
 import { HttpStatusCode } from "axios";
 
-import toast from "react-hot-toast";
-import { useEffect } from "react";
-
 import { useDispatch } from "react-redux";
 import { setCategories } from "../context/bookSlice";
 

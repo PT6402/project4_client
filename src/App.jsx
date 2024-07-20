@@ -23,14 +23,17 @@ import { Loader } from "./components";
 import { admin_routes } from "./routes";
 import AddCategory from "./pages/admin/categories_page/AddCategory";
 import EditCategory from "./pages/admin/categories_page/EditCategory";
-import { useCategory } from "./hooks";
+import { useAuth, useCategory } from "./hooks";
 import AddAuthor from "./pages/admin/authors_page/AddAuthor";
 import AddPackage from "./pages/admin/packages_page/AddPackage";
+import RoutePaymentSuccess from "./routes/RoutePaymentSuccess";
 
 function App() {
   const [showLoader, setShowLoader] = useState(false);
   const { getCategories, isLoading: loadCate } = useCategory();
+  const { handleReloadPage } = useAuth();
   const handleCallFirst = async () => {
+    await handleReloadPage();
     await getCategories();
   };
   useEffect(() => {
@@ -65,6 +68,10 @@ function App() {
         <Route path="thank-you" element={<ThankYouPage />} />
         <Route path="search" element={<SearchPage />} />
         <Route path="author" element={<AuthorPage />} />
+        <Route
+          path="/payment/success/:idOrder/:tokenPayment"
+          Component={RoutePaymentSuccess}
+        />
       </Route>
       <Route path="/admin" element={<AdminLayout />}>
         {admin_routes.map(

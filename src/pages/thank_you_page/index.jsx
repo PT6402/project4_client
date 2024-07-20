@@ -41,12 +41,12 @@ const ThankYouPage = () => {
             >
               Shop More
             </Link>
-            <Link
-              to={`/user/orders`}
+            {/* <Link
+              to={`/user`}
               className="text-sm font-semibold leading-6 text-gray-100 hover:underline"
             >
               Order History <span aria-hidden="true">→</span>
-            </Link>
+            </Link> */}
           </div>
         </div>
       </div>

@@ -1,20 +1,18 @@
 /* eslint-disable react/prop-types */
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import Dropdown from "./Dropdown";
 import { XMarkIcon } from "@heroicons/react/24/outline";
 import { useLocation, useNavigate } from "react-router-dom";
 
 import { toast } from "react-hot-toast";
+import usePayment from "../../hooks/usePayment";
 
 const CartCheckoutDetails = ({ cart }) => {
   const [coupon, setCoupon] = useState({ name: "", value: 0 });
-  const totalAmount = 0;
-  const discountedAmount = 0;
+  const [urlPay, setUrlPay] = useState(null);
   const allCoupons = [];
   const location = useLocation();
-  const navigate = useNavigate();
-
-  const getAddress = () => [];
+  const { handleCheckout } = usePayment();
   function calculateTotalPrice() {
     let totalPrice = 0;
     cart.forEach((item) => {
@@ -29,17 +27,17 @@ const CartCheckoutDetails = ({ cart }) => {
     });
     return totalPrice;
   }
-  const checkoutHandler = () => {
-    if (location.pathname === "/cart") {
-      navigate("/checkout");
-    } else {
-      if (getAddress().length === 0) {
-        toast.error("Please add a Primary Address to Proceed.");
-        return;
-      }
-      // displayRazorpay();
-    }
+  const checkoutHandler = async () => {
+    const url = await handleCheckout({
+      cartId: cart[0].cartId,
+    });
+    setUrlPay(url);
   };
+  useEffect(() => {
+    if (urlPay != null) {
+      window.location.href = urlPay;
+    }
+  }, [urlPay]);
   return (
     <div className="relative mb-20 sm:w-1/3">
       <div className="sticky left-0 right-0 w-full p-6 mt-6 border rounded-lg shadow-md top-40 md:mt-0">
@@ -85,16 +83,6 @@ const CartCheckoutDetails = ({ cart }) => {
               </div>
             );
           })}
-
-        {/* {coupon.name !== "" && (
-          <div className="flex justify-between">
-            <p className="text-gray-100">Coupon Applied</p>
-            <p className="text-gray-100 before:mr-1 before:content-['-₹']">
-              {" "}
-              {coupon.value}
-            </p>
-          </div>
-        )} */}
         <hr className="my-4" />
         <div className="flex justify-between text-gray-100">
           <p className="text-lg font-bold">Total</p>
@@ -114,22 +102,8 @@ const CartCheckoutDetails = ({ cart }) => {
                 hover:bg-cyan-950 
                 focus:ring-cyan-950"
         >
-          {location.pathname === "/cart" ? "Check Out" : "Place Order"}
+          checkout
         </button>
-
-        {/* {coupon.name !== "" && (
-          <div className="flex justify-end ">
-            <div className="px-2 py-1 my-2 hover:bg-gray-800 hover:rounded">
-              <button
-                type="button"
-                // onClick={() => setCoupon({ name: "", value: 0 })}
-                className="text-xs text-gray-100"
-              >
-                {coupon.name} <XMarkIcon className="inline-block w-4 h-4 " />
-              </button>
-            </div>
-          </div>
-        )} */}
       </div>
     </div>
   );

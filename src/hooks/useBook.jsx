@@ -16,7 +16,9 @@ const useBook = () => {
   const {
     collection: { currentPage, limit },
   } = useSelector((state) => state.bookStore);
-
+  const {
+    inforUser: { userDetailId },
+  } = useSelector((state) => state.userStore);
   const getBooks = async ({ goToPage = currentPage }) => {
     setIsLoading(true);
     setError(null);
@@ -92,8 +94,47 @@ const useBook = () => {
       setIsLoading(false);
     }
   };
+  const getMyBook = async () => {
+    setIsLoading(true);
+    setError(null);
+    try {
+      const res = await http.get(`api/v1/mybook/show/${userDetailId}`);
+      if (res.status == HttpStatusCode.Ok) {
+        return res.data.model;
+      }
+    } catch (error) {
+      console.log(error.response.data);
+      setError(error.response.data);
+    } finally {
+      setIsLoading(false);
+    }
+  };
+  const getOrder = async () => {
+    setIsLoading(true);
+    setError(null);
+    try {
+      const res = await http.get(`/api/v1/orders/user/${userDetailId}`);
+      if (res.status == HttpStatusCode.Ok) {
+        return res.data.model;
+      }
+    } catch (error) {
+      console.log(error.response.data);
+      setError(error.response.data);
+    } finally {
+      setIsLoading(false);
+    }
+  };
 
-  return { isLoading, error, getBooks, getBookDetail, search, getAuthors };
+  return {
+    isLoading,
+    error,
+    getBooks,
+    getBookDetail,
+    search,
+    getAuthors,
+    getMyBook,
+    getOrder,
+  };
 };
 
 export default useBook;

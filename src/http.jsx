@@ -4,7 +4,7 @@ import { useDispatch, useSelector } from "react-redux";
 import { useNavigate } from "react-router-dom";
 import { setAccessToken } from "./context/userSlice";
 axios.defaults.baseURL = import.meta.env.VITE_URL_SERVER;
-const refreshToken = localStorage.getItem("refresh-token");
+const refreshToken = localStorage.getItem("refreshToken");
 const handleRefreshToken = async (dispatch) => {
   try {
     const res = await axios.get("/api/auth/refresh-token", {

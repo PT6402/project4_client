@@ -36,6 +36,21 @@ const userSlice = createSlice({
     setTypeLogin: (state, action) => {
       state.inforUser.typeLogin = action.payload;
     },
+    setLogout: (state) => {
+      state.inforUser = {
+        fullname: "",
+        role: "",
+        email: "",
+        typeLogin: "",
+        accessToken: "",
+        userDetailId: null,
+        isLoggedIn: false,
+      };
+      state.wishlist = [];
+      state.cart = {
+        items: [],
+      };
+    },
 
     // cart
     addCartItem: (state, action) => {
@@ -87,4 +102,5 @@ export const {
   addCartItem,
   removeAll,
   deleteCartItem,
+  setLogout,
 } = userSlice.actions;
