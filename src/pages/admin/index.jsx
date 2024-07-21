@@ -3,5 +3,8 @@ import AdminCatetoriesPage from "./categories_page";
 import AdminHomePage from "./home_page";
 import AdminUserPage from "./users_page";
 import AdminPackagePage from "./packages_page";
+import StatisticsPage from "./statistics_page";
+import AdminOrdersPage from "./orders_page";
+import OrderDetailPage from "./orders_page/OrderDetailPage";
 
-export { AdminAuthorPage, AdminCatetoriesPage, AdminHomePage, AdminUserPage, AdminPackagePage };
+export { AdminAuthorPage, AdminCatetoriesPage, AdminHomePage, AdminUserPage, AdminPackagePage, StatisticsPage, AdminOrdersPage, OrderDetailPage };
