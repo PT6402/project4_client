@@ -27,6 +27,7 @@ import { useAuth, useCategory } from "./hooks";
 import AddAuthor from "./pages/admin/authors_page/AddAuthor";
 import AddPackage from "./pages/admin/packages_page/AddPackage";
 import RoutePaymentSuccess from "./routes/RoutePaymentSuccess";
+import OrderDetailPage from "./pages/admin/orders_page/OrderDetailPage";
 
 function App() {
   const [showLoader, setShowLoader] = useState(false);
@@ -89,6 +90,7 @@ function App() {
         <Route path="/admin/category/create" element={<AddCategory />} />
         <Route path="/admin/category/edit/:id" element={<EditCategory />} />
         <Route path="/admin/package/create" element={<AddPackage />} />
+        <Route path="/admin/order/:id" element={<OrderDetailPage />} />
       </Route>
       <Route path="/*" element={<NotFoundPage />} />
     </Routes>

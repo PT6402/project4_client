@@ -4,7 +4,10 @@ import {
   AdminCatetoriesPage,
   AdminHomePage,
   AdminUserPage,
-  AdminPackagePage
+  AdminPackagePage,
+  StatisticsPage,
+  AdminOrdersPage,
+  OrderDetailPage
 } from "../pages/admin";
 import IconStarEmpty from "../components/icons/IconStarEmpty";
 import AddAuthor from "../pages/admin/authors_page/AddAuthor";
@@ -53,6 +56,20 @@ const admin_routes = [
         path: "user",
         index: false,
         element: <AdminUserPage />,
+      },
+      {
+        icon: <HomeIcon {...icon} />,
+        name: "statistics",
+        path: "statistics",
+        index: false,
+        element: <StatisticsPage />,
+      },
+      {
+        icon: <HomeIcon {...icon} />,
+        name: "orders",
+        path: "order",
+        index: false,
+        element: <AdminOrdersPage />,
       },
     ],
   },
