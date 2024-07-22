@@ -86,7 +86,7 @@ const OrderHistory = () => {
                 <dd className="font-semibold">{creatDate}</dd>
               </div>
               <div>
-                <dt className="text-gray-400">Total amount</dt>
+                <dt className="text-gray-400">Status payment</dt>
                 <dd className="font-semibold">
                   {/* {totalBill} */}
                   {paymentStatus == 1 ? "success" : "fail"}
