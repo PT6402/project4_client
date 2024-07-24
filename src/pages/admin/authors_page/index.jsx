@@ -1,7 +1,7 @@
-import React, { useEffect } from 'react';
-import useAuthor from '../../../hooks/useAuthor';
-import { Button } from '@material-tailwind/react';
-import { Link } from 'react-router-dom';
+import { useEffect } from "react";
+import { Button } from "@material-tailwind/react";
+import { Link } from "react-router-dom";
+import { useAuthor } from "../../../hooks";
 
 const AdminAuthorPage = () => {
   const { authors, isLoading, error, getAuthors } = useAuthor();
@@ -19,14 +19,14 @@ const AdminAuthorPage = () => {
   }
 
   return (
-    <div className='mt-8'>
+    <div className="mt-8">
       <Link to={"create"}>
         <Button variant="gradient" className="mt-5">
           Create Author
         </Button>
       </Link>
       <div className="mt-8 grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6">
-        {authors.map(author => (
+        {authors.map((author) => (
           <div key={author.id} className="bg-white shadow-md rounded-lg p-4">
             <img
               src={`data:image/jpeg;base64,${author.image_data}`}

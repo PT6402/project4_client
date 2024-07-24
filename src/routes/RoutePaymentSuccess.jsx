@@ -1,6 +1,7 @@
 import { useNavigate, useParams } from "react-router-dom";
-import usePayment from "../hooks/usePayment";
+
 import { useEffect } from "react";
+import { usePayment } from "../hooks";
 
 export default function RoutePaymentSuccess() {
   const navigate = useNavigate();

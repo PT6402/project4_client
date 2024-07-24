@@ -3,8 +3,12 @@ import { useAuth } from "../../../hooks";
 import * as Yup from "yup";
 import { InputForm } from "../../../components";
 import { Link } from "react-router-dom";
+import { useSelector } from "react-redux";
 export default function FormForgot() {
   const { forgotPassword, isLoading } = useAuth();
+  const {
+    inforUser: { email },
+  } = useSelector((state) => state.userStore);
   const handleSubmit = (value) => {
     forgotPassword(value?.email).then((res) => {
       if (res?.errorNotFound) {
@@ -18,7 +22,7 @@ export default function FormForgot() {
   return (
     <>
       <Formik
-        initialValues={{ email: "" }}
+        initialValues={{ email: email || "" }}
         onSubmit={handleSubmit}
         validationSchema={ForgotSchema}
         validateOnChange={false}

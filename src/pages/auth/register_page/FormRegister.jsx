@@ -1,7 +1,6 @@
-import { useEffect, useRef } from "react";
+import { useRef } from "react";
 import { Link } from "react-router-dom";
 import { useAuth } from "../../../hooks";
-import useGoogle from "../../../hooks/useGoogle";
 import * as Yup from "yup";
 import { Formik } from "formik";
 import { InputForm } from "../../../components";
@@ -9,46 +8,26 @@ import BtnLoginGG from "./BtnLoginGG";
 export default function FormRegister() {
   const fullnameInput = useRef();
   const { register } = useAuth();
-  const { isLoading, error, userInfo, setIsLoading, loginGoogle } = useGoogle();
-  const handleSubmit = ({ typeLogin }, value) => {
-    if (typeLogin == "GOOGLE") {
-      const data = {
-        typeLogin,
-        fullname: userInfo.inforUser.name,
-        email: userInfo.inforUser.email,
-        password: userInfo.access_token,
-      };
-      register(data).then((res) => {
-        if (res.errorExist) {
-          value.fullname = "";
-          value.email = "";
-          value.password = "";
-          value.confirmPass = "";
-        }
-      });
-    } else {
-      const data = {
-        typeLogin: "EMAIL",
-        fullname: value.fullname,
-        email: value.email,
-        password: value.password,
-      };
-      register(data).then((res) => {
-        if (res.errorExist) {
-          fullnameInput.current.focus();
-          value.fullname = "";
-          value.email = "";
-          value.password = "";
-          value.confirmPass = "";
-        }
-      });
-    }
+  const handleSubmit = (value) => {
+    const data = {
+      email: value.email,
+      password: value.password,
+    };
+    register(data).then((res) => {
+      if (res?.errorExist) {
+        fullnameInput.current.focus();
+        // value.fullname = "";
+        value.email = "";
+        value.password = "";
+        value.confirmPass = "";
+      }
+    });
   };
   const SignupSchema = Yup.object().shape({
-    fullname: Yup.string()
-      .min(2, "Too Short!")
-      .max(50, "Too Long!")
-      .required("Required"),
+    // fullname: Yup.string()
+    //   .min(2, "Too Short!")
+    //   .max(50, "Too Long!")
+    //   .required("Required"),
     email: Yup.string().email("Invalid email").required("Required"),
     password: Yup.string()
       .min(8, "Password must be 8 characters long")
@@ -61,26 +40,18 @@ export default function FormRegister() {
       .oneOf([Yup.ref("password"), null], 'Must match "password" field value')
       .required("Required"),
   });
-  useEffect(() => {
-    if (
-      !(error == undefined && isLoading == undefined) &&
-      !error &&
-      !isLoading
-    ) {
-      handleSubmit({ typeLogin: "GOOGLE" });
-    }
-  }, [isLoading]);
+
   return (
     <>
-      <BtnLoginGG googleLogin={loginGoogle} setIsLoading={setIsLoading} />
+      <BtnLoginGG />
       <Formik
         initialValues={{
-          fullname: "",
+          // fullname: "",
           email: "",
           password: "",
           confirmPass: "",
         }}
-        onSubmit={(e) => handleSubmit({ typeLogin: "EMAIL" }, e)}
+        onSubmit={(e) => handleSubmit(e)}
         validationSchema={SignupSchema}
       >
         {({
@@ -96,7 +67,7 @@ export default function FormRegister() {
             className="space-y-4 md:space-y-6"
             autoComplete="off"
           >
-            <InputForm
+            {/* <InputForm
               title={"fullname"}
               onBlur={handleBlur}
               onChange={handleChange}
@@ -104,7 +75,7 @@ export default function FormRegister() {
               value={values.fullname}
               error={errors.fullname}
               touched={touched.fullname}
-            />
+            /> */}
             <InputForm
               title={"email"}
               onBlur={handleBlur}

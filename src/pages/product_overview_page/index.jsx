@@ -1,11 +1,10 @@
 import { useEffect, useState } from "react";
 import { AddToCartButton, Loader, WishlistButton } from "../../components";
 import { useNavigate, useParams } from "react-router-dom";
-import useBook from "../../hooks/useBook";
 import IconStarFull from "../../components/icons/IconStarFull";
 import PricePackage from "../../components/PricePackage";
-import useCart from "../../hooks/useCart";
 import { useSelector } from "react-redux";
+import { useBook, useCart } from "../../hooks";
 
 const ProductOverviewPage = () => {
   const navigate = useNavigate();

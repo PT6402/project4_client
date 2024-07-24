@@ -1,14 +1,15 @@
 /* eslint-disable react/prop-types */
 import { useLocation, useNavigate } from "react-router-dom";
 
-import useAuth from "@/hooks/useAuth";
 import { useEffect } from "react";
 import { useSelector } from "react-redux";
+import { useAuth } from "../../../hooks";
 export default function FormCode({ handleChange }) {
   const navigate = useNavigate();
   const { pathname } = useLocation();
   const { inforUser } = useSelector((state) => state.userStore);
   const { checkCodeReset, error } = useAuth();
+  console.log("checked");
   function focusNextInput(el, prevId, nextId) {
     if (el.value.length === 0) {
       if (prevId) {
@@ -45,7 +46,7 @@ export default function FormCode({ handleChange }) {
   };
   const styleInput = `block w-16 h-16 py-3 text-sm font-extrabold text-center text-gray-900 bg-white border border-gray-300 rounded-lg focus:ring-gray-500 focus:border-gray-500  $ sm:w-24 sm:h-24 sm:text-xl`;
   useEffect(() => {
-    if (!(inforUser?.email && inforUser?.accessToken)) {
+    if (!inforUser?.email) {
       navigate("/forgot-password");
     }
   }, [pathname]);

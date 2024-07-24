@@ -2,8 +2,7 @@ import { ChevronLeftIcon, ChevronRightIcon } from "@heroicons/react/24/outline";
 import { useDispatch, useSelector } from "react-redux";
 import { Link } from "react-router-dom";
 import { setCurrentPage } from "../../context/bookSlice";
-import { useFilter } from "../../hooks";
-import useBook from "../../hooks/useBook";
+import { useBook, useFilter } from "../../hooks";
 
 export default function PaginationPage() {
   const dispatch = useDispatch();

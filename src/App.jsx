@@ -1,6 +1,5 @@
 /* eslint-disable react-hooks/exhaustive-deps */
 import { Route, Routes } from "react-router-dom";
-import "./App.css";
 import { AdminLayout, UserLayout } from "./layouts";
 import {
   AccountPage,
@@ -23,32 +22,25 @@ import { Loader } from "./components";
 import { admin_routes } from "./routes";
 import AddCategory from "./pages/admin/categories_page/AddCategory";
 import EditCategory from "./pages/admin/categories_page/EditCategory";
-import { useAuth, useCategory } from "./hooks";
+import { useLoadFirst } from "./hooks";
 import AddAuthor from "./pages/admin/authors_page/AddAuthor";
 import AddPackage from "./pages/admin/packages_page/AddPackage";
 import RoutePaymentSuccess from "./routes/RoutePaymentSuccess";
 import OrderDetailPage from "./pages/admin/orders_page/OrderDetailPage";
 
 function App() {
-  const [showLoader, setShowLoader] = useState(false);
-  const { getCategories, isLoading: loadCate } = useCategory();
-  const { handleReloadPage } = useAuth();
-  const handleCallFirst = async () => {
-    await handleReloadPage();
-    await getCategories();
-  };
+  const [showLoader, setShowLoader] = useState(true);
+  const { load, isLoading } = useLoadFirst();
   useEffect(() => {
-    document.title = "Products | The Book Shelf";
-    const loader = setTimeout(() => {
-      if (!loadCate) {
-        setShowLoader(false);
-      }
-    }, 2000);
-    return () => clearTimeout(loader);
-  }, [loadCate]);
-  useEffect(() => {
-    handleCallFirst();
+    (async () => await load())();
   }, []);
+  useEffect(() => {
+    if (isLoading) {
+      setShowLoader(true);
+    } else {
+      setShowLoader(false);
+    }
+  }, [isLoading]);
   if (showLoader) return <Loader />;
   return (
     <Routes>

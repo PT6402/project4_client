@@ -2,7 +2,6 @@ import { useEffect } from "react";
 import { NavLink } from "react-router-dom";
 
 import { CategoryCard } from "../../components";
-import useBook from "../../hooks/useBook";
 import { useSelector } from "react-redux";
 
 const links = [{ name: "Explore", to: "products" }];

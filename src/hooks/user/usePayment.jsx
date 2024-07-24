@@ -1,7 +1,7 @@
 import { useState } from "react";
-import http from "../http";
 import { useSelector } from "react-redux";
-import useAuth from "./useAuth";
+import useHttp from "../auth/useHttp";
+import useAuth from "../auth/useAuth";
 
 const usePayment = () => {
   const [isLoading, setIsLoading] = useState();
@@ -10,11 +10,13 @@ const usePayment = () => {
     inforUser: { userDetailId },
   } = useSelector((state) => state.userStore);
   const { handleReloadPage } = useAuth();
+  const { http_auth } = useHttp();
+  const authHttp = http_auth();
   const handleCheckout = async ({ cartId }) => {
     setIsLoading(true);
     setError(null);
     try {
-      const res = await http.post(
+      const res = await authHttp.post(
         `/api/v1/orders/checkout/${userDetailId}/${cartId}`
       );
       return res.data.model.payment_url;
@@ -30,7 +32,7 @@ const usePayment = () => {
     setError(null);
     try {
       const userId = await handleReloadPage();
-      await http.post(`/api/v1/orders/check`, {
+      await authHttp.post(`/api/v1/orders/check`, {
         orderId,
         token,
         userDetailId: userId,

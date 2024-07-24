@@ -1,25 +1,22 @@
 import { useState } from "react";
 import { useDispatch } from "react-redux";
-import http from "../http";
 import { HttpStatusCode } from "axios";
-import { setWishlist } from "../context/userSlice";
+import { setWishlist } from "../../context/userSlice";
+import useHttp from "../auth/useHttp";
 
 const useWishlist = () => {
   const dispatch = useDispatch();
   const [isLoading, setIsLoading] = useState();
   const [error, setError] = useState();
-
-  const getWishlist = async ({ userDetailId }) => {
+  const { http_auth } = useHttp();
+  const authHttp = http_auth();
+  const getWishlist = async () => {
     setIsLoading(true);
     setError(null);
     try {
-      if (userDetailId) {
-        const res = await http.get(`/api/v1/wishlist/show/${userDetailId}`);
-        if (res.status == HttpStatusCode.Ok) {
-          dispatch(setWishlist(res.data?.model));
-        }
-      } else {
-        return;
+      const res = await authHttp.get(`/api/v1/wishlist/show`);
+      if (res.status == HttpStatusCode.Ok) {
+        dispatch(setWishlist(res.data?.model));
       }
     } catch (error) {
       console.log(error);
@@ -31,7 +28,7 @@ const useWishlist = () => {
     setIsLoading(true);
     setError(null);
     try {
-      const res = await http.post(
+      const res = await authHttp.post(
         `/api/v1/wishlist/create?bookid=${bookId}&userdetailid=${userDetailId}`
       );
       if (res.status == HttpStatusCode.Ok) {
@@ -47,7 +44,7 @@ const useWishlist = () => {
     setIsLoading(true);
     setError(null);
     try {
-      const res = await http.delete(`/api/v1/wishlist/${wishlistId}`);
+      const res = await authHttp.delete(`/api/v1/wishlist/${wishlistId}`);
       if (res.status == HttpStatusCode.Ok) {
         console.log("delete success");
       }

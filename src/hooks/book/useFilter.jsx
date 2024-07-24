@@ -1,14 +1,16 @@
 import { useDispatch, useSelector } from "react-redux";
-import http from "../http";
 import { HttpStatusCode } from "axios";
-import { setListBook, setTotalPage } from "../context/bookSlice";
 
 import { useState } from "react";
+import useHttp from "../auth/useHttp";
+import { setListBook, setTotalPage } from "../../context/bookSlice";
 
 const useFilter = () => {
   const [loading, setLoading] = useState();
   const [error, setError] = useState();
   const dispatch = useDispatch();
+  const { http_auth } = useHttp();
+  const authHttp = http_auth();
 
   const {
     collection: { currentPage, limit },
@@ -17,7 +19,7 @@ const useFilter = () => {
     setLoading(true);
     setError(null);
     try {
-      const res = await http.post(
+      const res = await authHttp.post(
         `/api/v1/book/showpage?page=${currentPage}&limit=${limit}`,
         {
           list: categorys,

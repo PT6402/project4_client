@@ -4,52 +4,37 @@ const userSlice = createSlice({
   name: "userSlice",
   initialState: {
     inforUser: {
-      fullname: "",
-      role: "",
-      email: "",
-      typeLogin: "",
-      accessToken: "",
-      userDetailId: null,
-      isLoggedIn: false,
+      email: null,
+      fullname: null,
+      role: "user",
     },
-    orderHistorys: [],
+    cart: [],
     myBooks: [],
-    cart: {
-      items: [],
-    },
-
     wishlist: [],
+    orderHistorys: [],
   },
   reducers: {
-    setAccessToken: (state, action) => {
-      state.inforUser.accessToken = action.payload;
-    },
     setEmail: (state, action) => {
       state.inforUser.email = action.payload;
-      state.inforUser.accessToken = "";
       state.inforUser.role = "";
       state.inforUser.fullname = "";
     },
     setInfor: (state, action) => {
       state.inforUser = action.payload;
     },
-    setTypeLogin: (state, action) => {
-      state.inforUser.typeLogin = action.payload;
+    setMyBook: (state, action) => {
+      state.myBooks = action.payload;
     },
-    setLogout: (state) => {
+    clearUser: (state) => {
       state.inforUser = {
-        fullname: "",
-        role: "",
-        email: "",
-        typeLogin: "",
-        accessToken: "",
-        userDetailId: null,
-        isLoggedIn: false,
+        fullname: null,
+        role: "user",
+        email: null,
       };
       state.wishlist = [];
-      state.cart = {
-        items: [],
-      };
+      state.cart = [];
+      state.myBooks = [];
+      state.orderHistorys = [];
     },
 
     // cart
@@ -93,14 +78,14 @@ const userSlice = createSlice({
 
 export default userSlice.reducer;
 export const {
-  setAccessToken,
   setEmail,
   setInfor,
-  setTypeLogin,
+  setMyBook,
+
   setWishlist,
   setCartItem,
   addCartItem,
   removeAll,
   deleteCartItem,
-  setLogout,
+  clearUser,
 } = userSlice.actions;

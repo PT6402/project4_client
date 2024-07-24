@@ -5,7 +5,7 @@ import { XMarkIcon } from "@heroicons/react/24/outline";
 import { useLocation, useNavigate } from "react-router-dom";
 
 import { toast } from "react-hot-toast";
-import usePayment from "../../hooks/usePayment";
+import usePayment from "../../hooks/user/usePayment";
 
 const CartCheckoutDetails = ({ cart }) => {
   const [coupon, setCoupon] = useState({ name: "", value: 0 });

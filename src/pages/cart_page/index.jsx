@@ -1,9 +1,8 @@
 import { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
 import { CartCard, CartCheckoutDetails, Loader } from "../../components";
-import { listCart } from "./data_list_cart";
-import useCart from "../../hooks/useCart";
 import { useSelector } from "react-redux";
+import { useCart } from "../../hooks";
 
 const CartPage = () => {
   // const cart = listCart;

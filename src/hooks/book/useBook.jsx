@@ -1,24 +1,24 @@
 import { useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
-import http from "../http";
 import { HttpStatusCode } from "axios";
+
+import useHttp from "../auth/useHttp";
 import {
   setCurrentPage,
   setListBook,
   setTotalPage,
-} from "../context/bookSlice";
+} from "../../context/bookSlice";
 
 const useBook = () => {
   const dispatch = useDispatch();
 
   const [isLoading, setIsLoading] = useState();
   const [error, setError] = useState();
+  const { http, http_auth } = useHttp();
+  const authHttp = http_auth();
   const {
     collection: { currentPage, limit },
   } = useSelector((state) => state.bookStore);
-  const {
-    inforUser: { userDetailId },
-  } = useSelector((state) => state.userStore);
   const getBooks = async ({ goToPage = currentPage }) => {
     setIsLoading(true);
     setError(null);
@@ -83,22 +83,7 @@ const useBook = () => {
     setIsLoading(true);
     setError(null);
     try {
-      const res = await http.get(`http://localhost:9090/api/v1/authors`);
-      if (res.status == HttpStatusCode.Ok) {
-        return res.data.model;
-      }
-    } catch (error) {
-      console.log(error.response.data);
-      setError(error.response.data);
-    } finally {
-      setIsLoading(false);
-    }
-  };
-  const getMyBook = async () => {
-    setIsLoading(true);
-    setError(null);
-    try {
-      const res = await http.get(`api/v1/mybook/show/${userDetailId}`);
+      const res = await http.get(`api/v1/authors`);
       if (res.status == HttpStatusCode.Ok) {
         return res.data.model;
       }
@@ -113,7 +98,7 @@ const useBook = () => {
     setIsLoading(true);
     setError(null);
     try {
-      const res = await http.get(`/api/v1/orders/user/${userDetailId}`);
+      const res = await authHttp.get(`/api/v1/orders/user`);
       if (res.status == HttpStatusCode.Ok) {
         return res.data.model;
       }
@@ -132,7 +117,6 @@ const useBook = () => {
     getBookDetail,
     search,
     getAuthors,
-    getMyBook,
     getOrder,
   };
 };

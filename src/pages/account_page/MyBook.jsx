@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react";
 import { Loader, MyBookCard } from "../../components";
-import useBook from "../../hooks/useBook";
+import { useBook } from "../../hooks";
 
 export default function MyBook() {
   const [data, setData] = useState([]);
