@@ -1,11 +1,10 @@
 import { useEffect, useState } from "react";
 import { AddToCartButton, Loader, WishlistButton } from "../../components";
 import { useNavigate, useParams } from "react-router-dom";
-import useBook from "../../hooks/useBook";
 import IconStarFull from "../../components/icons/IconStarFull";
 import PricePackage from "../../components/PricePackage";
-import useCart from "../../hooks/useCart";
 import { useSelector } from "react-redux";
+import { useBook, useCart } from "../../hooks";
 
 const ProductOverviewPage = () => {
   const navigate = useNavigate();
@@ -15,10 +14,8 @@ const ProductOverviewPage = () => {
   const [dataDetail, setDataDetail] = useState({});
   const { getBookDetail, isLoading } = useBook();
   const { addToCart, updateCart, isLoading: loadCart } = useCart();
-  const {
-    inforUser: { isLoggedIn },
-    cart: { items },
-  } = useSelector((state) => state.userStore);
+  const { isLoggedIn } = useSelector((state) => state.auth);
+  const { cart: items } = useSelector((state) => state.userStore);
   const handleGetOption = ({ type, packageId }) => {
     setOption({ type, packageId });
   };

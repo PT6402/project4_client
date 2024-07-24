@@ -1,13 +1,16 @@
 import { useState } from "react";
-import http from "../http";
 import { HttpStatusCode } from "axios";
 
 import { useDispatch } from "react-redux";
-import { setCategories } from "../context/bookSlice";
+
+import useHttp from "../auth/useHttp";
+import { setCategories } from "../../context/bookSlice";
 
 const useCategory = () => {
   const [isLoading, setIsLoading] = useState();
   const [error, setError] = useState();
+  const { http, http_auth } = useHttp();
+  const authHttp = http_auth();
   const dispatch = useDispatch();
   const getCategories = async () => {
     setIsLoading(true);
@@ -50,7 +53,7 @@ const useCategory = () => {
     setIsLoading(true);
     setError(null);
     try {
-      const res = await http.post("/api/v1/cate/create", formData, {
+      const res = await authHttp.post("/api/v1/cate/create", formData, {
         headers: {
           "Content-Type": "multipart/form-data",
         },
@@ -71,7 +74,7 @@ const useCategory = () => {
     setIsLoading(true);
     setError(null);
     try {
-      const res = await http.put(`/api/v1/cate/update/${id}`, formData, {
+      const res = await authHttp.put(`/api/v1/cate/update/${id}`, formData, {
         headers: {
           "Content-Type": "multipart/form-data",
         },

@@ -1,12 +1,15 @@
-import { useState } from 'react';
-import http from '../http';
-import { HttpStatusCode } from 'axios';
+import { useState } from "react";
+import { HttpStatusCode } from "axios";
+import useHttp from "../auth/useHttp";
 
 const useAuthor = () => {
   const [authors, setAuthors] = useState([]);
   const [currentAuthor, setCurrentAuthor] = useState(null);
   const [isLoading, setIsLoading] = useState(false);
   const [error, setError] = useState(null);
+
+  // TODO: dùng http của useHttp tương lai sẽ dùng authHttp để phân quyển admin
+  const { http } = useHttp();
 
   const getAuthors = async () => {
     setIsLoading(true);
@@ -29,7 +32,7 @@ const useAuthor = () => {
         setCurrentAuthor(res.data.model);
       }
     } catch (error) {
-      setError(error.response?.data || 'Error fetching author');
+      setError(error.response?.data || "Error fetching author");
     } finally {
       setIsLoading(false);
     }
@@ -57,10 +60,10 @@ const useAuthor = () => {
     try {
       const res = await http.put(`/api/v1/authors/${id}`, authorData);
       if (res.status === HttpStatusCode.Ok) {
-        fetchAuthors();
+        fetchAuthor();
       }
     } catch (error) {
-      setError(error.response?.data || 'Error updating author');
+      setError(error.response?.data || "Error updating author");
     } finally {
       setIsLoading(false);
     }

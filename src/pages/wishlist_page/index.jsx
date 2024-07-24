@@ -1,28 +1,18 @@
 import { useEffect } from "react";
-
 import { Link, useNavigate } from "react-router-dom";
 import { ProductCard } from "../../components";
-import { Transition } from "@headlessui/react";
 import { useSelector } from "react-redux";
 import { useWishlist } from "../../hooks";
 
 const WishlistPage = () => {
   const navigate = useNavigate();
-  const { getWishlist } = useWishlist();
-
-  const {
-    wishlist,
-    inforUser: { userDetailId },
-  } = useSelector((state) => state.userStore);
+  const { isLoggedIn } = useSelector((state) => state.auth);
+  const { wishlist } = useSelector((state) => state.userStore);
 
   useEffect(() => {
     document.title = "Wishlist | The Book Shelf";
-    if (!userDetailId) {
+    if (!isLoggedIn) {
       navigate("/login");
-    } else {
-      (async () => {
-        await getWishlist({ userDetailId });
-      })();
     }
   }, []);
   return (

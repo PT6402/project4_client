@@ -11,7 +11,7 @@ import { XMarkIcon } from "@heroicons/react/24/outline";
 import { FunnelIcon } from "@heroicons/react/20/solid";
 
 import { Checkbox, Loader, Range } from "../../components";
-import { useFilter } from "../../hooks";
+import { useBook, useFilter } from "../../hooks";
 import { useDispatch, useSelector } from "react-redux";
 import {
   clearFilter,
@@ -19,7 +19,6 @@ import {
   setFilterCategorys,
   setFilterRating,
 } from "../../context/bookSlice";
-import useBook from "../../hooks/useBook";
 import ShowItemFilter from "./ShowItemFilter";
 import ButtonClearAll from "./ButtonClearAll";
 

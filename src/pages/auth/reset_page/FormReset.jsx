@@ -1,9 +1,9 @@
 /* eslint-disable react/prop-types */
-import useAuth from "@/hooks/useAuth";
 
 import { Formik } from "formik";
 import * as Yup from "yup";
 import { InputForm } from "../../../components";
+import { useAuth } from "../../../hooks";
 export default function FormReset({ code }) {
   const { resetPassword } = useAuth();
   const handleSubmit = (e) => {

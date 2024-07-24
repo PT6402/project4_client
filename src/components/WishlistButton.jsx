@@ -6,10 +6,8 @@ import { useNavigate } from "react-router-dom";
 
 const WishlistButton = ({ productId }) => {
   const navigate = useNavigate();
-  const {
-    wishlist,
-    inforUser: { userDetailId },
-  } = useSelector((state) => state.userStore);
+  const { isLoggedIn } = useSelector((state) => state.auth);
+  const { wishlist } = useSelector((state) => state.userStore);
   const { addWishlist, deleteWishlist, getWishlist } = useWishlist();
   const [active, setActive] = useState(() => {
     if (wishlist.find(({ bookid }) => bookid == productId)) {
@@ -20,7 +18,7 @@ const WishlistButton = ({ productId }) => {
   });
 
   const wishlistToggleHandler = () => {
-    if (userDetailId) {
+    if (isLoggedIn) {
       if (active) {
         handleDeleteWishlist();
       } else {
@@ -32,15 +30,15 @@ const WishlistButton = ({ productId }) => {
   };
   const handleAddWishlist = async () => {
     setActive(true);
-    await addWishlist({ userDetailId, bookId: productId });
-    await getWishlist({ userDetailId });
+    await addWishlist({ bookId: productId });
+    await getWishlist();
   };
   const handleDeleteWishlist = async () => {
     const wishlistItem = wishlist.find(({ bookid }) => bookid == productId);
     if (wishlistItem) {
       setActive(false);
-      await deleteWishlist({ wishlistId: wishlistItem.wishId });
-      await getWishlist({ userDetailId });
+      await deleteWishlist({ bookId: productId });
+      await getWishlist();
     }
   };
   const handleCheckActive = () => {
@@ -51,7 +49,7 @@ const WishlistButton = ({ productId }) => {
     }
   };
   useEffect(() => {
-    if (userDetailId) {
+    if (isLoggedIn) {
       handleCheckActive();
     }
   }, []);

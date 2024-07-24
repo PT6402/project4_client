@@ -1,8 +1,8 @@
 /* eslint-disable react/prop-types */
 
 import { useEffect, useState } from "react";
-import useDebounce from "../../hooks/useDebounce";
 import { XMarkIcon } from "@heroicons/react/20/solid";
+import { useDebounce } from "../../hooks";
 
 export default function InputSearch({
   children,

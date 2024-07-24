@@ -1,7 +1,7 @@
 import { useEffect, useState } from "react";
 import { Button } from "@material-tailwind/react";
 import { Link } from "react-router-dom";
-import useCategory from "../../../hooks/useCategory";
+import { useCategory } from "../../../hooks";
 
 export default function AdminCatetoriesPage() {
   const { getCategories, isLoading, error } = useCategory();

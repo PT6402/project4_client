@@ -1,16 +1,16 @@
 import { useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
-import http from "../http";
 import { HttpStatusCode } from "axios";
-import { setCartItem } from "../context/userSlice";
+import { setCartItem } from "../../context/userSlice";
+import useHttp from "../auth/useHttp";
 
 const useCart = () => {
   const [isLoading, setIsLoading] = useState();
   const [error, setError] = useState();
   const dispatch = useDispatch();
-  const {
-    inforUser: { isLoggedIn, userDetailId },
-  } = useSelector((state) => state.userStore);
+  const { http_auth, http } = useHttp();
+  const authHttp = http_auth();
+  const { isLoggedIn } = useSelector((state) => state.auth);
 
   const addToCart = async ({ bookId, iBuy, packageId }) => {
     setIsLoading(true);
@@ -19,7 +19,7 @@ const useCart = () => {
       if (!isLoggedIn) {
         throw Error("not user current");
       }
-      const res = await http.post(`/api/v1/cart/add/${userDetailId}`, {
+      const res = await authHttp.post(`/api/v1/cart`, {
         bookId,
         packId: packageId,
         ibuy: iBuy,
@@ -41,9 +41,7 @@ const useCart = () => {
       if (!isLoggedIn) {
         throw Error("not user current");
       }
-      const res = await http.delete(
-        `/api/v1/cart/remove/${userDetailId}/${bookId}`
-      );
+      const res = await authHttp.delete(`/api/v1/cart/${bookId}`);
       if (res.status == HttpStatusCode.Ok) {
         await getCart();
       }
@@ -54,14 +52,20 @@ const useCart = () => {
       setIsLoading(false);
     }
   };
-  const getCart = async (userId = userDetailId) => {
+  const getCart = async (accessToken) => {
     setIsLoading(true);
     setError(null);
     try {
-      if (!isLoggedIn && userId == null) {
-        throw Error("not user current");
+      let res;
+      if (!accessToken) {
+        res = await authHttp.get("/api/v1/cart");
+      } else {
+        res = await http.get("api/v1/cart", {
+          headers: {
+            Authorization: `Bearer ${accessToken}`,
+          },
+        });
       }
-      const res = await http.get(`/api/v1/cart/view?userId=${userId}`);
       if (res.status == HttpStatusCode.Ok) {
         dispatch(setCartItem(res.data.model));
         return res.data.model;
@@ -77,10 +81,10 @@ const useCart = () => {
     setIsLoading(true);
     setError(null);
     try {
-      if (!isLoggedIn && userDetailId == null) {
+      if (!isLoggedIn) {
         throw Error("not user current");
       }
-      const res = await http.put(`/api/v1/cart/update`, {
+      const res = await authHttp.put(`/api/v1/cart`, {
         cartItemId,
         packId,
       });
