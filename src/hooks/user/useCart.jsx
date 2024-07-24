@@ -8,7 +8,7 @@ const useCart = () => {
   const [isLoading, setIsLoading] = useState();
   const [error, setError] = useState();
   const dispatch = useDispatch();
-  const { http_auth } = useHttp();
+  const { http_auth, http } = useHttp();
   const authHttp = http_auth();
   const { isLoggedIn } = useSelector((state) => state.auth);
 
@@ -19,7 +19,7 @@ const useCart = () => {
       if (!isLoggedIn) {
         throw Error("not user current");
       }
-      const res = await authHttp.post(`/api/v1/cart/add`, {
+      const res = await authHttp.post(`/api/v1/cart`, {
         bookId,
         packId: packageId,
         ibuy: iBuy,
@@ -41,7 +41,7 @@ const useCart = () => {
       if (!isLoggedIn) {
         throw Error("not user current");
       }
-      const res = await authHttp.delete(`/api/v1/cart/remove/${bookId}`);
+      const res = await authHttp.delete(`/api/v1/cart/${bookId}`);
       if (res.status == HttpStatusCode.Ok) {
         await getCart();
       }
@@ -52,14 +52,20 @@ const useCart = () => {
       setIsLoading(false);
     }
   };
-  const getCart = async () => {
+  const getCart = async (accessToken) => {
     setIsLoading(true);
     setError(null);
     try {
-      if (!isLoggedIn) {
-        throw Error("not user current");
+      let res;
+      if (!accessToken) {
+        res = await authHttp.get("/api/v1/cart");
+      } else {
+        res = await http.get("api/v1/cart", {
+          headers: {
+            Authorization: `Bearer ${accessToken}`,
+          },
+        });
       }
-      const res = await authHttp.get(`/api/v1/cart/view`);
       if (res.status == HttpStatusCode.Ok) {
         dispatch(setCartItem(res.data.model));
         return res.data.model;
@@ -78,7 +84,7 @@ const useCart = () => {
       if (!isLoggedIn) {
         throw Error("not user current");
       }
-      const res = await authHttp.put(`/api/v1/cart/update`, {
+      const res = await authHttp.put(`/api/v1/cart`, {
         cartItemId,
         packId,
       });

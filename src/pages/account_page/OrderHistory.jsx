@@ -1,67 +1,11 @@
-import { useEffect, useState } from "react";
-import { Loader, OrderCard } from "../../components";
-import { useBook } from "../../hooks";
+import { useState } from "react";
+import { OrderCard } from "../../components";
+import { useSelector } from "react-redux";
 
 const OrderHistory = () => {
   const [openOrderId, setOpenOrderId] = useState(null);
-  const [showLoader, setShowLoader] = useState(true);
-  const [data, setData] = useState([]);
-  const { getOrder, isLoading } = useBook();
-  useEffect(() => {
-    if (isLoading) {
-      setShowLoader(true);
-    } else {
-      setShowLoader(false);
-    }
-  }, [isLoading]);
-  useEffect(() => {
-    getOrder().then((res) => setData(res));
-  }, []);
-  if (showLoader) return <Loader />;
-  // const orders = [
-  //   {
-  //     date: "12-12-2012",
-  //     orderId: "1234-1234",
-  //     products: [
-  //       {
-  //         bookId: 1,
-  //         nameBook: "book 1",
-  //         authors: [],
-  //         price: 1000,
-  //         image: "https://picsum.photos/seed/VDb7zyov2/640/480",
-  //       },
-  //       {
-  //         bookId: 1,
-  //         nameBook: "book 1",
-  //         authors: [],
-  //         price: 1000,
-  //         image: "https://picsum.photos/seed/VDb7zyov2/640/480",
-  //       },
-  //     ],
-  //     totalBill: 1000,
-  //   },
-  //   {
-  //     date: "12-12-2012",
-  //     orderId: "1234-1234-1234-1234",
-  //     products: [
-  //       {
-  //         bookId: 1,
-  //         nameBook: "book 1",
-  //         authors: [],
-  //         price: 1000,
-  //         image: "https://picsum.photos/seed/VDb7zyov2/640/480",
-  //       },
-  //       {
-  //         bookId: 1,
-  //         nameBook: "book 1",
-  //         authors: [],
-  //         price: 1000,
-  //         image: "https://picsum.photos/seed/VDb7zyov2/640/480",
-  //       },
-  //     ],
-  //     totalBill: 1000,
-  //   },
-  // ];
+
+  const { orderHistorys: data } = useSelector((state) => state.userStore);
 
   const handleOrderClick = (orderId) => {
     setOpenOrderId(openOrderId === orderId ? null : orderId);

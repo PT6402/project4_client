@@ -4,6 +4,8 @@ import useUser from "./useUser";
 import useWishlist from "../user/useWishlist";
 import useCart from "../user/useCart";
 import useCategory from "../book/useCategory";
+import useBook from "../book/useBook";
+import useMyBook from "../user/useMyBook";
 
 const useLoadFirst = () => {
   const [isLoading, setIsLoading] = useState();
@@ -15,17 +17,22 @@ const useLoadFirst = () => {
   const { getCategories } = useCategory();
   const { getWishlist } = useWishlist();
   const { getCart } = useCart();
+  const { getOrder } = useBook();
+  const { getMyBook } = useMyBook();
 
   const load = async () => {
     setIsLoading(true);
     setError(null);
     try {
-      const accessToken = await handleRefreshToken();
-      //----
       await getCategories();
-      await getUser(accessToken);
-      await getWishlist();
-      await getCart();
+      await handleRefreshToken().then((accessToken) => {
+        getUser(accessToken);
+        getWishlist(accessToken);
+        getCart(accessToken);
+        getOrder(accessToken);
+        getMyBook(accessToken);
+      });
+      //----
     } catch (error) {
       console.log(error);
       setError(error);

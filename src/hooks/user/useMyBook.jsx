@@ -9,14 +9,23 @@ const useMyBook = () => {
   const [isLoading, setIsLoading] = useState();
   const [error, setError] = useState();
 
-  const { http_auth } = useHttp();
+  const { http_auth, http } = useHttp();
   const authHttp = http_auth();
 
-  const getMyBook = async () => {
+  const getMyBook = async (accessToken) => {
     setIsLoading(true);
     setError(null);
     try {
-      const res = await authHttp.get(`api/v1/mybook/show`);
+      let res;
+      if (!accessToken) {
+        res = await authHttp.get("api/v1/mybook");
+      } else {
+        res = await http.get("api/v1/mybook", {
+          headers: {
+            Authorization: `Bearer ${accessToken}`,
+          },
+        });
+      }
       if (res.status == HttpStatusCode.Ok) {
         dispatch(setMyBook(res.data.model));
       }

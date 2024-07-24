@@ -5,7 +5,7 @@ import { useNavigate } from "react-router-dom";
 import { HttpStatusCode } from "axios";
 import { useDispatch, useSelector } from "react-redux";
 import { setEmail } from "@/context/userSlice";
-import { clearAuth, setAccessToken } from "../../context/authSlice";
+import { clearAuth, setLogin } from "../../context/authSlice";
 import useCart from "../user/useCart";
 import { clearUser } from "../../context/userSlice";
 import useWishlist from "../user/useWishlist";
@@ -25,13 +25,14 @@ const useAuth = () => {
   const { http, http_auth } = useHttp();
   const auth_http = http_auth();
 
-  const register = async ({ email, password }) => {
+  const register = async ({ email, password, name }) => {
     setIsLoading(true);
     setError(null);
     try {
       const res = await http.post("/api/v1/auth/register", {
         email,
         password,
+        name,
       });
       if (res.status == HttpStatusCode.Ok) {
         dispatch(setEmail(email));
@@ -60,7 +61,7 @@ const useAuth = () => {
       });
       if (res.status == HttpStatusCode.Ok) {
         const data = res.data.model;
-        dispatch(setAccessToken(data));
+        dispatch(setLogin({ accessToken: data, isLoggedIn: true }));
         await getUser(data);
         await getWishlist();
         await getCart();
@@ -85,7 +86,7 @@ const useAuth = () => {
     setIsLoading(true);
     setError(null);
     try {
-      const res = await http.get(`api/auth/v1/forgot-password/${email}`);
+      const res = await http.get(`api/v1/auth/forgot-password/${email}`);
       if (res.status == HttpStatusCode.Ok) {
         dispatch(setEmail(email));
         navigate("/reset-password");
@@ -148,7 +149,7 @@ const useAuth = () => {
     setError(null);
     try {
       if (accessToken != null) {
-        const res = await auth_http.post(`api/v1/auth/logout`);
+        const res = await auth_http.get(`auth/logout`);
         if (res.status == 200) {
           dispatch(clearAuth());
           dispatch(clearUser());

@@ -54,7 +54,7 @@ const userSlice = createSlice({
       state.items = [];
     },
     setCartItem: (state, action) => {
-      state.cart.items = action.payload;
+      state.cart = action.payload;
     },
 
     // wishlist
@@ -73,6 +73,10 @@ const userSlice = createSlice({
     setWishlist: (state, action) => {
       state.wishlist = action.payload;
     },
+
+    setOrderHistory: (state, action) => {
+      state.orderHistorys = action.payload;
+    },
   },
 });
 
@@ -81,11 +85,11 @@ export const {
   setEmail,
   setInfor,
   setMyBook,
-
   setWishlist,
   setCartItem,
   addCartItem,
   removeAll,
   deleteCartItem,
   clearUser,
+  setOrderHistory,
 } = userSlice.actions;

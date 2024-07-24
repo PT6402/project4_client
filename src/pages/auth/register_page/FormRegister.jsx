@@ -10,13 +10,14 @@ export default function FormRegister() {
   const { register } = useAuth();
   const handleSubmit = (value) => {
     const data = {
+      name: value.fullname,
       email: value.email,
       password: value.password,
     };
     register(data).then((res) => {
       if (res?.errorExist) {
         fullnameInput.current.focus();
-        // value.fullname = "";
+        value.fullname = "";
         value.email = "";
         value.password = "";
         value.confirmPass = "";
@@ -24,10 +25,10 @@ export default function FormRegister() {
     });
   };
   const SignupSchema = Yup.object().shape({
-    // fullname: Yup.string()
-    //   .min(2, "Too Short!")
-    //   .max(50, "Too Long!")
-    //   .required("Required"),
+    fullname: Yup.string()
+      .min(2, "Too Short!")
+      .max(50, "Too Long!")
+      .required("Required"),
     email: Yup.string().email("Invalid email").required("Required"),
     password: Yup.string()
       .min(8, "Password must be 8 characters long")
@@ -46,7 +47,7 @@ export default function FormRegister() {
       <BtnLoginGG />
       <Formik
         initialValues={{
-          // fullname: "",
+          fullname: "",
           email: "",
           password: "",
           confirmPass: "",
@@ -67,7 +68,7 @@ export default function FormRegister() {
             className="space-y-4 md:space-y-6"
             autoComplete="off"
           >
-            {/* <InputForm
+            <InputForm
               title={"fullname"}
               onBlur={handleBlur}
               onChange={handleChange}
@@ -75,7 +76,7 @@ export default function FormRegister() {
               value={values.fullname}
               error={errors.fullname}
               touched={touched.fullname}
-            /> */}
+            />
             <InputForm
               title={"email"}
               onBlur={handleBlur}

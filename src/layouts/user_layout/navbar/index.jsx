@@ -98,7 +98,7 @@ const Navbar = () => {
                         aria-hidden="true"
                       />
                       <span className="ml-1 text-xs font-medium text-gray-100 sm:ml-2 sm:text-sm group-hover:text-gray-50">
-                        {isUserValid && cart.items.length}
+                        {isUserValid && cart.length}
                       </span>
                       <span className="sr-only">items in cart, view bag</span>
                     </NavLink>

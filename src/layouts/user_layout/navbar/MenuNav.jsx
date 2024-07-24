@@ -14,12 +14,12 @@ export default function MenuNav() {
   return (
     <div
       className=" text-white"
-      onMouseEnter={() => setOpen(true)}
+      onMouseEnter={() => setOpen(false)}
       onMouseLeave={() => setOpen(false)}
     >
       <div
         className="flex flex-row items-center w-full px-4 md:w-auto md:inline md:mt-0 cursor-pointer"
-        onMouseLeave={() => setOpen(true)}
+        onMouseLeave={() => setOpen(false)}
       >
         <span> Explore </span>
         <ChevronDownIcon

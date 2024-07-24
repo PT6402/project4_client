@@ -2,7 +2,7 @@ import { useState } from "react";
 import { jwtDecode } from "jwt-decode";
 import http, { HttpStatusCode } from "axios";
 import { useDispatch, useSelector } from "react-redux";
-import { setAccessToken } from "../../context/authSlice";
+import { setLogin } from "../../context/authSlice";
 const useHttp = () => {
   const URL_SERVER = import.meta.env.VITE_URL_SERVER;
   http.defaults.baseURL = URL_SERVER;
@@ -12,22 +12,20 @@ const useHttp = () => {
   const [error, setError] = useState();
   const [isLoading, setIsLoading] = useState();
 
-  const {
-    inforUser: { accessToken },
-  } = useSelector((state) => state.userStore);
+  const { accessToken } = useSelector((state) => state.auth);
 
-  const http_auth = () => {
+  const http_auth = (accessArg = accessToken) => {
     const newInstance = http.create();
     newInstance.interceptors.request.use(
       async (config) => {
         let date = new Date();
-        if (accessToken != null) {
-          const decodeToken = jwtDecode(accessToken);
+        if (accessArg != null) {
+          const decodeToken = jwtDecode(accessArg);
           if (decodeToken.exp < date.getTime() / 1000) {
             const newAccessToken = await handleRefreshToken();
             config.headers.Authorization = `Bearer ${newAccessToken}`;
           } else {
-            config.headers.Authorization = `Bearer ${accessToken}`;
+            config.headers.Authorization = `Bearer ${accessArg}`;
           }
         }
 
@@ -46,7 +44,12 @@ const useHttp = () => {
     try {
       const res = await http.get("/api/v1/auth/refresh-token");
       if (res.status == HttpStatusCode.Ok) {
-        dispatch(setAccessToken(res.data.model));
+        dispatch(
+          setLogin({
+            accessToken: res.data.model,
+            isLoggedIn: true,
+          })
+        );
         return res.data.model;
       }
     } catch (error) {

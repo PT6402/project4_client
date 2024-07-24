@@ -14,10 +14,8 @@ const ProductOverviewPage = () => {
   const [dataDetail, setDataDetail] = useState({});
   const { getBookDetail, isLoading } = useBook();
   const { addToCart, updateCart, isLoading: loadCart } = useCart();
-  const {
-    inforUser: { isLoggedIn },
-    cart: { items },
-  } = useSelector((state) => state.userStore);
+  const { isLoggedIn } = useSelector((state) => state.auth);
+  const { cart: items } = useSelector((state) => state.userStore);
   const handleGetOption = ({ type, packageId }) => {
     setOption({ type, packageId });
   };

@@ -2,7 +2,6 @@ import { useState } from "react";
 import { useDispatch } from "react-redux";
 import useHttp from "./useHttp";
 import { HttpStatusCode } from "axios";
-import { setLogin } from "../../context/authSlice";
 import { setInfor } from "../../context/userSlice";
 
 const useUser = () => {
@@ -22,15 +21,6 @@ const useUser = () => {
             Authorization: `Bearer ${accessToken}`,
           },
         });
-        if (res.status == HttpStatusCode.Ok) {
-          // auth
-          dispatch(
-            setLogin({
-              accessToken: accessToken,
-              isLoggedIn: true,
-            })
-          );
-        }
       }
       if (res.status == HttpStatusCode.Ok) {
         const data = res.data.model;
@@ -38,7 +28,7 @@ const useUser = () => {
         // set user
         dispatch(
           setInfor({
-            fullname: data.fullname,
+            fullname: data.name,
             email: data.email,
             role: data.role,
           })

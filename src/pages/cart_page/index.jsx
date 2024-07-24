@@ -6,9 +6,7 @@ import { useCart } from "../../hooks";
 
 const CartPage = () => {
   // const cart = listCart;
-  const {
-    cart: { items },
-  } = useSelector((state) => state.userStore);
+  const { cart: items } = useSelector((state) => state.userStore);
   // const [dataCart, setDataCart] = useState([]);
   const { deleteToCart, updateCart, isLoading } = useCart();
   const [showLoader, setShowLoader] = useState(true);
@@ -50,7 +48,7 @@ const CartPage = () => {
       )}
       {items && items.length === 0 && (
         <div className="grid h-60 place-items-center">
-          <div className="space-y-4">
+          <div>
             <p className="my-4 text-2xl font-semibold tracking-wide text-gray-100">
               Cart is Empty.
             </p>
@@ -59,13 +57,6 @@ const CartPage = () => {
               className="w-full px-5 block py-2.5 text-xs lg:text-sm font-medium text-center text-gray-100 rounded-lg bg-cyan-900 focus:ring-4 focus:outline-none hover:bg-cyan-950 focus:ring-cyan-950"
             >
               SHOP NOW
-            </Link>
-
-            <Link
-              to="/wishlist"
-              className="w-full px-5 block py-2.5 text-xs lg:text-sm font-medium text-center text-gray-100 rounded-lg bg-cyan-900 focus:ring-4 focus:outline-none hover:bg-cyan-950 focus:ring-cyan-950"
-            >
-              Add From Wishlist
             </Link>
           </div>
         </div>

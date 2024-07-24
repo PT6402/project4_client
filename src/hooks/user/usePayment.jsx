@@ -1,24 +1,22 @@
 import { useState } from "react";
-import { useSelector } from "react-redux";
 import useHttp from "../auth/useHttp";
-import useAuth from "../auth/useAuth";
+import { HttpStatusCode } from "axios";
+import useBook from "../book/useBook";
+import useMyBook from "./useMyBook";
 
 const usePayment = () => {
   const [isLoading, setIsLoading] = useState();
   const [error, setError] = useState();
-  const {
-    inforUser: { userDetailId },
-  } = useSelector((state) => state.userStore);
-  const { handleReloadPage } = useAuth();
-  const { http_auth } = useHttp();
+  const { http_auth, http, handleRefreshToken } = useHttp();
   const authHttp = http_auth();
+  const { getOrder } = useBook();
+  const { getMyBook } = useMyBook();
   const handleCheckout = async ({ cartId }) => {
     setIsLoading(true);
     setError(null);
     try {
-      const res = await authHttp.post(
-        `/api/v1/orders/checkout/${userDetailId}/${cartId}`
-      );
+      const res = await authHttp.post(`/api/v1/orders/checkout/${cartId}`);
+
       return res.data.model.payment_url;
     } catch (error) {
       console.log(error);
@@ -31,12 +29,23 @@ const usePayment = () => {
     setIsLoading(true);
     setError(null);
     try {
-      const userId = await handleReloadPage();
-      await authHttp.post(`/api/v1/orders/check`, {
-        orderId,
-        token,
-        userDetailId: userId,
-      });
+      const accessToken = await handleRefreshToken();
+      const res = await http.post(
+        `/api/v1/orders/check`,
+        {
+          orderId,
+          token,
+        },
+        {
+          headers: {
+            Authorization: `Bearer ${accessToken}`,
+          },
+        }
+      );
+      if (res.status == HttpStatusCode.Ok) {
+        getOrder();
+        getMyBook();
+      }
     } catch (error) {
       console.log(error);
       setError(error);

@@ -8,6 +8,7 @@ import {
   setListBook,
   setTotalPage,
 } from "../../context/bookSlice";
+import { setOrderHistory } from "../../context/userSlice";
 
 const useBook = () => {
   const dispatch = useDispatch();
@@ -94,12 +95,23 @@ const useBook = () => {
       setIsLoading(false);
     }
   };
-  const getOrder = async () => {
+  const getOrder = async (accessToken) => {
     setIsLoading(true);
     setError(null);
     try {
-      const res = await authHttp.get(`/api/v1/orders/user`);
+      // const res = await authHttp.get(`/api/v1/orders`);
+      let res;
+      if (!accessToken) {
+        res = await authHttp.get("/api/v1/orders");
+      } else {
+        res = await http.get("/api/v1/orders", {
+          headers: {
+            Authorization: `Bearer ${accessToken}`,
+          },
+        });
+      }
       if (res.status == HttpStatusCode.Ok) {
+        dispatch(setOrderHistory(res.data.model));
         return res.data.model;
       }
     } catch (error) {
