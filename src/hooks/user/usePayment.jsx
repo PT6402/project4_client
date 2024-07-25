@@ -43,8 +43,8 @@ const usePayment = () => {
         }
       );
       if (res.status == HttpStatusCode.Ok) {
-        getOrder();
-        getMyBook();
+        getOrder(accessToken);
+        getMyBook(accessToken);
       }
     } catch (error) {
       console.log(error);
