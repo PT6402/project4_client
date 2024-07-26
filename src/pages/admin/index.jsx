@@ -6,5 +6,6 @@ import AdminPackagePage from "./packages_page";
 import StatisticsPage from "./statistics_page";
 import AdminOrdersPage from "./orders_page";
 import OrderDetailPage from "./orders_page/OrderDetailPage";
+import AdminPublishersPage from "./publishers_page";
 
-export { AdminAuthorPage, AdminCatetoriesPage, AdminHomePage, AdminUserPage, AdminPackagePage, StatisticsPage, AdminOrdersPage, OrderDetailPage };
+export { AdminAuthorPage, AdminCatetoriesPage, AdminHomePage, AdminUserPage, AdminPackagePage, StatisticsPage, AdminOrdersPage, OrderDetailPage, AdminPublishersPage };

@@ -12,6 +12,7 @@ import usePayment from "./user/usePayment";
 import useUser from "./auth/useUser";
 import useWishlist from "./user/useWishlist";
 import useDebounce from "./util/useDebounce";
+import usePublisher from "./admin/usePublisher";
 
 export {
   // auth
@@ -32,6 +33,7 @@ export {
   useFilter,
   usePackage,
   useAuthor,
+  usePublisher,
 
   // util
   useDebounce,

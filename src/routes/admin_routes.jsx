@@ -7,11 +7,13 @@ import {
   AdminPackagePage,
   StatisticsPage,
   AdminOrdersPage,
-  OrderDetailPage
+  OrderDetailPage,
+  AdminPublishersPage
 } from "../pages/admin";
 import IconStarEmpty from "../components/icons/IconStarEmpty";
 import AddAuthor from "../pages/admin/authors_page/AddAuthor";
 import AddPackage from "../pages/admin/packages_page/AddPackage";
+import AddPublisher from "../pages/admin/publishers_page/AddPublisher";
 
 const icon = {
   className: "w-5 h-5 text-inherit",
@@ -70,6 +72,13 @@ const admin_routes = [
         path: "order",
         index: false,
         element: <AdminOrdersPage />,
+      },
+      {
+        icon: <HomeIcon {...icon} />,
+        name: "publishers",
+        path: "publisher",
+        index: false,
+        element: <AdminPublishersPage />,
       },
     ],
   },
