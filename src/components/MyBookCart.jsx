@@ -2,9 +2,10 @@ import Rating from "react-rating";
 import InputForm from "./InputForm";
 import IconStarEmpty from "./icons/IconStarEmpty";
 import IconStarFull from "./icons/IconStarFull";
+import { Button } from "@material-tailwind/react";
 
 /* eslint-disable react/prop-types */
-const MyBookCard = ({ book }) => {
+const MyBookCard = ({ book, handleReadBook }) => {
   const {
     bookId,
     price,
@@ -39,6 +40,9 @@ const MyBookCard = ({ book }) => {
               {price}
             </p>
           </div> */}
+          <Button variant="filled" color="cyan" onClick={handleReadBook}>
+            Read book
+          </Button>
         </div>
       </div>
     </div>

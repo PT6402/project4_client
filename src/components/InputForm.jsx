@@ -4,6 +4,7 @@ import { useState } from "react";
 import { Link } from "react-router-dom";
 
 export default function InputForm({
+  className,
   isPassword = false,
   isRegister = false,
   value,
@@ -19,7 +20,7 @@ export default function InputForm({
 
   if (isPassword) {
     return (
-      <div>
+      <div className={className}>
         <label
           htmlFor={name}
           className="block mb-2 text-sm font-medium text-gray-100"
@@ -66,7 +67,7 @@ export default function InputForm({
     );
   } else {
     return (
-      <div>
+      <div className={className}>
         <label
           htmlFor={name}
           className="block mb-2 text-sm font-medium text-gray-100"

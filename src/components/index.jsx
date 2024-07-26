@@ -7,6 +7,7 @@ import OrderCard from "./OrderCard";
 import PricePackage from "./PricePackage";
 import SearchBar from "./SearchBar";
 import WishlistButton from "./WishlistButton";
+import Backdrop from "./backdrop";
 import CartCard from "./cart/CartCard";
 import CartCheckoutDetails from "./cart/CartCheckoutDetails";
 import Dropdown from "./cart/Dropdown";
@@ -44,4 +45,5 @@ export {
   AuthorBookCard,
   PricePackage,
   MyBookCard,
+  Backdrop,
 };

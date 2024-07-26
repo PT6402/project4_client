@@ -6,6 +6,7 @@ import { Toaster } from "react-hot-toast";
 import { Provider } from "react-redux";
 import { ThemeProvider } from "@material-tailwind/react";
 import { BrowserRouter as Router } from "react-router-dom";
+import "swiper/css";
 ReactDOM.createRoot(document.getElementById("root")).render(
   <Provider store={store}>
     <Router>

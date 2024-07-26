@@ -3,6 +3,8 @@ import { useParams } from "react-router-dom";
 import OrderHistory from "./OrderHistory";
 import { useSelector } from "react-redux";
 import MyBook from "./MyBook";
+import CenterModal from "../../components/center_modal";
+import { Button } from "@material-tailwind/react";
 
 const AccountPage = () => {
   const { tab } = useParams();
