@@ -5,6 +5,7 @@ import authorSlice from "./authorSlice";
 import bookSlice from "./bookSlice";
 import uiSlice from "./uiSlice";
 import formSlice from "./formSlice";
+import readBookSlice from "./readBookSlice";
 
 const store = configureStore({
   reducer: {
@@ -14,6 +15,7 @@ const store = configureStore({
     uiConfig: uiSlice,
     formStore: formSlice,
     authorStore: authorSlice,
+    readBook: readBookSlice,
   },
   middleware: (getDefaultMiddleware) =>
     getDefaultMiddleware({

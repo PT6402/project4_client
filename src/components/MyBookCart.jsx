@@ -7,10 +7,10 @@ import { Button } from "@material-tailwind/react";
 /* eslint-disable react/prop-types */
 const MyBookCard = ({ book, handleReadBook }) => {
   const {
-    bookId,
+    bookid,
     price,
     bookname,
-    bookid,
+
     mybookid,
     status,
     expiredDate,
@@ -19,7 +19,7 @@ const MyBookCard = ({ book, handleReadBook }) => {
   } = book;
   return (
     <div
-      id={bookId}
+      id={bookid}
       className="flex flex-col justify-between p-6 border-b border-gray-700 sm:flex-row hover:rounded-lg hover:bg-gray-800 sm:justify-start"
     >
       <img
@@ -40,7 +40,11 @@ const MyBookCard = ({ book, handleReadBook }) => {
               {price}
             </p>
           </div> */}
-          <Button variant="filled" color="cyan" onClick={handleReadBook}>
+          <Button
+            variant="filled"
+            color="cyan"
+            onClick={() => handleReadBook(bookid)}
+          >
             Read book
           </Button>
         </div>

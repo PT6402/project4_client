@@ -21,6 +21,7 @@ import {
 } from "../../context/bookSlice";
 import ShowItemFilter from "./ShowItemFilter";
 import ButtonClearAll from "./ButtonClearAll";
+import SlideRangePrice from "../../components/products/filters/SlideRangePrice";
 
 const ProductLayout = ({ children, handleSetDataBook, idCate }) => {
   const [idCategory, setIdCategory] = useState(idCate);
@@ -135,11 +136,12 @@ const ProductLayout = ({ children, handleSetDataBook, idCate }) => {
             <div className="h-full px-3 py-4 overflow-y-auto">
               <form className="hidden md:block">
                 <h3 className="sr-only">Categories</h3>
-                <div className="mt-6 space-y-4">
+                <div className="mt-6 flex flex-col gap-2">
                   <Range
                     handleToggleStar={handleToggleStar}
                     handleChange={handleChange}
                   />
+                  <SlideRangePrice min={0} max={10} />
                   <Checkbox onChange={handleCheckboxOnChange} />
                 </div>
                 {isFilter && (

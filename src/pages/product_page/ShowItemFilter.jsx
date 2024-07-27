@@ -11,7 +11,7 @@ export default function ShowItemFilter({ handleClearCate, handleClearRating }) {
   } = useSelector((state) => state.bookStore);
 
   return (
-    <div className="text-white">
+    <div className="text-white ">
       {isFilter && (
         <div className="flex flex-col">
           {rating != null && (

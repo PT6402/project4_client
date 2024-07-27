@@ -14,8 +14,14 @@ import "swiper/css/navigation";
 import "swiper/css/pagination";
 import "swiper/css/scrollbar";
 import ItemSwiper from "./ItemSwiper";
+import { useSelector } from "react-redux";
 
-export default function ReadBook({ sliderRef, zoom }) {
+export default function ReadBook({
+  sliderRef,
+  zoom,
+  handleCurrentSlide,
+  data,
+}) {
   return (
     <div className="flex justify-center items-center h-[calc(100vh-2rem)] w-[calc(100vw-0.5rem)] -ml-1 p-4">
       <Swiper
@@ -26,10 +32,13 @@ export default function ReadBook({ sliderRef, zoom }) {
         grabCursor={false}
         modules={[Keyboard, Scrollbar, Navigation, Pagination]}
         className={"mySwiper slider-navigation rounded-lg"}
+        onSlideChange={(value) => handleCurrentSlide(value.activeIndex)}
       >
-        <SwiperSlide className="relative">
-          <ItemSwiper zoom={zoom} />
-        </SwiperSlide>
+        {data.map((item, i) => (
+          <SwiperSlide className="relative" key={i}>
+            <ItemSwiper zoom={zoom} item={item} />
+          </SwiperSlide>
+        ))}
       </Swiper>
     </div>
   );

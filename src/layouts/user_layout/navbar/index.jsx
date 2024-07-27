@@ -37,7 +37,8 @@ const Navbar = () => {
                     to={"/products"}
                   >
                     <div className="flex items-center p-2 -m-2 group ">
-                      <MenuNav />
+                      {/* <MenuNav /> */}
+                      <p className="text-white font-bold underline">Store</p>
                     </div>
                   </NavLink>
                   <span

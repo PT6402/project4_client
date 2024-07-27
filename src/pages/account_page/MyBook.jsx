@@ -1,17 +1,25 @@
 import { useEffect, useRef, useState } from "react";
 import { Loader, MyBookCard } from "../../components";
-import useMyBook from "../../hooks/user/useMyBook";
-import { useSelector } from "react-redux";
-import { Button } from "@material-tailwind/react";
+import { useDispatch, useSelector } from "react-redux";
 import CenterModal from "../../components/center_modal";
 import LayoutReadBook from "../../components/LayoutReadBook";
 import ReadBook from "./ReadBook";
+import useReadBook from "../../hooks/user/useReadBook";
+import { clearReadBook } from "../../context/readBookSlice";
 
 export default function MyBook() {
+  const [showLoader, setShowLoader] = useState(false);
+  // const [data, setData] = useState([]);
+  const { listPage, isLoading: loadBook } = useSelector(
+    (state) => state.readBook
+  );
+  const { getReadBook, isLoading, getReadAppendBook } = useReadBook();
   const [close, setClose] = useState(false);
+  const [getCurrent, setCurrent] = useState(1);
   const { myBooks } = useSelector((state) => state.userStore);
   const sliderRef = useRef();
   const [zoom, setZoom] = useState(10);
+  const dispatch = useDispatch();
   const handleZoomIn = () => {
     console.log("in");
     setZoom(zoom - 5);
@@ -20,9 +28,27 @@ export default function MyBook() {
     console.log("out");
     setZoom(zoom + 5);
   };
-  const handleReadBook = () => {
+  const handleReadBook = async (bookId) => {
+    await getReadBook(bookId);
     setClose(true);
   };
+  const handleCurrentSlide = (index) => {
+    const length = listPage.length;
+    setCurrent(listPage[index].image_name.match(/page_(\d+)/)[1]);
+    if (index == 4 && listPage.length == 10 && !loadBook) {
+      getReadAppendBook();
+    } else if (length > 10 && index >= length - 6 && !loadBook) {
+      getReadAppendBook();
+    }
+  };
+  useEffect(() => {
+    if (isLoading) {
+      setShowLoader(true);
+    } else {
+      setShowLoader(false);
+    }
+  }, [isLoading]);
+  if (showLoader) return <Loader />;
   return (
     <div className="max-h-[calc(100vh-15rem)] no-scrollbar overflow-y-scroll">
       {myBooks.length > 0 &&
@@ -42,9 +68,19 @@ export default function MyBook() {
             sliderRef={sliderRef}
             handleZoomOut={handleZoomOut}
             handleZoomIn={handleZoomIn}
-            close={() => setClose(false)}
+            close={() => {
+              setClose(false);
+              dispatch(clearReadBook());
+              setCurrent(1);
+            }}
+            currentSlide={getCurrent}
           >
-            <ReadBook sliderRef={sliderRef} zoom={zoom} />
+            <ReadBook
+              sliderRef={sliderRef}
+              zoom={zoom}
+              data={listPage}
+              handleCurrentSlide={handleCurrentSlide}
+            />
           </LayoutReadBook>
         </CenterModal>
       )}

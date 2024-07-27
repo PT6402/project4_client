@@ -8,7 +8,7 @@ const Checkbox = ({ onChange }) => {
   } = useSelector((state) => state.bookStore);
 
   return (
-    <fieldset className="pb-4">
+    <fieldset className="pb-4 mt-10">
       <legend className="text-sm text-gray-100">Category</legend>
       <ul className="text-sm font-medium text-gray-100">
         {categories.map(({ name, id }) => (

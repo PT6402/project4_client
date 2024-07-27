@@ -19,6 +19,7 @@ export default function LayoutReadBook({
   handleZoomOut,
   handleZoomIn,
   close,
+  currentSlide,
 }) {
   const handlePrev = useCallback(() => {
     if (!sliderRef.current) return;
@@ -33,13 +34,15 @@ export default function LayoutReadBook({
     <div className="w-full h-full p-2 flex flex-col relative">
       <div className="flex justify-between items-center  ">
         <div className="flex gap-2">
-          <InputForm className={"w-20 -mt-2"} />
+          {/* <InputForm className={"w-20 -mt-2"} />
           <Button color="gray" variant="filled" className="">
             Find
-          </Button>
+          </Button> */}
         </div>
         <div className="absolute left-1/2 -translate-x-1/2">
-          <p>-/-</p>
+          <p className="border-2 p-2 rounded-lg shadow-lg">
+            {currentSlide} / -{" "}
+          </p>
         </div>
         <div>
           <div
