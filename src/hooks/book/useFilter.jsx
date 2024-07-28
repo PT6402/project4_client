@@ -15,7 +15,7 @@ const useFilter = () => {
   const {
     collection: { currentPage, limit },
   } = useSelector((state) => state.bookStore);
-  const filterBook = async ({ rating, categorys }) => {
+  const filterBook = async ({ rating, categorys, from, to }) => {
     setLoading(true);
     setError(null);
     try {
@@ -24,6 +24,8 @@ const useFilter = () => {
         {
           list: categorys,
           rating: rating,
+          from,
+          to,
         }
       );
       if (res.status == HttpStatusCode.Ok) {

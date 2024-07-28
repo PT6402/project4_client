@@ -11,7 +11,7 @@ export default function SearchPage() {
   const [data, setData] = useState([]);
   const [searchBy, setSearchBy] = useState("book");
   const [querySearch, setQuerySearch] = useState("");
-  const { search, getBooks, getAuthors, isLoading } = useBook();
+  const { search, getBooks, getAuthors, getPublisher, isLoading } = useBook();
   const handleGetBySearch = (value) => {
     searchRef.current.value = "";
     setSearchBy(value);
@@ -39,15 +39,17 @@ export default function SearchPage() {
     if (searchRef.current.value.trim() == "") {
       if (searchBy == "book") {
         getBooks({ goToPage: 1 }).then((res) => setData(res));
-      } else {
+      } else if (searchBy == "author") {
         getAuthors().then((res) => setData(res));
+      } else {
+        getPublisher().then((res) => setData(res));
       }
     } else {
       handleSearch();
     }
   }, [searchBy, querySearch]);
   return (
-    <div className="h-[calc(100vh-4rem)] overflow-hidden ">
+    <div className="h-fit ">
       <InputSearch
         handleOnChangeQuery={handleOnChangeQuery}
         querySearch={querySearch}
@@ -60,7 +62,7 @@ export default function SearchPage() {
         />
       </InputSearch>
 
-      <div className="mx-auto max-w-2xl px-4 pt-5 sm:px-6  lg:max-w-7xl lg:px-8 overflow-y-auto h-[calc(100vh-14.5rem)]">
+      <div className="mx-auto max-w-2xl px-4 pt-5 sm:px-6  lg:max-w-7xl lg:px-8 ">
         <h2 className="sr-only">Products</h2>
 
         <div className="grid grid-cols-1 gap-x-6 gap-y-10 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 xl:gap-x-8">
@@ -73,11 +75,11 @@ export default function SearchPage() {
                 to={`/product-overview/${bookid}`}
                 className="group"
               >
-                <div className="aspect-h-1 aspect-w-1 w-full overflow-hidden rounded-lg bg-gray-200 xl:aspect-h-8 xl:aspect-w-7">
+                <div className="aspect-h-1 aspect-w-1 w-full  rounded-lg bg-gray-200 xl:aspect-h-8 xl:aspect-w-7">
                   <img
                     src={`data:image/png;base64,${imageCove}`}
                     alt={name}
-                    className="h-full w-full object-cover object-center group-hover:opacity-75"
+                    className="h-full w-full object-cover object-center group-hover:opacity-75 rounded-lg"
                   />
                 </div>
                 <h3 className="mt-4 text-xl font-bold text-white ">{name}</h3>
@@ -86,7 +88,7 @@ export default function SearchPage() {
           ) : (
             data.map(({ id, image_data, name, fileImage }) => (
               <Link key={id} to={`/product-overview/${id}`} className="group">
-                <div className="aspect-h-1 aspect-w-1 w-full overflow-hidden rounded-lg bg-gray-200 xl:aspect-h-8 xl:aspect-w-7">
+                <div className="aspect-h-1 aspect-w-1 w-full  rounded-lg bg-gray-200 xl:aspect-h-8 xl:aspect-w-7">
                   <img
                     src={`data:image/png;base64,${image_data || fileImage}`}
                     alt={name}

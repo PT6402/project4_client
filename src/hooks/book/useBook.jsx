@@ -65,9 +65,16 @@ const useBook = () => {
         if (res.status == HttpStatusCode.Ok) {
           return res.data.model;
         }
-      } else {
+      } else if (searchBy == "author") {
         const res = await http.get(
           `/api/v1/authors/search?name=${querySearch}`
+        );
+        if (res.status == HttpStatusCode.Ok) {
+          return res.data.model;
+        }
+      } else {
+        const res = await http.get(
+          `/api/v1/publisher/search?name=${querySearch}`
         );
         if (res.status == HttpStatusCode.Ok) {
           return res.data.model;
@@ -121,11 +128,27 @@ const useBook = () => {
       setIsLoading(false);
     }
   };
+  const getPublisher = async () => {
+    setIsLoading(true);
+    setError(null);
+    try {
+      const res = await http.get(`/api/v1/publisher/`);
+      if (res.status == HttpStatusCode.Ok) {
+        return res.data.model;
+      }
+    } catch (error) {
+      console.log(error.response.data);
+      setError(error.response.data);
+    } finally {
+      setIsLoading(false);
+    }
+  };
 
   return {
     isLoading,
     error,
     getBooks,
+    getPublisher,
     getBookDetail,
     search,
     getAuthors,

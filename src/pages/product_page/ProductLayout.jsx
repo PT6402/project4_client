@@ -18,6 +18,7 @@ import {
   setFilterCate,
   setFilterCategorys,
   setFilterRating,
+  setPrice,
 } from "../../context/bookSlice";
 import ShowItemFilter from "./ShowItemFilter";
 import ButtonClearAll from "./ButtonClearAll";
@@ -30,7 +31,7 @@ const ProductLayout = ({ children, handleSetDataBook, idCate }) => {
   const [showLoader, setShowLoader] = useState(true);
   //
   const {
-    filterBook: { isFilter, categorys, rating },
+    filterBook: { isFilter, categorys, rating, from, to },
   } = useSelector((state) => state.bookStore);
   const { getBooks, isLoading } = useBook();
   const { filterBook, loading } = useFilter();
@@ -43,13 +44,19 @@ const ProductLayout = ({ children, handleSetDataBook, idCate }) => {
   };
   const handleClearCate = () => {
     dispatch(setFilterCategorys([]));
-    if (rating == null) {
+    if (rating == null && from == null && to == null) {
       dispatch(clearFilter());
     }
   };
   const handleClearRating = () => {
     dispatch(setFilterRating(null));
-    if (categorys.length == 0) {
+    if (categorys.length == 0 && from == null && to == null) {
+      dispatch(clearFilter());
+    }
+  };
+  const handleClearPrice = () => {
+    dispatch(setPrice({ from: null, to: null }));
+    if (categorys.length == 0 && rating == null) {
       dispatch(clearFilter());
     }
   };
@@ -65,7 +72,7 @@ const ProductLayout = ({ children, handleSetDataBook, idCate }) => {
     dispatch(setFilterRating(value));
   };
   const handleCallApiFilter = async () => {
-    const data = await filterBook({ categorys, rating });
+    const data = await filterBook({ categorys, rating, from, to });
     handleSetDataBook(data);
   };
   const handleCallApiBook = async () => {
@@ -74,7 +81,7 @@ const ProductLayout = ({ children, handleSetDataBook, idCate }) => {
   };
 
   const handleCallApi = async () => {
-    if (categorys.length == 0 && rating == null) {
+    if (categorys.length == 0 && rating == null && from == null && to == null) {
       if (idCategory == null) {
         await handleCallApiBook();
       } else {
@@ -85,6 +92,17 @@ const ProductLayout = ({ children, handleSetDataBook, idCate }) => {
     }
   };
   //
+  const handleChangePrice = ({ min, max }) => {
+    if (min != 0 || max != 1000) {
+      dispatch(setPrice({ from: min, to: max }));
+    } else {
+      if (isFilter) {
+        if (!(from == null && to == null)) {
+          dispatch(setPrice({ from: 0, to: 1000 }));
+        }
+      }
+    }
+  };
   useEffect(() => {
     if (idCategory != null) {
       dispatch(setFilterCate(Number(idCate)));
@@ -104,7 +122,7 @@ const ProductLayout = ({ children, handleSetDataBook, idCate }) => {
 
   useEffect(() => {
     handleCallApi();
-  }, [categorys, rating]);
+  }, [categorys, rating, from, to]);
   return (
     <div className="relative">
       <main>
@@ -119,7 +137,11 @@ const ProductLayout = ({ children, handleSetDataBook, idCate }) => {
                     handleToggleStar={handleToggleStar}
                     handleChange={handleChange}
                   />
-                  <SlideRangePrice min={0} max={10} />
+                  <SlideRangePrice
+                    min={0}
+                    max={1000}
+                    handleChange={handleChangePrice}
+                  />
                   <Checkbox onChange={handleCheckboxOnChange} />
                 </div>
                 {isFilter && (
@@ -128,6 +150,7 @@ const ProductLayout = ({ children, handleSetDataBook, idCate }) => {
                     <ShowItemFilter
                       handleClearCate={handleClearCate}
                       handleClearRating={handleClearRating}
+                      handleClearPrice={handleClearPrice}
                     />
                   </div>
                 )}

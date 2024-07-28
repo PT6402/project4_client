@@ -45,7 +45,7 @@ const ProductCard = ({ product }) => {
     //     </div> */}
     //   </div>
     // </div>
-    <div className="w-72 bg-white shadow-md rounded-xl duration-500  hover:shadow-xl cursor-pointer m-2">
+    <div className="w-72 bg-white shadow-md rounded-xl duration-500  hover:shadow-xl cursor-pointer m-2 scale-75">
       <div
         // to={`/product-overview/${bookId}`}
         className=" "

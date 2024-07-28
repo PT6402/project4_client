@@ -14,6 +14,7 @@ export default function ListBoxDropdown({ handleGetBySearch, searchBy }) {
   const searchByDropdown = [
     { id: 1, name: "Book", value: "book" },
     { id: 2, name: "Author", value: "author" },
+    { id: 3, name: "Publisher", value: "publisher" },
   ];
   const [selected, setSelected] = useState(() => {
     return searchByDropdown.find(({ value }) => value == searchBy);

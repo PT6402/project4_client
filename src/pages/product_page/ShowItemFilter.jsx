@@ -4,9 +4,13 @@ import IconStarFull from "../../components/icons/IconStarFull";
 
 import { XMarkIcon } from "@heroicons/react/20/solid";
 
-export default function ShowItemFilter({ handleClearCate, handleClearRating }) {
+export default function ShowItemFilter({
+  handleClearCate,
+  handleClearRating,
+  handleClearPrice,
+}) {
   const {
-    filterBook: { isFilter, categorys, rating },
+    filterBook: { isFilter, categorys, rating, from, to },
     categories,
   } = useSelector((state) => state.bookStore);
 
@@ -26,6 +30,21 @@ export default function ShowItemFilter({ handleClearCate, handleClearRating }) {
               <p>Rating: </p>
               <div className="flex">
                 <IconStarFull />({rating})
+              </div>
+            </div>
+          )}
+          {(from != null || to != null) && (
+            <div className="flex items-center">
+              <button
+                onClick={handleClearPrice}
+                className="flex items-center p-2 text-sm text-gray-400 rounded-lg bg-gray-50 bg-opacity-10 mr-1"
+                type="button"
+              >
+                <XMarkIcon className="w-4 h-4" />
+              </button>
+              <p>Price: </p>
+              <div className="flex">
+                From: {from} - To: {to}
               </div>
             </div>
           )}
