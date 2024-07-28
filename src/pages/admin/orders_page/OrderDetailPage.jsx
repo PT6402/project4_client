@@ -1,32 +1,15 @@
-import { useEffect, useState } from "react";
-import { useParams } from "react-router-dom";
-import { Button } from "@material-tailwind/react";
-import { useHttp } from "../../../hooks";
+import React, { useEffect, useState } from 'react';
+import { useParams } from 'react-router-dom';
+import { Button } from '@material-tailwind/react';
+import { useOrder } from '../../../hooks';
 
 const OrderDetailPage = () => {
   const { id } = useParams();
-  const [order, setOrder] = useState(null);
-  const [isLoading, setIsLoading] = useState(false);
-  const [error, setError] = useState(null);
-  const { http_auth } = useHttp();
+  const { order, isLoading, error, getOrderDetailsForAdmin } = useOrder();
 
   useEffect(() => {
-    const fetchOrderDetails = async () => {
-      setIsLoading(true);
-      try {
-        const response = await http_auth.get(`/api/v1/orders/admin/${id}`);
-        setOrder(response.data.model);
-      } catch (error) {
-        setError(
-          error.response?.data?.message || "Failed to fetch order details"
-        );
-      } finally {
-        setIsLoading(false);
-      }
-    };
-
-    fetchOrderDetails();
-  }, [id]);
+    getOrderDetailsForAdmin(id);
+  }, []);
 
   return (
     <div className="p-4">
@@ -39,9 +22,7 @@ const OrderDetailPage = () => {
           <p>User Name: {order.userName}</p>
           <p>Email: {order.email}</p>
           <p>Create Date: {order.creatDate}</p>
-          <p>
-            Payment Status: {order.paymentStatus === 1 ? "Paid" : "Pending"}
-          </p>
+          <p>Payment Status: {order.paymentStatus === 1 ? 'Paid' : 'Pending'}</p>
 
           <h2 className="text-xl font-semibold mt-4 mb-2">Order Items</h2>
           <ul>
@@ -50,10 +31,7 @@ const OrderDetailPage = () => {
                 <p>Book Name: {detail.bookName}</p>
                 <p>Day Quantity: {detail.dayQuantity}</p>
                 <p>Price: ${detail.price}</p>
-                <p>
-                  Package:{" "}
-                  {detail.packName ? detail.packName : "Permanent Purchases"}
-                </p>
+                <p>Package: {detail.packName || "Permanent purchases"}</p>
                 {detail.imageCove && (
                   <img
                     src={`data:image/jpeg;base64,${detail.imageCove}`}
