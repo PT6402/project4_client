@@ -27,7 +27,7 @@ const ProductPage = () => {
               <ProductCard key={product.bookid} product={product} />
             ))}
           </div>
-          <PaginationPage />
+          {/* <PaginationPage /> */}
         </div>
       )}
       {dataBook && dataBook.length === 0 && (

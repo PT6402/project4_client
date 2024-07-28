@@ -50,7 +50,7 @@ export default function MyBook() {
   }, [isLoading]);
   if (showLoader) return <Loader />;
   return (
-    <div className="max-h-[calc(100vh-15rem)] no-scrollbar overflow-y-scroll">
+    <div className="max-h-[calc(100vh-15rem)] no-scrollbar ">
       {myBooks.length > 0 &&
         myBooks.map((book) => (
           <>

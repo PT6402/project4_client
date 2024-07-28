@@ -1,9 +1,16 @@
 /* eslint-disable react/prop-types */
 import { useCallback, useEffect, useRef, useState } from "react";
 import "./sliderRangePrice.css";
-export default function SlideRangePrice({ min, max }) {
+import { useDebounce } from "../../../hooks";
+import { useSelector } from "react-redux";
+export default function SlideRangePrice({ min, max, handleChange }) {
+  const {
+    filterBook: { isFilter, from, to },
+  } = useSelector((state) => state.bookStore);
   const [minVal, setMinVal] = useState(min);
   const [maxVal, setMaxVal] = useState(max);
+  const debouncedMinVal = useDebounce(minVal);
+  const debouncedMaxVal = useDebounce(maxVal);
   const minValRef = useRef(min);
   const maxValRef = useRef(max);
   const range = useRef(null);
@@ -34,10 +41,18 @@ export default function SlideRangePrice({ min, max }) {
       range.current.style.width = `${maxPercent - minPercent}%`;
     }
   }, [maxVal, getPercent]);
-
+  useEffect(() => {
+    handleChange({ min: minVal, max: maxVal });
+  }, [debouncedMinVal, debouncedMaxVal]);
+  useEffect(() => {
+    if (from == null && to == null) {
+      setMaxVal(1000);
+      setMinVal(0);
+    }
+  }, [isFilter, from, to]);
   return (
-    <div>
-      <p className="text-white my-2">Rate</p>
+    <div className="-mb-2">
+      <p className="text-white my-2">Price</p>
       <div className="container ">
         <input
           type="range"

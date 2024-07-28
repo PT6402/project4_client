@@ -14,6 +14,8 @@ const bookSlice = createSlice({
       isFilter: false,
       categorys: [],
       rating: null,
+      from: null,
+      to: null,
     },
   },
 
@@ -50,11 +52,18 @@ const bookSlice = createSlice({
       state.filterBook.isFilter = true;
       state.filterBook.rating = action.payload;
     },
+    setPrice: (state, action) => {
+      state.filterBook.isFilter = true;
+      state.filterBook.from = action.payload.from;
+      state.filterBook.to = action.payload.to;
+    },
     clearFilter: (state) => {
       state.filterBook = {
         isFilter: false,
         categorys: [],
         rating: null,
+        from: null,
+        to: null,
       };
     },
     refreshCollection: (state) => {
@@ -78,4 +87,5 @@ export const {
   setCurrentPage,
   refreshCollection,
   setFilterCategorys,
+  setPrice,
 } = bookSlice.actions;

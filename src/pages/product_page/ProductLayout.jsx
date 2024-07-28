@@ -18,6 +18,7 @@ import {
   setFilterCate,
   setFilterCategorys,
   setFilterRating,
+  setPrice,
 } from "../../context/bookSlice";
 import ShowItemFilter from "./ShowItemFilter";
 import ButtonClearAll from "./ButtonClearAll";
@@ -30,7 +31,7 @@ const ProductLayout = ({ children, handleSetDataBook, idCate }) => {
   const [showLoader, setShowLoader] = useState(true);
   //
   const {
-    filterBook: { isFilter, categorys, rating },
+    filterBook: { isFilter, categorys, rating, from, to },
   } = useSelector((state) => state.bookStore);
   const { getBooks, isLoading } = useBook();
   const { filterBook, loading } = useFilter();
@@ -43,13 +44,19 @@ const ProductLayout = ({ children, handleSetDataBook, idCate }) => {
   };
   const handleClearCate = () => {
     dispatch(setFilterCategorys([]));
-    if (rating == null) {
+    if (rating == null && from == null && to == null) {
       dispatch(clearFilter());
     }
   };
   const handleClearRating = () => {
     dispatch(setFilterRating(null));
-    if (categorys.length == 0) {
+    if (categorys.length == 0 && from == null && to == null) {
+      dispatch(clearFilter());
+    }
+  };
+  const handleClearPrice = () => {
+    dispatch(setPrice({ from: null, to: null }));
+    if (categorys.length == 0 && rating == null) {
       dispatch(clearFilter());
     }
   };
@@ -65,7 +72,7 @@ const ProductLayout = ({ children, handleSetDataBook, idCate }) => {
     dispatch(setFilterRating(value));
   };
   const handleCallApiFilter = async () => {
-    const data = await filterBook({ categorys, rating });
+    const data = await filterBook({ categorys, rating, from, to });
     handleSetDataBook(data);
   };
   const handleCallApiBook = async () => {
@@ -74,7 +81,7 @@ const ProductLayout = ({ children, handleSetDataBook, idCate }) => {
   };
 
   const handleCallApi = async () => {
-    if (categorys.length == 0 && rating == null) {
+    if (categorys.length == 0 && rating == null && from == null && to == null) {
       if (idCategory == null) {
         await handleCallApiBook();
       } else {
@@ -85,6 +92,17 @@ const ProductLayout = ({ children, handleSetDataBook, idCate }) => {
     }
   };
   //
+  const handleChangePrice = ({ min, max }) => {
+    if (min != 0 || max != 1000) {
+      dispatch(setPrice({ from: min, to: max }));
+    } else {
+      if (isFilter) {
+        if (!(from == null && to == null)) {
+          dispatch(setPrice({ from: 0, to: 1000 }));
+        }
+      }
+    }
+  };
   useEffect(() => {
     if (idCategory != null) {
       dispatch(setFilterCate(Number(idCate)));
@@ -104,35 +122,13 @@ const ProductLayout = ({ children, handleSetDataBook, idCate }) => {
 
   useEffect(() => {
     handleCallApi();
-  }, [categorys, rating]);
+  }, [categorys, rating, from, to]);
   return (
-    <div className="mx-auto md:max-w-2xl lg:max-w-7xl">
-      <main className="relative px-4 mx-auto md:ml-36 mt-18 max-w-7xl sm:px-6 lg:px-8">
-        <div className="sticky z-20 flex items-baseline justify-between pt-40 pb-8 bg-gray-900 sm:top-16 lg:top-0 md:pt-24 mb-30">
-          <div className="flex items-center">
-            <Menu as="div" className="relative inline-block text-left"></Menu>
-            <button
-              type="button"
-              className="p-2 ml-4 -m-2 text-gray-400 hover:text-gray-500 sm:ml-6 md:hidden"
-              onClick={() => setMobileFiltersOpen(true)}
-            >
-              <span className="sr-only">Filters</span>
-              <FunnelIcon className="w-5 h-5" aria-hidden="true" />
-            </button>
-          </div>
-        </div>
-
-        <section aria-labelledby="products-heading" className="pt-6 pb-24">
-          <h2 id="products-heading" className="sr-only">
-            Products
-          </h2>
-
+    <div className="relative">
+      <main>
+        <section className="pt-6 pb-24 mt-10 flex">
           {/* Filters */}
-          <aside
-            id="default-sidebar"
-            aria-label="Sidebar"
-            className="fixed left-0 h-screen mx-6 transition-transform -translate-x-full lg:w-64 sm:top-32 lg:top-16 sm:translate-x-0"
-          >
+          <aside className=" mx-6 transition-transform  lg:w-64 sm:top-32 lg:top-16 sm:translate-x-0 sticky top-48">
             <div className="h-full px-3 py-4 overflow-y-auto">
               <form className="hidden md:block">
                 <h3 className="sr-only">Categories</h3>
@@ -141,7 +137,11 @@ const ProductLayout = ({ children, handleSetDataBook, idCate }) => {
                     handleToggleStar={handleToggleStar}
                     handleChange={handleChange}
                   />
-                  <SlideRangePrice min={0} max={10} />
+                  <SlideRangePrice
+                    min={0}
+                    max={1000}
+                    handleChange={handleChangePrice}
+                  />
                   <Checkbox onChange={handleCheckboxOnChange} />
                 </div>
                 {isFilter && (
@@ -150,6 +150,7 @@ const ProductLayout = ({ children, handleSetDataBook, idCate }) => {
                     <ShowItemFilter
                       handleClearCate={handleClearCate}
                       handleClearRating={handleClearRating}
+                      handleClearPrice={handleClearPrice}
                     />
                   </div>
                 )}
