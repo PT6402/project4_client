@@ -106,33 +106,11 @@ const ProductLayout = ({ children, handleSetDataBook, idCate }) => {
     handleCallApi();
   }, [categorys, rating]);
   return (
-    <div className="mx-auto md:max-w-2xl lg:max-w-7xl">
-      <main className="relative px-4 mx-auto md:ml-36 mt-18 max-w-7xl sm:px-6 lg:px-8">
-        <div className="sticky z-20 flex items-baseline justify-between pt-40 pb-8 bg-gray-900 sm:top-16 lg:top-0 md:pt-24 mb-30">
-          <div className="flex items-center">
-            <Menu as="div" className="relative inline-block text-left"></Menu>
-            <button
-              type="button"
-              className="p-2 ml-4 -m-2 text-gray-400 hover:text-gray-500 sm:ml-6 md:hidden"
-              onClick={() => setMobileFiltersOpen(true)}
-            >
-              <span className="sr-only">Filters</span>
-              <FunnelIcon className="w-5 h-5" aria-hidden="true" />
-            </button>
-          </div>
-        </div>
-
-        <section aria-labelledby="products-heading" className="pt-6 pb-24">
-          <h2 id="products-heading" className="sr-only">
-            Products
-          </h2>
-
+    <div className="relative">
+      <main>
+        <section className="pt-6 pb-24 mt-10 flex">
           {/* Filters */}
-          <aside
-            id="default-sidebar"
-            aria-label="Sidebar"
-            className="fixed left-0 h-screen mx-6 transition-transform -translate-x-full lg:w-64 sm:top-32 lg:top-16 sm:translate-x-0"
-          >
+          <aside className=" mx-6 transition-transform  lg:w-64 sm:top-32 lg:top-16 sm:translate-x-0 sticky top-48">
             <div className="h-full px-3 py-4 overflow-y-auto">
               <form className="hidden md:block">
                 <h3 className="sr-only">Categories</h3>

@@ -36,8 +36,8 @@ export default function SlideRangePrice({ min, max }) {
   }, [maxVal, getPercent]);
 
   return (
-    <div>
-      <p className="text-white my-2">Rate</p>
+    <div className="-mb-2">
+      <p className="text-white my-2">Price</p>
       <div className="container ">
         <input
           type="range"

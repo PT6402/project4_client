@@ -3,6 +3,8 @@ import { NavLink } from "react-router-dom";
 
 import { CategoryCard } from "../../components";
 import { useSelector } from "react-redux";
+import SliderBook from "./slider_book";
+import SliderAuthor from "./slider_author";
 
 const links = [{ name: "Explore", to: "products" }];
 
@@ -69,7 +71,9 @@ const HomePage = () => {
                 </NavLink>
               ))}
             </div>
-
+            <SliderBook data={categories} />
+            {/* <HeroAuthor /> */}
+            <SliderAuthor />
             <dl className="grid grid-cols-2 gap-6 mt-8 sm:mt-20 lg:grid-cols-4">
               {categories.length > 0 &&
                 categories.map((category) => (
