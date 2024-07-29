@@ -1,7 +1,5 @@
 /* eslint-disable react/prop-types */
-import { Button } from "@material-tailwind/react";
 import { IoIosClose } from "react-icons/io";
-import InputForm from "./InputForm";
 import {
   ArrowLeftCircleIcon,
   ArrowRightCircleIcon,
