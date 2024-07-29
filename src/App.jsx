@@ -29,6 +29,7 @@ import RoutePaymentSuccess from "./routes/RoutePaymentSuccess";
 import OrderDetailPage from "./pages/admin/orders_page/OrderDetailPage";
 import AddPublisher from "./pages/admin/publishers_page/AddPublisher";
 import EditPublisher from "./pages/admin/publishers_page/EditPublisher";
+import AdminCreateBookPage from "./pages/admin/book_page/create";
 
 function App() {
   const [showLoader, setShowLoader] = useState(true);
@@ -87,6 +88,7 @@ function App() {
         <Route path="/admin/order/:id" element={<OrderDetailPage />} />
         <Route path="/admin/publisher/create" element={<AddPublisher />} />
         <Route path="/admin/publisher/edit/:id" element={<EditPublisher />} />
+        <Route path="/admin/book/create" element={<AdminCreateBookPage />} />
       </Route>
       <Route path="/*" element={<NotFoundPage />} />
     </Routes>
