@@ -12,11 +12,11 @@ const OrderHistory = () => {
   };
 
   return (
-    <>
+    <div className="h-[100vh]">
       {data.length > 0 &&
         data.length > 0 &&
         data.map(({ paymentStatus, orderId, creatDate, orderDetails }) => (
-          <div key={orderId} className="pt-2 m-4 border border-gray-700">
+          <div key={orderId} className="pt-2 m-4 border border-gray-700 ">
             <div
               className="grid grid-cols-1 grid-rows-1 gap-4 px-6 pb-2 border-b border-gray-700 sm:grid-cols-4 cursor-pointer"
               onClick={() => handleOrderClick(orderId)}
@@ -47,7 +47,7 @@ const OrderHistory = () => {
           </div>
         ))}
       {data && data.length === 0 && <p>No order history.</p>}
-    </>
+    </div>
   );
 };
 

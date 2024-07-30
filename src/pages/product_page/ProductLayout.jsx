@@ -124,7 +124,7 @@ const ProductLayout = ({ children, handleSetDataBook, idCate }) => {
     handleCallApi();
   }, [categorys, rating, from, to]);
   return (
-    <div className="relative">
+    <div className="relative h-screen">
       <main>
         <section className="pt-6 pb-24 mt-10 flex">
           {/* Filters */}

@@ -16,7 +16,7 @@ const WishlistPage = () => {
     }
   }, []);
   return (
-    <section>
+    <section className="h-screen">
       <h1
         className={`${wishlist.length > 0 ? "mb-5" : ""} 
         mt-40 sm:mt-20 font-bold tracking-tight text-center text-gray-100 md:text-xl lg:text-4xl `}

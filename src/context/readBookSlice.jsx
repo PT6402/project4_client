@@ -3,12 +3,16 @@ import { createSlice } from "@reduxjs/toolkit";
 const readBookSlice = createSlice({
   name: "readBookSlice",
   initialState: {
+    totalPage: 0,
     isLoading: false,
     bookCurrentId: null,
     currentPage: 1,
     listPage: [],
   },
   reducers: {
+    setTotalReadPage: (state, action) => {
+      state.totalPage = action.payload;
+    },
     setPage: (state, action) => {
       state.listPage = action.payload;
     },
@@ -34,6 +38,7 @@ const readBookSlice = createSlice({
 
 export default readBookSlice.reducer;
 export const {
+  setTotalReadPage,
   setPage,
   setAppendPage,
   setInitReadBookInfor,
