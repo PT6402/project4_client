@@ -3,6 +3,8 @@ import { createSlice } from "@reduxjs/toolkit";
 const bookSlice = createSlice({
   name: "bookSlice",
   initialState: {
+    authors: [],
+    topLike: [],
     listBook: [],
     collection: {
       totalPage: 0,
@@ -20,6 +22,12 @@ const bookSlice = createSlice({
   },
 
   reducers: {
+    setListAuthor: (state, action) => {
+      state.authors = action.payload;
+    },
+    setTopLike: (state, action) => {
+      state.topLike = action.payload;
+    },
     setCurrentPage: (state, action) => {
       state.collection.currentPage = action.payload;
     },
@@ -78,6 +86,7 @@ const bookSlice = createSlice({
 
 export default bookSlice.reducer;
 export const {
+  setListAuthor,
   setFilterCate,
   clearFilter,
   setCategories,
@@ -88,4 +97,5 @@ export const {
   refreshCollection,
   setFilterCategorys,
   setPrice,
+  setTopLike,
 } = bookSlice.actions;

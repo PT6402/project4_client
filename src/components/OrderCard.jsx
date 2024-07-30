@@ -25,12 +25,12 @@ const OrderCard = ({ order }) => {
             {/* <p className="mt-1 text-xs text-gray-200 sm:text-sm">{authors}</p> */}
           </div>
           <div className="flex flex-row items-center mt-4 space-x-4 text-gray-100">
-            <p className="text-xs before:mr-1 before:content-['$'] line-through text-gray-200">
-              {price}
-            </p>
-            {/* <p className="text-xl before:mr-1 before:content-['₹'] font-bold sm:text-2xl">
+            {/* <p className="text-xs before:mr-1 before:content-['$'] line-through text-gray-200">
               {price}
             </p> */}
+            <p className="text-xl before:mr-1 before:content-['$'] font-bold sm:text-2xl">
+              {price}
+            </p>
           </div>
         </div>
         <div>
