@@ -10,15 +10,17 @@ import { clearReadBook } from "../../context/readBookSlice";
 export default function MyBook() {
   const [showLoader, setShowLoader] = useState(false);
   // const [data, setData] = useState([]);
-  const { listPage, isLoading: loadBook } = useSelector(
-    (state) => state.readBook
-  );
+  const {
+    listPage,
+    isLoading: loadBook,
+    totalPage,
+  } = useSelector((state) => state.readBook);
   const { getReadBook, isLoading, getReadAppendBook } = useReadBook();
   const [close, setClose] = useState(false);
   const [getCurrent, setCurrent] = useState(1);
   const { myBooks } = useSelector((state) => state.userStore);
   const sliderRef = useRef();
-  const [zoom, setZoom] = useState(10);
+  const [zoom, setZoom] = useState(65);
   const dispatch = useDispatch();
   const handleZoomIn = () => {
     console.log("in");
@@ -48,9 +50,10 @@ export default function MyBook() {
       setShowLoader(false);
     }
   }, [isLoading]);
-  if (showLoader) return <Loader />;
+
   return (
-    <div className="max-h-[calc(100vh-15rem)] no-scrollbar ">
+    <div className={`h-[100vh] !no-scrollbar ${close ? "max-h-0" : ""} `}>
+      {showLoader && <Loader />}
       {myBooks.length > 0 &&
         myBooks.map((book) => (
           <>
@@ -65,6 +68,7 @@ export default function MyBook() {
       {close && (
         <CenterModal close={() => setClose(false)}>
           <LayoutReadBook
+            totalPage={totalPage}
             sliderRef={sliderRef}
             handleZoomOut={handleZoomOut}
             handleZoomIn={handleZoomIn}

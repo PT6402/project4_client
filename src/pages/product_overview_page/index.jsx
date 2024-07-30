@@ -57,11 +57,14 @@ const ProductOverviewPage = () => {
       setShowLoader(false);
     }
   }, [isLoading, loadCart]);
-  if (showLoader) return <Loader />;
+  // if (showLoader) return <Loader />;
 
   return (
-    <section className="overflow-hidden text-gray-100">
-      {dataDetail?.id &&
+    <section className="overflow-hidden text-gray-100 h-screen">
+      {showLoader ? (
+        <Loader />
+      ) : (
+        dataDetail?.id &&
         (() => {
           const {
             fileimage,
@@ -77,7 +80,7 @@ const ProductOverviewPage = () => {
             priceBuy,
           } = dataDetail;
           return (
-            <div className="container px-5 pt-32 pb-4 mx-auto sm:py-24">
+            <div className="container px-5 pt-32 pb-4 mx-auto sm:py-24 ">
               <div className="flex flex-wrap items-center mx-auto lg:max-w-5xl">
                 <img
                   alt={name}
@@ -170,7 +173,8 @@ const ProductOverviewPage = () => {
               )}
             </div>
           );
-        })()}
+        })()
+      )}
     </section>
   );
 };

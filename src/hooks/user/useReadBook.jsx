@@ -7,6 +7,7 @@ import {
   setInitReadBookInfor,
   setLoading,
   setPage,
+  setTotalReadPage,
 } from "../../context/readBookSlice";
 
 const useReadBook = () => {
@@ -24,8 +25,9 @@ const useReadBook = () => {
       const res = await authHttp.get(`api/v1/read/${bookId}`);
       if (res.status == HttpStatusCode.Ok) {
         dispatch(setInitReadBookInfor({ bookId }));
-        dispatch(setPage(res.data.model));
-        return res.data.model;
+        dispatch(setTotalReadPage(res.data.model.totalPage));
+        dispatch(setPage(res.data.model.list));
+        return res.data.model.list;
       }
     } catch (error) {
       console.log(error);
@@ -42,8 +44,8 @@ const useReadBook = () => {
       );
       if (res.status == HttpStatusCode.Ok) {
         dispatch(setInitReadBookInfor({ bookId }));
-        dispatch(setAppendPage(res.data.model));
-        return res.data.model;
+        dispatch(setAppendPage(res.data.model.list));
+        return res.data.model.list;
       }
     } catch (error) {
       console.log(error);

@@ -18,6 +18,7 @@ export default function LayoutReadBook({
   handleZoomIn,
   close,
   currentSlide,
+  totalPage,
 }) {
   const handlePrev = useCallback(() => {
     if (!sliderRef.current) return;
@@ -39,7 +40,7 @@ export default function LayoutReadBook({
         </div>
         <div className="absolute left-1/2 -translate-x-1/2">
           <p className="border-2 p-2 rounded-lg shadow-lg">
-            {currentSlide} / -{" "}
+            {currentSlide} / {totalPage}
           </p>
         </div>
         <div>

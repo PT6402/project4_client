@@ -18,7 +18,7 @@ const AccountPage = () => {
   }, []);
 
   return (
-    <div className="mx-4 mt-[5.5rem]">
+    <div className="mx-4 mt-[5.5rem]  ">
       <ul className="flex flex-wrap max-w-4xl mx-auto text-sm font-medium text-center text-gray-400">
         <li className="mr-2">
           <button
@@ -58,10 +58,10 @@ const AccountPage = () => {
       <div className="max-w-4xl mx-auto my-4 text-gray-100 ">
         {/* For profile */}
         {selectedTab === "profile" && (
-          <>
+          <div className="h-[100vh]">
             {<p className="text-lg font-semibold">{fullname}</p>}
             <p className="font-semibold text-md">{email}</p>
-          </>
+          </div>
         )}
         {/* For Address */}
         {selectedTab === "orders" && (
