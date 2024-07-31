@@ -80,7 +80,7 @@ const ProductOverviewPage = () => {
             priceBuy,
           } = dataDetail;
           return (
-            <div className="container px-5 pt-32 pb-4 mx-auto sm:py-24 ">
+            <div className="container px-5 pt-32 pb-4 mx-auto sm:py-24 flex flex-col ">
               <div className="flex flex-wrap items-center mx-auto lg:max-w-5xl">
                 <img
                   alt={name}
@@ -136,7 +136,7 @@ const ProductOverviewPage = () => {
                 </div>
               </div>
               {reviewlist?.length > 0 && (
-                <div className="flex flex-col mx-auto border-t border-gray-700 lg:max-w-5xl">
+                <div className="flex flex-col w-full border-t border-gray-700 flex-grow">
                   <h2 className="my-2 text-sm tracking-widest text-gray-500 title-font">
                     Recent Reviews
                   </h2>

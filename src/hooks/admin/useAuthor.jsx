@@ -1,8 +1,11 @@
 import { useState } from "react";
 import { HttpStatusCode } from "axios";
 import useHttp from "../auth/useHttp";
+import { useDispatch } from "react-redux";
+import { setListAuthor } from "../../context/bookSlice";
 
 const useAuthor = () => {
+  const dispatch = useDispatch();
   const [authors, setAuthors] = useState([]);
   const [currentAuthor, setCurrentAuthor] = useState(null);
   const [isLoading, setIsLoading] = useState(false);
@@ -15,7 +18,10 @@ const useAuthor = () => {
     setIsLoading(true);
     try {
       const response = await http.get("/api/v1/authors");
-      setAuthors(response.data.model);
+      if (response.status == HttpStatusCode.Ok) {
+        dispatch(setListAuthor(response.data.model));
+        setAuthors(response.data.model);
+      }
     } catch (error) {
       setError(error);
     } finally {

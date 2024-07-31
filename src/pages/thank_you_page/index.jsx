@@ -1,5 +1,4 @@
 /* eslint-disable react/no-unescaped-entities */
-import {} from "react";
 import { Link } from "react-router-dom";
 
 const ThankYouPage = () => {

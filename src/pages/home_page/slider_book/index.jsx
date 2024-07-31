@@ -8,7 +8,10 @@ import "./styles.css";
 // import required modules
 import { Pagination } from "swiper/modules";
 import ItemProduct from "./ItemProduct";
+import { useSelector } from "react-redux";
 export default function SliderBook() {
+  const { topLike } = useSelector((state) => state.bookStore);
+
   return (
     <div className="mt-10 border border-gray-700 backdrop-filter backdrop-blur-md rounded-xl">
       <p className="text-2xl text-white font-bold text-center pb-2 pt-5">
@@ -21,18 +24,20 @@ export default function SliderBook() {
           modules={[Pagination]}
           className="mySwiper bg-transparent"
         >
-          <SwiperSlide className=" !bg-transparent">
-            <ItemProduct />
-          </SwiperSlide>
-          <SwiperSlide className=" !bg-transparent">
-            <ItemProduct />
-          </SwiperSlide>
-          <SwiperSlide className=" !bg-transparent">
-            <ItemProduct />
-          </SwiperSlide>
-          <SwiperSlide className=" !bg-transparent">
-            <ItemProduct />
-          </SwiperSlide>
+          {topLike.map(
+            ({ bookId, bookName, likeQty, rating, price, imagedata }, i) => (
+              <SwiperSlide className=" !bg-transparent" key={i}>
+                <ItemProduct
+                  bookId={bookId}
+                  bookName={bookName}
+                  likeQty={likeQty}
+                  rating={rating}
+                  price={price}
+                  imagedata={imagedata}
+                />
+              </SwiperSlide>
+            )
+          )}
         </Swiper>
       </div>
     </div>

@@ -6,7 +6,7 @@ import { useSelector } from "react-redux";
 import SliderBook from "./slider_book";
 import SliderAuthor from "./slider_author";
 
-const links = [{ name: "Explore", to: "products" }];
+const links = [{ name: "Store", to: "products" }];
 
 const HomePage = () => {
   const { categories } = useSelector((state) => state.bookStore);

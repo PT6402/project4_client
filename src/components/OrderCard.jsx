@@ -1,11 +1,8 @@
-import Rating from "react-rating";
-// import InputForm from "./InputForm";
-import IconStarEmpty from "./icons/IconStarEmpty";
-import IconStarFull from "./icons/IconStarFull";
+import ReviewComponent from "./ReviewComponent";
 
 /* eslint-disable react/prop-types */
-const OrderCard = ({ order }) => {
-  const { bookId, price, bookName, imageCove } = order;
+const OrderCard = ({ order, id }) => {
+  const { bookId, price, bookName, image, dayPackage, review } = order;
   return (
     <div
       id={bookId}
@@ -13,7 +10,7 @@ const OrderCard = ({ order }) => {
     >
       <img
         className="self-center w-32 h-48 sm:h-40 sm:w-18"
-        src={`data:image/png;base64,${imageCove}`}
+        src={`data:image/png;base64,${image}`}
         alt={bookName}
       />
       <div className="flex flex-col items-center sm:items-start sm:flex-row sm:ml-4 sm:w-full sm:justify-between">
@@ -25,37 +22,17 @@ const OrderCard = ({ order }) => {
             {/* <p className="mt-1 text-xs text-gray-200 sm:text-sm">{authors}</p> */}
           </div>
           <div className="flex flex-row items-center mt-4 space-x-4 text-gray-100">
-            <p className="text-xs before:mr-1 before:content-['$'] line-through text-gray-200">
-              {price}
+            <p className="text-xl font-bold sm:text-2xl">
+              {dayPackage != 0 ? "Rent" : "Buy"}
             </p>
-            {/* <p className="text-xl before:mr-1 before:content-['₹'] font-bold sm:text-2xl">
+            <p className="px-2">-</p>
+            <p className="text-xl before:mr-1 before:content-['$'] font-bold sm:text-2xl">
               {price}
-            </p> */}
+              {dayPackage != 0 && `/ ${dayPackage} day`}
+            </p>
           </div>
         </div>
-        <div>
-          <div className="w-fit">
-            <Rating
-              emptySymbol={<IconStarEmpty />}
-              fullSymbol={<IconStarFull />}
-              // onChange={(value) => handleChange(value)}
-              // onClick={(value) => handleToggleStar(value)}
-              start={0}
-              stop={5}
-              step={1}
-              initialRating={0}
-            />
-          </div>
-          <textarea
-            id="message"
-            rows="4"
-            className="block p-2.5 w-full text-sm placeholder:text-gray-800 text-gray-800 bg-gray-400 rounded-lg border border-transparent ring-0 outline-transparent focus:ring-0 focus:ring-transparent focus:border-transparent"
-            placeholder="Write your thoughts here..."
-          ></textarea>
-          <button className=" mt-1 w-fit px-5 py-2.5 text-xs lg:text-sm font-medium text-center text-gray-100 rounded-lg bg-cyan-900 focus:ring-4 focus:outline-none hover:bg-cyan-950 focus:ring-cyan-950">
-            submit
-          </button>
-        </div>
+        <ReviewComponent orderDetailItem={{ bookId, review }} orderId={id} />
       </div>
     </div>
   );

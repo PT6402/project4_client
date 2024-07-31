@@ -52,7 +52,7 @@ export default function MyBook() {
   }, [isLoading]);
 
   return (
-    <div className={`h-[100vh] !no-scrollbar ${close ? "max-h-0" : ""} `}>
+    <div className={` !no-scrollbar ${close ? "max-h-0" : "min-h-[100vh]"} `}>
       {showLoader && <Loader />}
       {myBooks.length > 0 &&
         myBooks.map((book) => (

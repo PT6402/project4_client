@@ -49,7 +49,7 @@ export default function SearchPage() {
     }
   }, [searchBy, querySearch]);
   return (
-    <div className="h-fit ">
+    <div className="h-screen ">
       <InputSearch
         handleOnChangeQuery={handleOnChangeQuery}
         querySearch={querySearch}
@@ -85,9 +85,22 @@ export default function SearchPage() {
                 <h3 className="mt-4 text-xl font-bold text-white ">{name}</h3>
               </Link>
             ))
+          ) : searchBy == "author" ? (
+            data.map(({ id, image_data, name, fileImage }) => (
+              <Link key={id} to={`/author/${id}`} className="group">
+                <div className="aspect-h-1 aspect-w-1 w-full  rounded-lg bg-gray-200 xl:aspect-h-8 xl:aspect-w-7">
+                  <img
+                    src={`data:image/png;base64,${image_data || fileImage}`}
+                    alt={name}
+                    className="h-full w-full object-cover object-center group-hover:opacity-75"
+                  />
+                </div>
+                <h3 className="mt-4 text-xl font-bold text-white ">{name}</h3>
+              </Link>
+            ))
           ) : (
             data.map(({ id, image_data, name, fileImage }) => (
-              <Link key={id} to={`/product-overview/${id}`} className="group">
+              <Link key={id} to={`/publisher/${id}`} className="group">
                 <div className="aspect-h-1 aspect-w-1 w-full  rounded-lg bg-gray-200 xl:aspect-h-8 xl:aspect-w-7">
                   <img
                     src={`data:image/png;base64,${image_data || fileImage}`}

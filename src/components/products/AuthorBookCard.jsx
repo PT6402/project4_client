@@ -1,12 +1,15 @@
 /* eslint-disable react/prop-types */
 import { TrashIcon } from "@heroicons/react/24/outline";
+import WishlistButton from "../WishlistButton";
+import { useNavigate } from "react-router-dom";
 const AuthorBookCard = ({ product }) => {
   const { bookId, image, price, nameBook } = product;
-
+  const navigate = useNavigate();
   return (
     <div
       id={bookId}
       className="bg-gray-600 rounded-md flex flex-col justify-between p-6 mb-6  sm:flex-row hover:rounded-lg hover:bg-gray-800 sm:justify-start"
+      onClick={() => navigate(`/product-overview/${bookId}`)}
     >
       <img
         className="self-center w-32 h-48 sm:h-40 sm:w-18 overflow-hidden rounded-md"
@@ -47,11 +50,14 @@ const AuthorBookCard = ({ product }) => {
           {/* For Desktop */}
 
           <div className="relative items-center hidden  space-x-4 text-gray-100 sm:flex">
-            <TrashIcon
-              // onClick={(e) => removeFromCartHandler(product)}
-              title="Remove From Cart"
-              className="w-8 h-8 p-2 text-red-400 duration-150 bg-gray-800 border border-gray-700 rounded-full cursor-pointer hover:text-red-500"
-            />
+            <div className="ml-auto relative ">
+              <div
+                className="absolute -top-5"
+                onClick={(e) => e.stopPropagation()}
+              >
+                <WishlistButton productId={bookId} />
+              </div>
+            </div>
           </div>
         </div>
       </div>
