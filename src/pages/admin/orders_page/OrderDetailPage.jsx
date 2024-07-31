@@ -1,7 +1,7 @@
-import React, { useEffect, useState } from 'react';
-import { useParams } from 'react-router-dom';
-import { Button } from '@material-tailwind/react';
-import { useOrder } from '../../../hooks';
+import React, { useEffect, useState } from "react";
+import { useParams } from "react-router-dom";
+import { Button } from "@material-tailwind/react";
+import { useOrder } from "../../../hooks";
 
 const OrderDetailPage = () => {
   const { id } = useParams();
@@ -22,7 +22,9 @@ const OrderDetailPage = () => {
           <p>User Name: {order.userName}</p>
           <p>Email: {order.email}</p>
           <p>Create Date: {order.creatDate}</p>
-          <p>Payment Status: {order.paymentStatus === 1 ? 'Paid' : 'Pending'}</p>
+          <p>
+            Payment Status: {order.paymentStatus === 1 ? "Paid" : "Pending"}
+          </p>
 
           <h2 className="text-xl font-semibold mt-4 mb-2">Order Items</h2>
           <ul>
@@ -32,9 +34,9 @@ const OrderDetailPage = () => {
                 <p>Day Quantity: {detail.dayQuantity}</p>
                 <p>Price: ${detail.price}</p>
                 <p>Package: {detail.packName || "Permanent purchases"}</p>
-                {detail.imageCove && (
+                {detail.image && (
                   <img
-                    src={`data:image/jpeg;base64,${detail.imageCove}`}
+                    src={`data:image/jpeg;base64,${detail.image}`}
                     alt={detail.bookName}
                     className="w-32 h-32 object-cover mt-2"
                   />

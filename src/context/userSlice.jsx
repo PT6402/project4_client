@@ -77,6 +77,30 @@ const userSlice = createSlice({
     setOrderHistory: (state, action) => {
       state.orderHistorys = action.payload;
     },
+
+    updateReviewInOrderHistory: (state, action) => {
+      const { updateOrderId, updateBookId, rating, comment } = action.payload;
+      const copyOrders = [...state.orderHistorys];
+      const review = copyOrders
+        .find(({ orderId }) => orderId == updateOrderId)
+        .orderDetails.find(({ bookId }) => bookId == updateBookId).review;
+      review.star = rating;
+      review.content = comment;
+      state.orderHistorys = copyOrders;
+    },
+    createReviewInOrderHistory: (state, action) => {
+      const { updateOrderId, updateBookId, rating, comment, id } =
+        action.payload;
+      const copyOrders = [...state.orderHistorys];
+      copyOrders
+        .find(({ orderId }) => orderId == updateOrderId)
+        .orderDetails.find(({ bookId }) => bookId == updateBookId).review = {
+        id,
+        star: rating,
+        content: comment,
+      };
+      state.orderHistorys = copyOrders;
+    },
   },
 });
 
@@ -92,4 +116,6 @@ export const {
   deleteCartItem,
   clearUser,
   setOrderHistory,
+  createReviewInOrderHistory,
+  updateReviewInOrderHistory,
 } = userSlice.actions;

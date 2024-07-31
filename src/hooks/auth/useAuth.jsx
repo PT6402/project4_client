@@ -149,7 +149,7 @@ const useAuth = () => {
     setError(null);
     try {
       if (accessToken != null) {
-        const res = await auth_http.get(`auth/logout`);
+        const res = await auth_http.get(`/api/v1/user/logout`);
         if (res.status == 200) {
           dispatch(clearAuth());
           dispatch(clearUser());

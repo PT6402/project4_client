@@ -40,7 +40,7 @@ const OrderHistory = () => {
             {openOrderId === orderId && (
               <div>
                 {orderDetails.map((order) => (
-                  <OrderCard key={order.bookId} order={order} />
+                  <OrderCard key={order.bookId} order={order} id={orderId} />
                 ))}
               </div>
             )}

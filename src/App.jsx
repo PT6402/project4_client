@@ -1,5 +1,5 @@
 /* eslint-disable react-hooks/exhaustive-deps */
-import { Route, Routes } from "react-router-dom";
+import { Route, Routes, useLocation } from "react-router-dom";
 import { AdminLayout, UserLayout } from "./layouts";
 import {
   AccountPage,
@@ -22,7 +22,7 @@ import { Loader } from "./components";
 import { admin_routes } from "./routes";
 import AddCategory from "./pages/admin/categories_page/AddCategory";
 import EditCategory from "./pages/admin/categories_page/EditCategory";
-import { useLoadFirst } from "./hooks";
+import { useLoadFirst, usePayment } from "./hooks";
 import AddAuthor from "./pages/admin/authors_page/AddAuthor";
 import AddPackage from "./pages/admin/packages_page/AddPackage";
 import RoutePaymentSuccess from "./routes/RoutePaymentSuccess";
@@ -30,20 +30,37 @@ import OrderDetailPage from "./pages/admin/orders_page/OrderDetailPage";
 import AddPublisher from "./pages/admin/publishers_page/AddPublisher";
 import EditPublisher from "./pages/admin/publishers_page/EditPublisher";
 import AdminCreateBookPage from "./pages/admin/book_page/create";
+import PublisherPage from "./pages/publisher_page";
+import parsePaymentUrl from "./util/getParamPayment";
 
 function App() {
   const [showLoader, setShowLoader] = useState(true);
+  const { handleSendStatusPayment, isLoading: paymentLoad } = usePayment();
   const { load, isLoading } = useLoadFirst();
+  const { pathname } = useLocation();
+  const handleLoad = async () => {
+    console.log(pathname);
+    if (pathname.startsWith("/payment")) {
+      const value = parsePaymentUrl(pathname);
+      await handleSendStatusPayment({
+        orderId: value.orderId,
+        token: value.tokenId,
+      });
+      await load();
+    } else {
+      await load();
+    }
+  };
   useEffect(() => {
-    (async () => await load())();
+    handleLoad();
   }, []);
   useEffect(() => {
-    if (isLoading) {
+    if (isLoading || paymentLoad) {
       setShowLoader(true);
     } else {
       setShowLoader(false);
     }
-  }, [isLoading]);
+  }, [isLoading, paymentLoad]);
   if (showLoader) return <Loader />;
   return (
     <Routes>
@@ -61,12 +78,12 @@ function App() {
         <Route path="cart" element={<CartPage />} />
         <Route path="product-overview/:id" element={<ProductOverviewPage />} />
         <Route path="account" element={<AccountPage />} />
-        <Route path="thank-you" element={<ThankYouPage />} />
         <Route path="search" element={<SearchPage />} />
-        <Route path="author" element={<AuthorPage />} />
+        <Route path="publisher/:pubId" element={<PublisherPage />} />
+        <Route path="author/:authorId" element={<AuthorPage />} />
         <Route
           path="/payment/success/:idOrder/:tokenPayment"
-          Component={RoutePaymentSuccess}
+          element={<RoutePaymentSuccess />}
         />
       </Route>
       <Route path="/admin" element={<AdminLayout />}>

@@ -143,10 +143,44 @@ const useBook = () => {
       setIsLoading(false);
     }
   };
+  const getAuthorById = async ({ authorId }) => {
+    setIsLoading(true);
+    setError(null);
+    try {
+      const res = await http.get(
+        `/api/v1/authors/booksByAuthor?authorId=${authorId}`
+      );
+      if (res.status == HttpStatusCode.Ok) {
+        return res.data.model;
+      }
+    } catch (error) {
+      console.log(error.response.data);
+      setError(error.response.data);
+    } finally {
+      setIsLoading(false);
+    }
+  };
+  const getPublisherById = async ({ pubId }) => {
+    setIsLoading(true);
+    setError(null);
+    try {
+      const res = await http.get(`/api/v1/publisher/booksByPub?pubId=${pubId}`);
+      if (res.status == HttpStatusCode.Ok) {
+        return res.data.model;
+      }
+    } catch (error) {
+      console.log(error.response.data);
+      setError(error.response.data);
+    } finally {
+      setIsLoading(false);
+    }
+  };
 
   return {
     isLoading,
     error,
+    getAuthorById,
+    getPublisherById,
     getBooks,
     getPublisher,
     getBookDetail,
