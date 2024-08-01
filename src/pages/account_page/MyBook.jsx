@@ -6,6 +6,9 @@ import LayoutReadBook from "../../components/LayoutReadBook";
 import ReadBook from "./ReadBook";
 import useReadBook from "../../hooks/user/useReadBook";
 import { clearReadBook } from "../../context/readBookSlice";
+import ModalNote from "../../components/modal_note";
+import LayoutNote from "../../components/LayoutNote";
+import NoteComponent from "./NoteComponent";
 
 export default function MyBook() {
   const [showLoader, setShowLoader] = useState(false);
@@ -17,6 +20,7 @@ export default function MyBook() {
   } = useSelector((state) => state.readBook);
   const { getReadBook, isLoading, getReadAppendBook } = useReadBook();
   const [close, setClose] = useState(false);
+  const [openNote, setOpenNote] = useState(false);
   const [getCurrent, setCurrent] = useState(1);
   const { myBooks } = useSelector((state) => state.userStore);
   const sliderRef = useRef();
@@ -43,6 +47,9 @@ export default function MyBook() {
       getReadAppendBook();
     }
   };
+  const handleOpenNote = () => {
+    setOpenNote(!openNote);
+  };
   useEffect(() => {
     if (isLoading) {
       setShowLoader(true);
@@ -65,9 +72,17 @@ export default function MyBook() {
           </>
         ))}
       {myBooks.length == 0 && <>no my book</>}
+      {openNote && (
+        <ModalNote close={() => setOpenNote(false)}>
+          <LayoutNote close={() => setOpenNote(false)}>
+            <NoteComponent handleOpenNote={handleOpenNote} />
+          </LayoutNote>
+        </ModalNote>
+      )}
       {close && (
         <CenterModal close={() => setClose(false)}>
           <LayoutReadBook
+            handleOpenNote={handleOpenNote}
             totalPage={totalPage}
             sliderRef={sliderRef}
             handleZoomOut={handleZoomOut}

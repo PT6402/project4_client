@@ -5,6 +5,7 @@ import IconStarFull from "../../components/icons/IconStarFull";
 import PricePackage from "../../components/PricePackage";
 import { useSelector } from "react-redux";
 import { useBook, useCart } from "../../hooks";
+import { Button } from "@material-tailwind/react";
 
 const ProductOverviewPage = () => {
   const navigate = useNavigate();
@@ -81,13 +82,17 @@ const ProductOverviewPage = () => {
           } = dataDetail;
           return (
             <div className="container px-5 pt-32 pb-4 mx-auto sm:py-24 flex flex-col ">
-              <div className="flex flex-wrap items-center mx-auto lg:max-w-5xl">
+              <div className="flex flex-wrap items-center mx-auto lg:max-w-5xl relative">
                 <img
                   alt={name}
                   className="object-cover object-center w-full rounded h-1/2 lg:w-1/4 self-start"
                   src={`data:image/png;base64,${fileimage}`}
                 />
-
+                {priceBuy == 0 && (
+                  <div className="absolute h-full w-full rounded h-1/2 lg:w-1/4 top-0 bg-gray-600 bg-opacity-35 flex items-center justify-center font-bold text-2xl">
+                    het ban
+                  </div>
+                )}
                 <div className="w-full  lg:w-2/3 lg:pl-10  lg:mt-0 self-start">
                   <h1 className=" text-3xl font-medium text-gray-100 title-font">
                     {name}
@@ -120,17 +125,21 @@ const ProductOverviewPage = () => {
                   <p className="leading-relaxed">{publisherDescription}</p>
 
                   <div className="flex items-baseline my-4">
-                    <PricePackage
-                      packlist={packlist}
-                      price={priceBuy}
-                      handleGetOption={handleGetOption}
-                    />
-                    <div className="flex ml-auto">
-                      <AddToCartButton
-                        bookId={id}
-                        cartUser={items}
-                        onClick={() => handleAddToCart(id)}
+                    {priceBuy != 0 && (
+                      <PricePackage
+                        packlist={packlist}
+                        price={priceBuy}
+                        handleGetOption={handleGetOption}
                       />
+                    )}
+                    <div className="flex ml-auto">
+                      {priceBuy != 0 && (
+                        <AddToCartButton
+                          bookId={id}
+                          cartUser={items}
+                          onClick={() => handleAddToCart(id)}
+                        />
+                      )}
                     </div>
                   </div>
                 </div>

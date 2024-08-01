@@ -19,6 +19,7 @@ export default function LayoutReadBook({
   close,
   currentSlide,
   totalPage,
+  handleOpenNote,
 }) {
   const handlePrev = useCallback(() => {
     if (!sliderRef.current) return;
@@ -66,7 +67,10 @@ export default function LayoutReadBook({
           <MinusIcon />
         </div>
       </div>
-      <div className=" rounded-md w-12 shadow-xl h-12 flex justify-center items-center border-2 p-2 absolute bottom-4 left-2 z-20">
+      <div
+        className=" rounded-md w-12 shadow-xl h-12 flex justify-center items-center border-2 p-2 absolute bottom-4 left-2 z-20"
+        onClick={handleOpenNote}
+      >
         <PencilSquareIcon />
       </div>
       <div className="flex-grow flex items-center ">

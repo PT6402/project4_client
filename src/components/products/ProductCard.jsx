@@ -20,7 +20,7 @@ const ProductCard = ({ product }) => {
     <div className="w-72 bg-white shadow-md rounded-xl duration-500  hover:shadow-xl cursor-pointer m-2 scale-75">
       <div
         // to={`/product-overview/${bookId}`}
-        className=" "
+        className=" relative"
         onClick={() => navigate(`/product-overview/${bookId}`)}
       >
         <img
@@ -28,6 +28,11 @@ const ProductCard = ({ product }) => {
           alt="Product"
           className="h-80 w-72 object-cover rounded-t-xl"
         />
+        {price == 0 && (
+          <div className="absolute w-full h-full top-0 bg-gray-600 bg-opacity-35 flex items-center justify-center font-bold text-2xl">
+            het ban
+          </div>
+        )}
         <div className="px-4 py-3 w-72 ">
           <div className="flex justify-between items-center">
             <div>
@@ -45,7 +50,10 @@ const ProductCard = ({ product }) => {
             </div>
           </div>
           <p className="text-lg font-bold text-black  block capitalize ">
-            {nameBook || bookname}
+            {/* {nameBook || bookname} */}
+            {price != 0
+              ? nameBook || bookname
+              : nameBook?.split("-")[1] || bookname?.split("-")[1]}
           </p>
           <div className="flex items-center ">
             <p className="text-lg font-semibold text-black cursor-auto my-3">

@@ -86,8 +86,12 @@ export default function SearchPage() {
               </Link>
             ))
           ) : searchBy == "author" ? (
-            data.map(({ id, image_data, name, fileImage }) => (
-              <Link key={id} to={`/author/${id}`} className="group">
+            data.map(({ authorId, image_data, name, fileImage, id }) => (
+              <Link
+                key={authorId || id}
+                to={`/author/${authorId || id}`}
+                className="group"
+              >
                 <div className="aspect-h-1 aspect-w-1 w-full  rounded-lg bg-gray-200 xl:aspect-h-8 xl:aspect-w-7">
                   <img
                     src={`data:image/png;base64,${image_data || fileImage}`}
@@ -99,8 +103,12 @@ export default function SearchPage() {
               </Link>
             ))
           ) : (
-            data.map(({ id, image_data, name, fileImage }) => (
-              <Link key={id} to={`/publisher/${id}`} className="group">
+            data.map(({ pubId, image_data, name, fileImage, id }) => (
+              <Link
+                key={pubId || id}
+                to={`/publisher/${pubId || id}`}
+                className="group"
+              >
                 <div className="aspect-h-1 aspect-w-1 w-full  rounded-lg bg-gray-200 xl:aspect-h-8 xl:aspect-w-7">
                   <img
                     src={`data:image/png;base64,${image_data || fileImage}`}

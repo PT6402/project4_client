@@ -34,6 +34,20 @@ const useAdminBook = () => {
       setIsLoading(false);
     }
   };
+  const notSell = async ({ bookId }) => {
+    setIsLoading(true);
+    try {
+      const res = await http.put(`api/v1/book/${bookId}`);
+      if (res.status == HttpStatusCode.Ok) {
+        return res.data.model;
+      }
+    } catch (error) {
+      setIsError(error);
+      console.log(error);
+    } finally {
+      setIsLoading(false);
+    }
+  };
   const createBook = async ({
     authors,
     cates,
@@ -71,6 +85,13 @@ const useAdminBook = () => {
       setIsLoading(false);
     }
   };
-  return { isLoading, isError, getBookAll, getPropertiesList, createBook };
+  return {
+    isLoading,
+    isError,
+    getBookAll,
+    getPropertiesList,
+    createBook,
+    notSell,
+  };
 };
 export default useAdminBook;

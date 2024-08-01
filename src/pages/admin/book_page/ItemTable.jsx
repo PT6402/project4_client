@@ -1,5 +1,8 @@
 /* eslint-disable react/prop-types */
+import { Button } from "@material-tailwind/react";
 import IconStarFull from "../../../components/icons/IconStarFull";
+import { useState } from "react";
+import useAdminBook from "../../../hooks/admin/userAdminBook";
 
 export default function ItemTable({
   name,
@@ -9,7 +12,24 @@ export default function ItemTable({
   rating,
   price,
   image,
+  id,
 }) {
+  const { notSell } = useAdminBook();
+  const [isNotSell, setNotSell] = useState(() => {
+    if (price != 0) {
+      return false;
+    } else {
+      return true;
+    }
+  });
+  const handleChangeStatus = async () => {
+    var status = await notSell({ bookId: id });
+    if (status != 0) {
+      setNotSell(false);
+    } else {
+      setNotSell(true);
+    }
+  };
   return (
     <tr className="border-b border-dashed last:border-b-0">
       <td className="p-3 pl-0">
@@ -62,6 +82,17 @@ export default function ItemTable({
         <span className="font-semibold text-light-inverse text-md/normal">
           ${price}
         </span>
+      </td>
+      <td className="pr-0 text-center">
+        <Button
+          variant="filled"
+          color={isNotSell ? "green" : "red"}
+          onClick={handleChangeStatus}
+        >
+          <span className="font-semibold text-light-inverse text-md/normal">
+            {isNotSell ? "sell" : "not sell"}
+          </span>
+        </Button>
       </td>
       <td className="p-3 pr-0 text-end">
         <button className="ml-auto relative text-secondary-dark bg-light-dark hover:text-primary flex items-center h-[25px] w-[25px] text-base font-medium leading-normal text-center align-middle cursor-pointer rounded-2xl transition-colors duration-200 ease-in-out shadow-none border-0 justify-center">

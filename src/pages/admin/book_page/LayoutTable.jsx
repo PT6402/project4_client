@@ -11,6 +11,7 @@ export default function LayoutTable({ children }) {
           <th className="pb-3 text-end min-w-[100px]">Publisher</th>
           <th className="pb-3 pr-12 text-end min-w-[175px]">Star</th>
           <th className="pb-3 pr-12 text-end min-w-[100px]">Price</th>
+          <th className="pb-3 pr-12 text-end min-w-[100px]">Status</th>
           <th className="pb-3 text-end min-w-[50px]">Edit</th>
         </tr>
       </thead>

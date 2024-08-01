@@ -63,6 +63,7 @@ export default function AdminBookPage() {
                             price={price}
                             authors={authors}
                             categories={categories}
+                            id={id}
                           />
                         )
                       )}
