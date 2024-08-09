@@ -2,6 +2,7 @@ import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { Button } from '@material-tailwind/react';
 import { usePublisher } from '../../../hooks';
+import { toast } from 'react-hot-toast';
 
 const AddPublisher = () => {
     const [name, setName] = useState('');
@@ -13,17 +14,24 @@ const AddPublisher = () => {
 
     const handleFileChange = (e) => {
         const file = e.target.files[0];
-        setFileImage(file);
-
-        const reader = new FileReader();
-        reader.onloadend = () => {
-            setPreview(reader.result);
-        };
-        reader.readAsDataURL(file);
+        if (file && file.type.startsWith("image/")) {
+            setFileImage(file);
+            const reader = new FileReader();
+            reader.onloadend = () => {
+                setPreview(reader.result);
+            };
+            reader.readAsDataURL(file);
+        } else {
+            toast.error("Please upload a valid image file.");
+        }
     };
 
     const handleSubmit = async (e) => {
         e.preventDefault();
+        if (!fileImage) {
+            toast.error("Please select an image.");
+            return;
+        }
         const formData = new FormData();
         formData.append('name', name);
         formData.append('description', description);
@@ -31,7 +39,10 @@ const AddPublisher = () => {
 
         const success = await createPublisher(formData);
         if (success) {
+            toast.success('Publisher created successfully');
             navigate('/admin/publisher');
+        } else if (error) {
+            toast.error(error);
         }
     };
 

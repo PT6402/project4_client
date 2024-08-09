@@ -1,6 +1,7 @@
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { Button } from "@material-tailwind/react";
+import { toast } from "react-hot-toast";
 import { useAuthor } from "../../../hooks";
 
 const AddAuthor = () => {
@@ -12,24 +13,33 @@ const AddAuthor = () => {
 
   const handleImageChange = (e) => {
     const file = e.target.files[0];
-    setFileImage(file);
-
-    // Create a preview URL for the selected image
-    const reader = new FileReader();
-    reader.onloadend = () => {
-      setImagePreview(reader.result);
-    };
-    reader.readAsDataURL(file);
+    if (file && file.type.startsWith("image/")) {
+      setFileImage(file);
+      const reader = new FileReader();
+      reader.onloadend = () => {
+        setImagePreview(reader.result);
+      };
+      reader.readAsDataURL(file);
+    } else {
+      toast.error("Please upload a valid image file.");
+    }
   };
 
   const handleSubmit = async (e) => {
     e.preventDefault();
+    if (!fileImage) {
+      toast.error("Please select an image.");
+      return;
+    }
     const formData = new FormData();
     formData.append("name", name);
     formData.append("fileImage", fileImage);
 
-    await createAuthor(formData);
-    navigate("/admin/author");
+    const success = await createAuthor(formData);
+    if (success) {
+      toast.success("Author created successfully");
+      navigate("/admin/author");
+    }
   };
 
   return (

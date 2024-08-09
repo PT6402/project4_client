@@ -10,7 +10,8 @@ const EditCategory = () => {
   const [name, setName] = useState("");
   const [description, setDescription] = useState("");
   const [fileImage, setFileImage] = useState(null);
-  const [previewUrl, setPreviewUrl] = useState(null); // For image preview
+  const [previewUrl, setPreviewUrl] = useState(null);
+  const [fileError, setFileError] = useState("");  // For image preview
   const navigate = useNavigate();
 
   useEffect(() => {
@@ -30,17 +31,30 @@ const EditCategory = () => {
   const handleImageChange = (e) => {
     const file = e.target.files[0];
     if (file) {
-      setFileImage(file);
-      const reader = new FileReader();
-      reader.onloadend = () => {
-        setPreviewUrl(reader.result);
-      };
-      reader.readAsDataURL(file);
+      if (!file.type.startsWith("image/")) {
+        setFileError("Please upload a valid image file.");
+        setFileImage(null);
+        setPreviewUrl(null);
+      } else {
+        setFileImage(file);
+        setFileError("");
+        const reader = new FileReader();
+        reader.onloadend = () => {
+          setPreviewUrl(reader.result);
+        };
+        reader.readAsDataURL(file);
+      }
     }
   };
 
   const handleSubmit = async (e) => {
     e.preventDefault();
+
+    if (fileError) {
+      toast.error(fileError);
+      return;
+    }
+
     const formData = new FormData();
     formData.append("name", name);
     formData.append("description", description);
@@ -52,6 +66,8 @@ const EditCategory = () => {
     if (success) {
       toast.success("Category updated successfully");
       navigate("/admin/category");
+    } else if (error) {
+      toast.error("Failed to update category");
     }
   };
 
@@ -90,6 +106,7 @@ const EditCategory = () => {
             onChange={handleImageChange}
             className="mt-1 block w-full border border-gray-300 rounded-md shadow-sm py-2 px-3 focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm"
           />
+          {fileError && <p className="text-red-500 mt-2">{fileError}</p>}
         </div>
         {previewUrl && (
           <div className="mt-4">
@@ -103,7 +120,7 @@ const EditCategory = () => {
         <Button type="submit" variant="gradient" disabled={isLoading}>
           {isLoading ? "Updating..." : "Update"}
         </Button>
-        {error && <p className="text-red-500">{error}</p>}
+        {error && <p className="text-red-500 mt-2">{error}</p>}
       </form>
     </div>
   );

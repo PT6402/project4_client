@@ -70,10 +70,10 @@ const useAuth = () => {
     } catch (error) {
       setError(error);
       toast.error(error.response.data.message);
-      if (error?.response?.data?.message == "password wrond") {
+      if (error?.response?.data?.message == "Password Wrong") {
         return { errorPassword: true };
       }
-      if (error?.response?.data?.message == "user not found") {
+      if (error?.response?.data?.message == "User Not Found") {
         dispatch(setEmail(null));
         return { errorNotFound: true };
       }
@@ -119,7 +119,7 @@ const useAuth = () => {
     } catch (error) {
       setError(error);
       if (error?.response?.data?.message == "token invalid") {
-        toast.error("code reset wrond");
+        toast.error("code reset wrong");
       }
       return false;
     } finally {
