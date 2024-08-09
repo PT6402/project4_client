@@ -41,6 +41,7 @@
     "react-responsive": "^10.0.0",
     "react-router-dom": "^6.24.0",
     "react-select": "^5.8.0",
+    "recharts": "^2.12.7",
     "swiper": "^11.1.7",
     "yup": "^1.4.0"
   },

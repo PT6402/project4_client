@@ -4,6 +4,7 @@ import { XMarkIcon } from "@heroicons/react/24/outline";
 import { Button, IconButton, Typography } from "@material-tailwind/react";
 import { useDispatch, useSelector } from "react-redux";
 import { setUIAdminSidenav } from "../../context/uiSlice";
+import logo from '../../assets/img/project_logo.jpg';
 
 export function Sidenav({ brandName = "The book shelf", routes }) {
   const { pathname } = useLocation();
@@ -39,18 +40,18 @@ export function Sidenav({ brandName = "The book shelf", routes }) {
   };
   return (
     <aside
-      className={`bg-white shadow-sm ${
-        adminSidenav ? "translate-x-0" : "-translate-x-80"
-      } fixed inset-0 z-50 my-4 ml-4 h-[calc(100vh-32px)] w-72 rounded-xl transition-transform duration-300 xl:translate-x-0 border border-blue-gray-100`}
+      className={`bg-white shadow-sm ${adminSidenav ? "translate-x-0" : "-translate-x-80"
+        } fixed inset-0 z-50 my-4 ml-4 h-[calc(100vh-32px)] w-72 rounded-xl transition-transform duration-300 xl:translate-x-0 border border-blue-gray-100`}
     >
       <div className={`relative`}>
         <Link to="/" className="py-6 px-8 text-center">
-          <Typography
+          {/* <Typography
             variant="h6"
             color={sidenavType === "dark" ? "white" : "blue-gray"}
-          >
-            {brandName}
-          </Typography>
+          > */}
+          {/* {brandName}
+          </Typography> */}
+          <img src={logo} alt="Logo" className="w-32 mx-auto" /> {/* Update the className as needed */}
         </Link>
         <IconButton
           variant="text"
