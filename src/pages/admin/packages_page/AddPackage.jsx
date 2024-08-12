@@ -12,6 +12,12 @@ const AddPackage = () => {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
+
+    if (dayQuantity <= 0) {
+      toast.error("Day Quantity must be a positive number");
+      return;
+    }
+
     const formData = {
       packageName,
       dayQuantity: parseInt(dayQuantity),

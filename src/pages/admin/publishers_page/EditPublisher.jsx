@@ -29,20 +29,32 @@ const EditPublisher = () => {
 
     const handleFileChange = (e) => {
         const file = e.target.files[0];
-        setFileImage(file);
-
-        const reader = new FileReader();
-        reader.onloadend = () => {
-            setPreview(reader.result);
-        };
-        reader.readAsDataURL(file);
+        if (file && file.type.startsWith("image/")) {
+            setFileImage(file);
+            const reader = new FileReader();
+            reader.onloadend = () => {
+                setPreview(reader.result);
+            };
+            reader.readAsDataURL(file);
+        } else {
+            toast.error("Please upload a valid image file.");
+        }
     };
 
     const handleSubmit = async (e) => {
         e.preventDefault();
+
+        // Check if file is not an image
+        if (fileImage && !fileImage.type.startsWith("image/")) {
+            toast.error("Please upload a valid image file.");
+            return; // Prevent form submission
+        }
+
         const formData = new FormData();
         formData.append('name', name);
         formData.append('description', description);
+
+        // Only append the fileImage if it is a valid image file
         if (fileImage) {
             formData.append('fileImage', fileImage);
         }
@@ -51,6 +63,8 @@ const EditPublisher = () => {
         if (success) {
             toast.success('Publisher updated successfully');
             navigate('/admin/publisher');
+        } else if (error) {
+            toast.error(error);
         }
     };
 

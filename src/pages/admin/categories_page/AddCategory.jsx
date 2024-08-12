@@ -9,23 +9,29 @@ const AddCategory = () => {
   const [fileImage, setFileImage] = useState(null);
   const [preview, setPreview] = useState(null);
   const { createCategory, isLoading, error } = useCategory();
+  const [fileError, setFileError] = useState("");
   const navigate = useNavigate();
 
   const handleSubmit = async (e) => {
     e.preventDefault();
+
+    // Check if the file type is valid
+    if (fileImage && !fileImage.type.startsWith("image/")) {
+      setFileError("Please upload a valid image file.");
+      return; // Prevent form submission
+    }
+
     const formData = new FormData();
     formData.append("name", name);
     formData.append("description", description);
     formData.append("fileImage", fileImage);
 
-    console.log("Form Data:", {
-      name,
-      description,
-      fileImage,
-    });
-
-    await createCategory(formData);
-    navigate("/admin/category");
+    const result = await createCategory(formData);
+    if (result && !result.error) {
+      navigate("/admin/category");
+    } else if (error) {
+      setFileError(error); // Display error message from the backend if available
+    }
   };
 
   const handleNameChange = (e) => {
@@ -38,17 +44,38 @@ const AddCategory = () => {
     console.log("Description:", e.target.value);
   };
 
+  // const handleFileChange = (e) => {
+  //   const file = e.target.files[0];
+  //   setFileImage(file);
+  //   console.log("File Image:", file);
+
+  //   if (file) {
+  //     const reader = new FileReader();
+  //     reader.onloadend = () => {
+  //       setPreview(reader.result);
+  //     };
+  //     reader.readAsDataURL(file);
+  //   } else {
+  //     setPreview(null);
+  //   }
+  // };
+
   const handleFileChange = (e) => {
     const file = e.target.files[0];
     setFileImage(file);
-    console.log("File Image:", file);
 
     if (file) {
-      const reader = new FileReader();
-      reader.onloadend = () => {
-        setPreview(reader.result);
-      };
-      reader.readAsDataURL(file);
+      if (!file.type.startsWith("image/")) {
+        setFileError("Please upload a valid image file.");
+        setPreview(null);
+      } else {
+        setFileError(""); // Clear any previous error
+        const reader = new FileReader();
+        reader.onloadend = () => {
+          setPreview(reader.result);
+        };
+        reader.readAsDataURL(file);
+      }
     } else {
       setPreview(null);
     }
@@ -99,11 +126,12 @@ const AddCategory = () => {
               />
             </div>
           )}
+          {fileError && <p className="text-red-500 mt-2">{fileError}</p>}
         </div>
         <Button type="submit" variant="gradient" disabled={isLoading}>
           {isLoading ? "Creating..." : "Create"}
         </Button>
-        {error && <p className="text-red-500">{error}</p>}
+        {error && <p className="text-red-500 mt-2">{error}</p>}
       </form>
     </div>
   );
